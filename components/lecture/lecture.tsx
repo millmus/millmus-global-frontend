@@ -1,0 +1,50 @@
+import { cls } from '@libs/client/utils';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+interface IProps {
+  id: number;
+  thumbnail: string;
+  category: string;
+  tutor: any;
+  name: string;
+}
+
+export default function Lecture({
+  id,
+  thumbnail,
+  category,
+  tutor,
+  name,
+}: IProps) {
+  const router = useRouter();
+  return (
+      <a
+        href={`/lecture/detail/${id}`}
+        className={cls(
+          router.pathname === '/'
+            ? 'transition-transform duration-300 hover:-translate-y-3 md:hover:translate-y-0'
+            : ''
+        )}
+      >
+        <div className='relative h-[200px] w-[20rem] md:h-[6.375rem] md:w-40'>
+          <Image
+            src={thumbnail}
+            alt='Lecture Thumbnail'
+            layout='fill'
+            objectFit='cover'
+            className='rounded-md'
+          />
+        </div>
+
+        <div className='mt-4 mb-1.5 text-sm font-medium text-[#b1b1b1] md:mt-2 md:mb-0 md:w-40 md:text-[0.688rem]'>
+          {category=="코인"?"무료특강":category} ˙ {tutor.name}
+        </div>
+
+        <div className='text-lg font-medium md:w-40 md:text-[0.812rem] md:leading-5'>
+          {name}
+        </div>
+      </a>
+  );
+}

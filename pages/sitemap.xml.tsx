@@ -1,0 +1,182 @@
+const Sitemap = () => {
+  return null;
+};
+
+export const getServerSideProps = async ({ res }: { res: any }) => {
+  const BASE_URL = 'http://localhost:3000';
+
+  const sitemap = `
+    <urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+<url>
+  <loc>https://millmus.com/</loc>
+  <lastmod>2024-12-11T08:59:13+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/coin/1</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/premium/1</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/login</loc>
+  <lastmod>2024-12-15T07:31:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/signup</loc>
+  <lastmod>2025-01-03T04:23:31+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture</loc>
+  <lastmod>2025-01-03T04:23:31+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/real-estate/1</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/stock/1</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/online-business/1</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/master/1</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/tutor/1</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/event/1</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/calculator</loc>
+  <lastmod>2025-01-03T04:23:36+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/detail/33</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/offline</loc>
+  <lastmod>2025-01-03T04:23:38+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/detail/1</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/detail/52</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/detail/75</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/detail/25</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/detail/37</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/detail/16</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/detail/45</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/detail/9</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/detail/47</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/lecture/detail/6</loc>
+  <lastmod>2025-01-03T05:48:10+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/about-us</loc>
+  <lastmod>2025-01-03T04:23:47+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/terms-of-service</loc>
+  <lastmod>2025-01-03T04:23:47+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/refund-policy</loc>
+  <lastmod>2025-01-03T04:23:48+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/privacy-policy</loc>
+  <lastmod>2025-01-03T04:23:48+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://millmus.com/find-id</loc>
+  <lastmod>2025-01-03T04:23:48+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://millmus.com/reset-pw</loc>
+  <lastmod>2024-12-15T07:31:28+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+</urlset>
+  `;
+
+  res.setHeader('Content-Type', 'text/xml');
+  res.write(sitemap);
+  res.end();
+
+  return {
+    props: {},
+  };
+};
+
+export default Sitemap;

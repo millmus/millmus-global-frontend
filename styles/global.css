@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  /* background-color: #282e38; */
+  background-color: #191919;
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+* {
+  box-sizing: border-box;
+}
+
+/* react-slick */
+/* .slick-dots {
+  margin-left: -236px !important;
+} */
+
+.slick-dots li {
+  width: 0.375rem !important;
+  height: 0.375rem !important;
+  transition: all 0.5s ease-in-out;
+}
+
+.slick-dots .slick-active {
+  background-color: #ffffff;
+  width: 2.063rem !important;
+  border-radius: 9999px;
+}
+
+/* wysiwyg */
+.toolbar {
+  color: black !important;
+}
+
+/* wysiwyg 줄바꿈 */
+.wysiwyg p {
+  word-break: break-word;
+}
+
+/* wysiwyg 이미지 비율 최적화 */
+.wysiwyg img {
+  height: auto !important;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.layout-overflow::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.layout-overflow {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+
+/* slide link click issues */
+.topbanner.slick-slider .slick-list {
+  visibility: hidden;
+}
+.topbanner.slick-slider .slick-list .slick-active {
+  visibility: visible;
+}
+/* slide link click issues */
+
+.slick-slider {
+  overflow: hidden;
+}
+
+.slick-track, .slick-list {
+  width: 100%;
+}
+
+.slick-slide > div {
+  display: flex;
+}
+
+.wysiwyg img{
+  width: 100% !important;
+}
+
+
+.line_comp {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+
+  /** 3줄 까지만 콘텐츠를 보여준다 */
+  -webkit-line-clamp: 1;
+}
+
+.ellipsis-clamp-2 {
+  display: -webkit-box;
+  overflow: hidden;
+  word-break: break-word;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.ellipsis-clamp-3 {
+  display: -webkit-box;
+  overflow: hidden;
+  word-break: break-word;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.chat-ellipsis {
+  display: -webkit-box;
+  overflow: hidden;
+  word-break: break-word;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
