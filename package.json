@@ -9,9 +9,10 @@
     "lint": "next lint"
   },
   "engines": {
-    "node": "20.x"
+    "node": ">=18.17.0"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@headlessui/react": "^1.5.0",
     "@types/vimeo__player": "^2.16.3",
     "@vimeo/player": "^2.18.0",
@@ -24,8 +25,9 @@
     "firebase": "^10.7.1",
     "framer-motion": "^6.2.8",
     "html-to-draftjs": "^1.5.0",
+    "immutable": "^5.1.4",
     "jwt-decode": "^3.1.2",
-    "next": "12.1.0",
+    "next": "12.3.4",
     "next-cookies": "^2.0.3",
     "qs": "^6.10.3",
     "react": "17.0.2",
@@ -60,7 +62,7 @@
     "autoprefixer": "^10.4.2",
     "cookie": "^0.4.2",
     "eslint": "8.10.0",
-    "eslint-config-next": "12.1.0",
+    "eslint-config-next": "12.3.4",
     "postcss": "^8.4.8",
     "prettier": "^2.5.1",
     "prettier-plugin-tailwindcss": "^0.1.8",
