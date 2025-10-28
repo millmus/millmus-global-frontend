@@ -1,6 +1,4 @@
 import Input from '@components/input';
-// import KakaoBtn from '@components/login/kakaoBtn'; // 기존 KakaoBtn 주석 처리
-import NewKakaoBtn from '@components/login/NewKakaoBtn'; // NewKakaoBtn import
 import EventSlider from '@components/login/eventSlider';
 import SEO from '@components/seo';
 import { usersApi } from '@libs/api';
@@ -15,7 +13,6 @@ import axios from 'axios';
 import NaverBtn from '@components/login/naverBtn';
 import GoogleBtn from '@components/login/googleBtn';
 import { AnimatePresence, motion } from 'framer-motion';
-import KakaoBtn from '@components/login/kakaoBtn';
 import { useRouter } from 'next/router';
 
 interface IForm {
@@ -79,17 +76,6 @@ const Login: NextPage = () => {
         <EventSlider />
 
         {/* 로그인 방법 분류 */}
-        {/* <KakaoBtn  */}
-        <NewKakaoBtn 
-          is_signup={false}
-          className='mt-8 flex h-[3.688rem] w-full cursor-pointer items-center justify-center rounded bg-[#fee500] text-lg font-medium text-[#222222] transition-all hover:opacity-90 md:h-14 md:text-base'
-        />
-        {/* <NewKakaoBtn 
-          is_signup = {false}
-          // className prop은 NewKakaoBtn에서 선택 사항이며 기본값이 있으므로 여기서는 생략 가능
-          // 또는 필요시 className을 명시적으로 지정할 수 있습니다.
-          // className='mt-8 flex h-[3.688rem] w-full cursor-pointer items-center justify-center rounded bg-[#fee500] text-lg font-medium text-[#222222] transition-all hover:opacity-90 md:h-14 md:text-base'
-        /> */}
         <button
           type='submit'
           onClick={() => {
@@ -220,7 +206,6 @@ const Login: NextPage = () => {
         <div className='mt-8 flex w-full justify-center'>
           <div className='w-[330px] space-y-2'>
             {/*<NaverBtn />*/}
-            {/* <KakaoBtn /> */} {/* 이전에 주석 처리된 KakaoBtn은 그대로 두거나 삭제합니다. */}
             <GoogleBtn />
           </div>
         </div>

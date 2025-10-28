@@ -7,7 +7,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import useSWR from 'swr';
 import Dday from './dday';
-import kakaoIcon from '@public/kakao.png';
 import { motion } from 'framer-motion';
 
 interface IProps {
@@ -431,20 +430,7 @@ export default function Detail({
                   <Link href={live_external_link.startsWith('http') ? live_external_link : `https://${live_external_link}`}>
                     <a target='_blank' className='mx-auto'>
                       <div className='flex h-14 w-64 items-center justify-center rounded bg-[#ffeb00] font-medium text-[#282e38] transition-all hover:opacity-90'>
-                        <>
-                          <div className='flex flex-row gap-2 items-center'>
-                            <Image
-                              src={kakaoIcon}
-                              width={40}
-                              height={40}
-                              alt='Kakao Icon'
-                              objectFit='cover'
-                              placeholder='blur'
-                              quality={100}
-                            />
-                            <span>단톡방 바로 입장</span>
-                          </div>
-                        </>
+                        <span>단톡방 바로 입장</span>
                       </div>
                     </a>
                   </Link>

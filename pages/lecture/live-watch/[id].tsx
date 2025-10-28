@@ -11,7 +11,6 @@ import YouTube from "react-youtube"
 import Image from "next/image"
 import Link from "next/link"
 import LiveChat from "@components/chat/live-chat"
-import kakaoIcon from "@public/kakao.png"
 import axios from "axios"
 
 interface IProps {
@@ -295,20 +294,7 @@ const LiveWatch: NextPage<IProps> = ({ id, lectureData }) => {
                       <Link href={liveData?.live_external_link.startsWith('http') ? liveData?.live_external_link : `https://${liveData?.live_external_link}`}>
                         <a target='_blank'>
                           <div className='flex px-4 py-2 items-center justify-center rounded bg-[#ffeb00] font-medium text-[#282e38] transition-all hover:opacity-90'>
-                            <>
-                              <div className='flex flex-row gap-2 items-center'>
-                                <Image
-                                  src={kakaoIcon}
-                                  width={24}
-                                  height={24}
-                                  alt='Kakao Icon'
-                                  objectFit='cover'
-                                  placeholder='blur'
-                                  quality={100}
-                                />
-                                <span>단톡방 바로 입장</span>
-                              </div>
-                            </>
+                            <span>단톡방 바로 입장</span>
                           </div>
                         </a>
                       </Link>

@@ -11,9 +11,7 @@ import axios from 'axios';
 import { useUser } from '@libs/client/useUser';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import KakaoBtn from '@components/login/kakaoBtn';
 import { AnimatePresence, motion } from 'framer-motion';
-import NewKakaoBtn from '@components/login/NewKakaoBtn';
 
 interface IForm {
   name: string;
@@ -134,7 +132,7 @@ const SignUp: NextPage = () => {
   };
 
   useEffect(() => {
-    if (type === 'kakao' || type === 'naver' || type === 'google') {
+    if (type === 'naver' || type === 'google') {
       name && setValue('name', name as string);
       phone_number &&
         setValue('phoneNum', (phone_number as string).replaceAll('-', ''));
@@ -149,16 +147,6 @@ const SignUp: NextPage = () => {
       <div className='mx-auto my-28 flex max-w-[32.5rem] flex-col items-center rounded-lg bg-[#373c46] p-[3.75rem] md:my-12 md:max-w-[330px] md:bg-transparent md:p-0'>
         <h1 className='text-2xl font-medium md:text-xl'>회원가입</h1>
 
-        {/* <KakaoBtn 
-          className={cls(
-            isSignUpOpened ? 'hidden' : '',
-            'mt-8 flex h-[3.688rem] w-full cursor-pointer items-center justify-center rounded bg-[#fee500] text-lg font-medium text-[#222222] transition-all hover:opacity-90 md:h-14 md:text-base')}
-          is_signup = {true}
-          /> */}
-        <NewKakaoBtn 
-          is_signup={true}
-          className='mt-8 flex h-[3.688rem] w-full cursor-pointer items-center justify-center rounded bg-[#fee500] text-lg font-medium text-[#222222] transition-all hover:opacity-90 md:h-14 md:text-base'
-        />
         <button
           type='submit'
           onClick={() => {

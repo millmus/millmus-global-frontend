@@ -46,11 +46,6 @@ export default function TopBanner() {
 			icon2: { src: UserWatch, classes: "h-[60px] w-[60px]" },
 			href: "/lecture/coin/1",
 		},
-		{
-			text1: "즉시 사용 가능!", text2: "카카오채널 추가시 1만원 쿠폰",
-			icon1: { src: Firework, },
-			icon2: { src: Mail, classes: "h-[50px] w-[50px]" },
-		},
 	];
 
 	return (topBanner && contents.length ?
@@ -58,13 +53,6 @@ export default function TopBanner() {
 			{contents.map((d, index) =>
 				<div key={index} className="h-[70px] md:h-[40px]" onClick={() => {
 					if (d.href) Router.push(d.href);
-					else {
-						const { Kakao } = window;
-						if (!Kakao.isInitialized()) {
-							Kakao.init("1e7d46f694c6be65caa45eb5ecb2f55a");
-						}
-						Kakao.Channel.addChannel({ channelPublicId: '_eixhCG' });
-					}
 				}}>
 					<div className="flex relative h-full max-w-[1180px] mx-auto pr-[50px] justify-center md:max-w-[330px] md:pr-0 md:justify-between">
 						<div className='relative h-[60px] w-[60px] my-auto md:h-[40px] md:w-[40px]'>

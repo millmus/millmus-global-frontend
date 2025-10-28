@@ -2,7 +2,6 @@ import { cls, trimDate } from '@libs/client/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import kakaoIcon from '@public/kakao.png';
 
 interface IProps {
   id: number;
@@ -118,20 +117,7 @@ export default function Lecture({
                 <Link href={live_external_link.startsWith('http') ? live_external_link : `https://${live_external_link}`}>
                   <a target='_blank'>
                     <div className='flex px-4 py-2 items-center justify-center rounded bg-[#ffeb00] font-medium text-[#282e38] transition-all hover:opacity-90'>
-                      <>
-                        <div className='flex flex-row gap-2 items-center'>
-                          <Image
-                            src={kakaoIcon}
-                            width={32}
-                            height={32}
-                            alt='Kakao Icon'
-                            objectFit='cover'
-                            placeholder='blur'
-                            quality={100}
-                          />
-                          <span>단톡방 바로 입장</span>
-                        </div>
-                      </>
+                      <span>단톡방 바로 입장</span>
                     </div>
                   </a>
                 </Link>

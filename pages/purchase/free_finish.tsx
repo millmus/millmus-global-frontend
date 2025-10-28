@@ -7,7 +7,6 @@ import type { GetServerSidePropsContext, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import kakaoIcon from '@public/kakao.png';
 import Image from 'next/image';
 import useSWR from 'swr';
 import { ICard } from 'types';
@@ -225,18 +224,7 @@ const Finish: NextPage<IProps> = ({ id, name, type, price, point, coupon, mercha
                             </>
                             :
                             <>
-                              <div className='flex flex-row gap-2 items-center'>
-                                <Image
-                                  src={kakaoIcon}
-                                  width={40}
-                                  height={40}
-                                  alt='Kakao Icon'
-                                  objectFit='cover'
-                                  placeholder='blur'
-                                  quality={100}
-                                />
-                                <span>단톡방 바로 입장</span>
-                              </div>
+                              <span>단톡방 바로 입장</span>
                             </>
                         }
                       </div>

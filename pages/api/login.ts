@@ -35,21 +35,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(200).json({ ok: true });
       }
     }
-    // // 카카오 로그인
-    // if (type === 'kakao') {
-    //   const { data } = await usersApi.kakaoLogin(req.body);
-    //   return res.status(200).json({ ok: true, data });
-    // }
-    // // 카카오 로그인
-    // if (type === 'naver') {
-    //   const { data } = await usersApi.naverLogin(req.body);
-    //   return res.status(200).json({ ok: true, data });
-    // }
-    // // 구글 로그인
-    // if (type === 'google') {
-    //   const { data } = await usersApi.googleLogin(req.body);
-    //   return res.status(200).json({ ok: true, data });
-    // }
   } catch (error) {
     return res.status(500).json({ error });
   }

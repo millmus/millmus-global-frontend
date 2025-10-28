@@ -100,7 +100,6 @@ export default function Header() {
   const handleLogout = async () => {
     await axios.post('/api/logout');
     mutate({ ok: false, token: null, profile: null });
-    sessionStorage.setItem('kakaoAuthProcessed', 'false');
   };
 
   useEffect(() => {
@@ -169,16 +168,6 @@ export default function Header() {
   useEffect(() => {
     mutate(data);
   }, [notificationData]);
-
-  useEffect(() => {
-    if(data?.token) {
-      console.log('kakaoAuthProcessed', sessionStorage.getItem('kakaoAuthProcessed'));
-      sessionStorage.setItem('kakaoAuthProcessed', 'true');
-    } else {
-      console.log('kakaoAuthProcessed', sessionStorage.getItem('kakaoAuthProcessed'));
-      sessionStorage.setItem('kakaoAuthProcessed', 'false');
-    }
-  }, [data?.token]);
 
   function notificationHandle() {
     setNotificationOpen(!notificationOpen);

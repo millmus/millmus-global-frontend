@@ -54,10 +54,6 @@ export default function EventSlider() {
 
   const contents = [
     {
-      text: "카카오채널 친구추가 1만원 쿠폰지급",
-      src: welcomeCoupon,
-    },
-    {
       text: "회원가입하고 무료특강 체험하기!",
       src: freeVideo,
     },

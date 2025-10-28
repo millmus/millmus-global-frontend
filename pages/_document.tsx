@@ -61,8 +61,6 @@ class CustomDocument extends Document {
           />
           {/* 네이버 로그인 */}
           <script src='https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js'></script>
-          {/* 카카오 로그인 - Head 내의 것은 삭제 */}
-          {/* <script src='https://developers.kakao.com/sdk/js/kakao.min.js'></script> */}
           {/* 구글 로그인 */}
           <script
             src='https://accounts.google.com/gsi/client'
@@ -108,9 +106,8 @@ src="https://www.facebook.com/tr?id=825807185786710&ev=PageView&noscript=1"
               'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','GTM-T6CT94L');`
             }}
-            />  
+            />
           )}
-          <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.5/kakao.min.js" integrity="sha384-dok87au0gKqJdxs7msEdBPNnKSRT+/mhTVzq+qOhcL464zXwvcrpjeWvyj1kCdq6" crossOrigin="anonymous"></script>
         </Head>
         <body>
           <noscript dangerouslySetInnerHTML={{

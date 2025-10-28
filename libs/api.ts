@@ -1,10 +1,9 @@
 import axios from 'axios';
 
 // export const API_URL = 'http://127.0.0.1:8000';
-export const API_URL = 'https://api.xn--o22bp6a0zk.com';
+export const API_URL = 'https://api-global.xn--o22bp6a0zk.com';
 // export const API_URL = 'https://test.xn--o22bp6a0zk.com';
 // export const API_URL = 'http://192.168.0.145:8000';
-// export const API_URL = 'https://new-api.xn--o22bp6a0zk.com';
  
 const api = axios.create({
   baseURL: API_URL,
@@ -93,24 +92,6 @@ export const usersApi = {
       is_signup,
       ad_agree
     }),
-  // // 카카오 로그인
-  // kakaoLogin: ({ id }: IProps) =>
-  //   api.post('/users/login/', {
-  //     login_method: 'kakao',
-  //     kakao_id: id,
-  //   }),
-  // // 네이버 로그인
-  // naverLogin: ({ id }: IProps) =>
-  //   api.post('/users/login/', {
-  //     login_method: 'naver',
-  //     naver_id: id,
-  //   }),
-  // // 구글 로그인
-  // googleLogin: ({ id }: IProps) =>
-  //   api.post('/users/login/', {
-  //     login_method: 'google',
-  //     google_id: id,
-  //   }),
   // 로그아웃(NextJS api)
   logoutNextApi: () => axios.post('/api/logout'),
 
