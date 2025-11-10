@@ -22,4 +22,5 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
+// next-i18next.config.js 파일이 자동으로 로드됩니다
 export default appWithTranslation(MyApp);
