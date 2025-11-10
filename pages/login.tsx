@@ -16,8 +16,8 @@ const Login: NextPage = () => {
   return (
     <>
       <SEO
-        title={t('loginPageTitle')}
-        description={t('loginPageDescription')}
+        title={t('loginPageTitle') as string}
+        description={t('loginPageDescription') as string}
       />
       <div className='mx-auto my-28 flex max-w-[32.5rem] flex-col items-center rounded-lg bg-[#373c46] p-[3.75rem] md:my-12 md:max-w-[330px] md:bg-transparent md:p-0'>
         <h1 className='text-2xl font-medium md:text-xl'>{t('loginTitle')}</h1>

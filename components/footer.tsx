@@ -529,7 +529,7 @@ export default function Footer() {
                 <input
                   type="text"
                   {...register('name', {
-                    required: t('nameRequired'),
+                    required: t('nameRequired') as string,
                   })}
                   className="w-full text-[#cfcfcf] px-3 py-1 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
                 />
@@ -541,10 +541,10 @@ export default function Footer() {
                   type="text"
                   maxLength={11}
                   {...register('phone', {
-                    required: t('phoneRequired'),
+                    required: t('phoneRequired') as string,
                     pattern: {
                       value: /^\d{11}$/, // 숫자만 11자리인지 확인하는 정규식
-                      message: t('phoneInvalid'),
+                      message: t('phoneInvalid') as string,
                     },
                   })}
                   className="w-full text-[#cfcfcf] px-3 py-1 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
@@ -556,7 +556,7 @@ export default function Footer() {
                 <input
                   type="text"
                   {...register('email', {
-                    required: t('emailRequired'),
+                    required: t('emailRequired') as string,
                   })}
                   className="w-full text-[#cfcfcf] px-3 py-1 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
                 />
@@ -567,7 +567,7 @@ export default function Footer() {
                 <input
                   type="text"
                   {...register('sns', {
-                    required: t('snsRequired'),
+                    required: t('snsRequired') as string,
                   })}
                   className="w-full text-[#cfcfcf] px-3 py-1 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
                 />
@@ -578,7 +578,7 @@ export default function Footer() {
                 <input
                   type="text"
                   {...register('subject', {
-                    required: t('subjectRequired'),
+                    required: t('subjectRequired') as string,
                   })}
                   className="w-full text-[#cfcfcf] px-3 py-1 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
                 />
@@ -589,7 +589,7 @@ export default function Footer() {
                 <input
                   type="text"
                   {...register('reference', {
-                    required: t('referenceRequired'),
+                    required: t('referenceRequired') as string,
                   })}
                   className="w-full text-[#cfcfcf] px-3 py-1 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
                 />
@@ -600,7 +600,7 @@ export default function Footer() {
                 <input
                   type="text"
                   {...register('oldPlatform', {
-                    required: t('platformRequired'),
+                    required: t('platformRequired') as string,
                   })}
                   className="w-full text-[#cfcfcf] px-3 py-1 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
                 />

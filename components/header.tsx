@@ -399,7 +399,7 @@ export default function Header() {
               <div className='w-[300px] relative'>
               <input
                   type='text'
-                  placeholder={t('searchPlaceholder')}
+                  placeholder={t('searchPlaceholder') as string}
                   className='w-full text-[#cfcfcf] px-3 py-2 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none'
                   value={searchQuery}
                   onChange={onChangeSearch}

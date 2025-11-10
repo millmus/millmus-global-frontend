@@ -71,7 +71,7 @@ const Signup: NextPage = () => {
       if (err?.response?.data?.message) {
         setError(err.response.data.message);
       } else {
-        setError(t('signupError'));
+        setError(t('signupError') as string);
       }
     } finally {
       setLoading(false);
@@ -81,8 +81,8 @@ const Signup: NextPage = () => {
   return (
     <>
       <SEO
-        title={t('signupPageTitle')}
-        description={t('signupPageDescription')}
+        title={t('signupPageTitle') as string}
+        description={t('signupPageDescription') as string}
       />
       <div className='mx-auto my-28 flex max-w-[32.5rem] flex-col items-center rounded-lg bg-[#373c46] p-[3.75rem] md:my-12 md:max-w-[330px] md:bg-transparent md:p-0'>
         <h1 className='text-2xl font-medium md:text-xl'>{t('signupTitle')}</h1>
@@ -100,14 +100,14 @@ const Signup: NextPage = () => {
             type='text'
             label={t('nickname')}
             register={register('nickname', {
-              required: t('nicknameRequired'),
+              required: t('nicknameRequired') as string,
               minLength: {
                 value: 2,
-                message: t('nicknameMinLength'),
+                message: t('nicknameMinLength') as string,
               },
               maxLength: {
                 value: 20,
-                message: t('nicknameMaxLength'),
+                message: t('nicknameMaxLength') as string,
               },
             })}
             error={errors?.nickname?.message}
@@ -118,10 +118,10 @@ const Signup: NextPage = () => {
             type='tel'
             label={t('phoneNumber')}
             register={register('phoneNum', {
-              required: t('phoneNumberRequired'),
+              required: t('phoneNumberRequired') as string,
               pattern: {
                 value: /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/,
-                message: t('phoneNumberInvalid'),
+                message: t('phoneNumberInvalid') as string,
               },
             })}
             error={errors?.phoneNum?.message}
