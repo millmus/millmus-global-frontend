@@ -19,6 +19,7 @@ import useResponsiveScale from '../hooks/useResponsiveScale';
 import { scaleValue } from '../utils/responsive';
 import { set } from 'react-hook-form';
 import { ICard } from '../types';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 // interface IFallback {
 //   data: any[];
@@ -219,5 +220,13 @@ const Home: NextPage = () => {
     </>
   );
 };
+
+export async function getServerSideProps({ locale }: { locale: string }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
+}
 
 export default Home;

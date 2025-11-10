@@ -6,6 +6,7 @@ import Banner from '@components/lecture/banner';
 import Best from '@components/lecture/best';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const Lecture: NextPage = () => {
   const { data, error } = useSWR('/cms/class', () =>
@@ -30,5 +31,13 @@ const Lecture: NextPage = () => {
     </>
   );
 };
+
+export async function getServerSideProps({ locale }: { locale: string }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
+}
 
 export default Lecture;

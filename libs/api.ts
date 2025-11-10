@@ -4,10 +4,34 @@ import axios from 'axios';
 export const API_URL = 'https://api-global.xn--o22bp6a0zk.com';
 // export const API_URL = 'https://test.xn--o22bp6a0zk.com';
 // export const API_URL = 'http://192.168.0.145:8000';
- 
+
 const api = axios.create({
   baseURL: API_URL,
 });
+
+// Request Interceptor: Accept-Language 헤더 자동 추가
+api.interceptors.request.use(
+  (config) => {
+    // 브라우저 환경에서만 실행 (SSR 안전)
+    if (typeof window !== 'undefined') {
+      // 쿠키에서 현재 언어 설정 읽기 (NEXT_LOCALE 쿠키)
+      const locale = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('NEXT_LOCALE='))
+        ?.split('=')[1] || 'ko'; // 기본값: 한국어
+
+      // Accept-Language 헤더 추가
+      if (config.headers) {
+        config.headers['Accept-Language'] = locale;
+      }
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 interface IProps {
   [key: string]: any;

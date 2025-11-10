@@ -15,6 +15,7 @@ import { lecturesApi } from '@libs/api';
 import axios from 'axios';
 import { scaleValue } from '../utils/responsive';
 import useResponsiveScale from '../hooks/useResponsiveScale';
+import { useTranslation } from 'next-i18next';
 
 interface IApplyTutorForm {
   // 성함
@@ -34,6 +35,7 @@ interface IApplyTutorForm {
 }
 
 export default function Footer() {
+  const { t } = useTranslation('common');
   const scale = useResponsiveScale();
 
   const popupVar = {
@@ -91,8 +93,8 @@ export default function Footer() {
   async function sendSMS(to: string, name: string) {
     try {
       const response = await axios.post('/api/sendSms', {
-        content: `${name}님이 강사지원 글을 남기셨습니다.`, // SMS 내용
-        subject: "[강사지원]", // SMS 제목
+        content: `${name}${t('smsNotification')}`, // SMS 내용
+        subject: t('smsSubject'), // SMS 제목
         toNumbers: [to] // 수신 번호 리스트
       }, {
         headers: {
@@ -215,19 +217,19 @@ export default function Footer() {
 
           <nav className='mt-10 flex space-x-7 font-[400] md:mt-6 md:space-x-3 text-[12px]'>
             <Link href='/about-us'>
-              <a className='text-[#c0c0c0]'>회사소개</a>
+              <a className='text-[#c0c0c0]'>{t('aboutUs')}</a>
             </Link>
 
             <Link href='/terms-of-service'>
-              <a className='text-[#c0c0c0]'>이용약관</a>
+              <a className='text-[#c0c0c0]'>{t('termsOfService')}</a>
             </Link>
 
             <Link href='/refund-policy'>
-              <a className='text-[#c0c0c0]'>환불규정</a>
+              <a className='text-[#c0c0c0]'>{t('refundPolicy')}</a>
             </Link>
 
             <Link href='/privacy-policy'>
-              <a className='text-[#c0c0c0]'>개인정보처리방침</a>
+              <a className='text-[#c0c0c0]'>{t('privacyPolicy')}</a>
             </Link>
           </nav>
 
@@ -307,21 +309,21 @@ export default function Footer() {
         <div>
 
           <div className='space-y-[10px] text-[#9e9e9e] mt-[20px] text-[12px] font-[400]'>
-            <div>주식회사 밀레니얼머니스쿨</div>
+            <div>{t('companyName')}</div>
             <div>
               <div>
-                사업자 등록번호 : 860-87-02584
+                {t('businessNumber')}
               </div>
               <div>
-                대표자 : 신희은ㅣ통신판매업신고 : 2023-서울강남-03183
+                {t('ceo')}ㅣ{t('businessRegistration')}
               </div>
             </div>
             <div>
               <div>
-                foryourfreedom2023@naver.com
+                {t('email')}
               </div>
               <div>
-                서울 강남구 역삼동 736-50, 4층 5층 8층
+                {t('address')}
               </div>
             </div>
           </div>
@@ -395,31 +397,30 @@ export default function Footer() {
 
           <nav className='mt-10 flex space-x-7 font-medium md:mt-6 md:space-x-3 md:text-sm'>
             <Link href='/about-us'>
-              <a className='text-[#c0c0c0]'>회사소개</a>
+              <a className='text-[#c0c0c0]'>{t('aboutUs')}</a>
             </Link>
 
             <Link href='/terms-of-service'>
-              <a className='text-[#c0c0c0]'>이용약관</a>
+              <a className='text-[#c0c0c0]'>{t('termsOfService')}</a>
             </Link>
 
             <Link href='/refund-policy'>
-              <a className='text-[#c0c0c0]'>환불규정</a>
+              <a className='text-[#c0c0c0]'>{t('refundPolicy')}</a>
             </Link>
 
             <Link href='/privacy-policy'>
-              <a className='text-[#c0c0c0]'>개인정보처리방침</a>
+              <a className='text-[#c0c0c0]'>{t('privacyPolicy')}</a>
             </Link>
           </nav>
 
           <div className='mt-[3.75rem] space-y-2 text-[#9e9e9e] md:mt-8 md:text-sm'>
-            <div>주식회사 밀레니얼머니스쿨</div>
+            <div>{t('companyName')}</div>
             <div>
-              사업자 등록번호 : 860-87-02584ㅣ대표자 : 신희은ㅣ통신판매업신고 :
-              2023-서울강남-03183
+              {t('businessNumber')}ㅣ{t('ceo')}ㅣ{t('businessRegistration')}
             </div>
             <div>
-              foryourfreedom2023@naver.com |
-              서울 강남구 역삼동 736-50, 4층 5층 8층
+              {t('email')} |
+              {t('address')}
             </div>
           </div>
         </div>
@@ -521,29 +522,29 @@ export default function Footer() {
             <div className="overflow-y-auto flex-1 min-h-0">
               <form onSubmit={handleSubmit(onValid, onInvalid)} className="space-y-3">
                 <div>
-                  <p className='text-[14px] font-[300] mb-2'>밀머스는 각 분야 최고의 강사님과 협업해 독보적인 클래스를 만들어 가고 있습니다. 모든 광고, 마케팅, 운영 비용은 밀머스가 전액 부담하며 실력있고 진정성 있는 강사님의 지원을 환영합니다!</p>
+                  <p className='text-[14px] font-[300] mb-2'>{t('instructorApplicationDescription')}</p>
                 </div>
               <div>
-                <label className="block text-sm font-medium mb-1">성함을 입력해주세요</label>
+                <label className="block text-sm font-medium mb-1">{t('nameLabel')}</label>
                 <input
                   type="text"
                   {...register('name', {
-                    required: '성함을 입력해주세요',
+                    required: t('nameRequired'),
                   })}
                   className="w-full text-[#cfcfcf] px-3 py-1 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
                 />
                 {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">핸드폰 번호를 입력해주세요</label>
+                <label className="block text-sm font-medium mb-1">{t('phoneLabel')}</label>
                 <input
                   type="text"
                   maxLength={11}
                   {...register('phone', {
-                    required: '핸드폰 번호를 입력해주세요',
+                    required: t('phoneRequired'),
                     pattern: {
                       value: /^\d{11}$/, // 숫자만 11자리인지 확인하는 정규식
-                      message: '핸드폰 번호는 -없이 숫자 11자리로 입력해주세요',
+                      message: t('phoneInvalid'),
                     },
                   })}
                   className="w-full text-[#cfcfcf] px-3 py-1 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
@@ -551,55 +552,55 @@ export default function Footer() {
                 {errors.phone && <span className="text-red-500 text-sm">{errors.phone.message}</span>}
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">이메일 주소를 입력해주세요</label>
+                <label className="block text-sm font-medium mb-1">{t('emailLabel')}</label>
                 <input
                   type="text"
                   {...register('email', {
-                    required: '이메일 주소를 입력해주세요',
+                    required: t('emailRequired'),
                   })}
                   className="w-full text-[#cfcfcf] px-3 py-1 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
                 />
                 {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">운영중인 대표 SNS 링크를 기입해주세요</label>
+                <label className="block text-sm font-medium mb-1">{t('snsLabel')}</label>
                 <input
                   type="text"
                   {...register('sns', {
-                    required: '대표 SNS 링크를 기입해주세요',
+                    required: t('snsRequired'),
                   })}
                   className="w-full text-[#cfcfcf] px-3 py-1 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
                 />
                 {errors.sns && <span className="text-red-500 text-sm">{errors.sns.message}</span>}
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">진행하고자 하는 강의주제를 알려주세요</label>
+                <label className="block text-sm font-medium mb-1">{t('subjectLabel')}</label>
                 <input
                   type="text"
                   {...register('subject', {
-                    required: '강의주제를 입력해주세요',
+                    required: t('subjectRequired'),
                   })}
                   className="w-full text-[#cfcfcf] px-3 py-1 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
                 />
                 {errors.subject && <span className="text-red-500 text-sm">{errors.subject.message}</span>}
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">기존에 진행한 강의 참고 링크를 제공해주세요</label>
+                <label className="block text-sm font-medium mb-1">{t('referenceLabel')}</label>
                 <input
                   type="text"
                   {...register('reference', {
-                    required: '강의 참고 링크를 제공해주세요',
+                    required: t('referenceRequired'),
                   })}
                   className="w-full text-[#cfcfcf] px-3 py-1 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
                 />
                 {errors.reference && <span className="text-red-500 text-sm">{errors.reference.message}</span>}
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">현재 강의가 런칭돼 있는 플랫폼 정보를 입력해주세요</label>
+                <label className="block text-sm font-medium mb-1">{t('platformLabel')}</label>
                 <input
                   type="text"
                   {...register('oldPlatform', {
-                    required: '플랫폼 정보를 입력해주세요',
+                    required: t('platformRequired'),
                   })}
                   className="w-full text-[#cfcfcf] px-3 py-1 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
                 />
@@ -610,7 +611,7 @@ export default function Footer() {
                     <div
                       className='flex h-14 w-64 cursor-pointer items-center justify-center rounded bg-[#00e7ff] text-black transition-all hover:opacity-90'
                     >
-                      강사 지원하기
+                      {t('submitApplication')}
                     </div>
                   </button>
                 </div>
@@ -639,7 +640,7 @@ export default function Footer() {
           >
             <div className="space-y-4">
               <div>
-                <p className='text-center'>각 분야 최고의 멘토들과 협업하는 밀레니얼머니스쿨에 관심가져 주시고 지원해주셔서 감사드립니다. 클래스 기획팀에서 상세 내용 검토 후 연락드리도록 하겠습니다!</p>
+                <p className='text-center'>{t('applicationSuccess')}</p>
               </div>
               <div className='flex justify-center gap-x-8 font-bold md:gap-x-6'>
                   <button onClick={() => {
@@ -648,7 +649,7 @@ export default function Footer() {
                     <div
                       className='flex h-14 w-64 cursor-pointer items-center justify-center rounded bg-[#00e7ff] text-black transition-all hover:opacity-90'
                     >
-                      확인
+                      {t('confirm')}
                     </div>
                   </button>
                 </div>

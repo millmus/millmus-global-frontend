@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { usersApi } from '@libs/api';
 import useSWR from 'swr';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface IForm {
   nickname: string;
@@ -14,6 +16,7 @@ interface IForm {
 }
 
 const Signup: NextPage = () => {
+  const { t } = useTranslation('auth');
   const router = useRouter();
   const { type, id, name } = router.query;
   const { mutate } = useSWR('/api/user');
@@ -68,7 +71,7 @@ const Signup: NextPage = () => {
       if (err?.response?.data?.message) {
         setError(err.response.data.message);
       } else {
-        setError('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
+        setError(t('signupError'));
       }
     } finally {
       setLoading(false);
@@ -78,16 +81,16 @@ const Signup: NextPage = () => {
   return (
     <>
       <SEO
-        title='회원가입'
-        description='밀레니얼 머니스쿨 회원가입 페이지 입니다.'
+        title={t('signupPageTitle')}
+        description={t('signupPageDescription')}
       />
       <div className='mx-auto my-28 flex max-w-[32.5rem] flex-col items-center rounded-lg bg-[#373c46] p-[3.75rem] md:my-12 md:max-w-[330px] md:bg-transparent md:p-0'>
-        <h1 className='text-2xl font-medium md:text-xl'>회원가입</h1>
+        <h1 className='text-2xl font-medium md:text-xl'>{t('signupTitle')}</h1>
 
         {/* 안내 메시지 */}
         <div className='mt-6 text-center text-sm text-[#cfcfcf]'>
-          <p>Google 계정으로 로그인하셨습니다</p>
-          <p className='mt-1'>추가 정보를 입력해주세요</p>
+          <p>{t('signupInfoMessage1')}</p>
+          <p className='mt-1'>{t('signupInfoMessage2')}</p>
         </div>
 
         {/* 회원가입 폼 */}
@@ -95,16 +98,16 @@ const Signup: NextPage = () => {
           {/* 닉네임 */}
           <Input
             type='text'
-            label='닉네임'
+            label={t('nickname')}
             register={register('nickname', {
-              required: '닉네임을 입력해주세요',
+              required: t('nicknameRequired'),
               minLength: {
                 value: 2,
-                message: '닉네임은 2자 이상이어야 합니다',
+                message: t('nicknameMinLength'),
               },
               maxLength: {
                 value: 20,
-                message: '닉네임은 20자 이하여야 합니다',
+                message: t('nicknameMaxLength'),
               },
             })}
             error={errors?.nickname?.message}
@@ -113,12 +116,12 @@ const Signup: NextPage = () => {
           {/* 전화번호 */}
           <Input
             type='tel'
-            label='전화번호'
+            label={t('phoneNumber')}
             register={register('phoneNum', {
-              required: '전화번호를 입력해주세요',
+              required: t('phoneNumberRequired'),
               pattern: {
                 value: /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/,
-                message: '올바른 전화번호를 입력해주세요',
+                message: t('phoneNumberInvalid'),
               },
             })}
             error={errors?.phoneNum?.message}
@@ -133,7 +136,7 @@ const Signup: NextPage = () => {
               className='mt-1 h-4 w-4 cursor-pointer'
             />
             <label htmlFor='adAgree' className='ml-2 cursor-pointer text-sm text-[#cfcfcf]'>
-              마케팅 정보 수신 동의 (선택)
+              {t('marketingConsent')}
             </label>
           </div>
 
@@ -150,7 +153,7 @@ const Signup: NextPage = () => {
             disabled={loading}
             className='mt-6 h-[3.75rem] w-full rounded bg-[#4285f4] font-medium text-white transition-colors hover:bg-[#357ae8] disabled:cursor-not-allowed disabled:opacity-50 md:h-14'
           >
-            {loading ? '처리 중...' : '회원가입 완료'}
+            {loading ? t('processing') : t('signupComplete')}
           </button>
 
           {/* 로그인 페이지로 돌아가기 */}
@@ -159,12 +162,20 @@ const Signup: NextPage = () => {
             onClick={() => router.replace('/login')}
             className='mt-2 w-full text-center text-sm text-[#cfcfcf] hover:text-white'
           >
-            로그인 페이지로 돌아가기
+            {t('backToLogin')}
           </button>
         </form>
       </div>
     </>
   );
 };
+
+export async function getServerSideProps({ locale }: { locale: string }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'auth'])),
+    },
+  };
+}
 
 export default Signup;

@@ -4,6 +4,7 @@ import '@styles/global.css';
 import { RecoilRoot } from 'recoil';
 import { SWRConfig } from 'swr';
 import axios from 'axios';
+import { appWithTranslation } from 'next-i18next';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -21,4 +22,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);

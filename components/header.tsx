@@ -18,6 +18,8 @@ import Toast from '@components/home/toast';
 import useResponsiveScale from '../hooks/useResponsiveScale';
 import { scaleValue } from '../utils/responsive';
 import Freelive from '@public/freelive.png';
+import { useTranslation } from 'next-i18next';
+import LanguageSwitcher from './common/LanguageSwitcher';
 
 const freeliveOriginWidth = 167;
 const freeliveOriginHeight = 55;
@@ -25,12 +27,13 @@ const freeliveNewWidth = 90;
 const freeliveNewHeight = freeliveNewWidth * (freeliveOriginHeight / freeliveOriginWidth);
 
 export default function Header() {
+  const { t } = useTranslation('common');
   const { data, mutate } = useSWR('/api/user');
   const router = useRouter();
   const [isOpened, setIsOpened] = useState(false);
   const [navListIndex, setNavListIndex] = useState(0);
   const scale = useResponsiveScale();
-  
+
   // 초기 로딩 상태 관리 - undefined는 로딩중, null/object는 로딩 완료
   const isAuthLoading = data === undefined;
 
@@ -361,7 +364,7 @@ export default function Header() {
             </div>
             <div className={`flex space-x-[45px] items-center`}>
               <Link href='/'><a>
-                <h3>홈</h3>
+                <h3>{t('home')}</h3>
                 </a></Link>
               {/* 무료라이브 */}
               <Link href='/lecture/coin/1'>
@@ -377,16 +380,16 @@ export default function Header() {
                     <svg className='my-auto mr-1.5' width="5" height="5" viewBox="0 0 5 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <circle cx="2.5" cy="2.5" r="2.5" fill="#FF0000" />
                     </svg>
-                    <span className='pb-[1px]'>무료<span className='text-[#FF0000]'>LIVE</span></span>
+                    <span className='pb-[1px]'>{t('freeLiveLabel').split('LIVE')[0]}<span className='text-[#FF0000]'>LIVE</span></span>
                   </div>
                 </a>
               </Link>
               {/* 무료라이브 */}
               <Link href='/lecture/premium/1'><a>
-                <h3>프리미엄클래스</h3>
+                <h3>{t('premiumClass')}</h3>
                 </a></Link>
               <Link href='/event/1'><a>
-                <h3>이벤트</h3>
+                <h3>{t('event')}</h3>
                 </a></Link>
             </div>
           </div>
@@ -396,7 +399,7 @@ export default function Header() {
               <div className='w-[300px] relative'>
               <input
                   type='text'
-                  placeholder='원하는 클래스를 직접 찾아보세요'
+                  placeholder={t('searchPlaceholder')}
                   className='w-full text-[#cfcfcf] px-3 py-2 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none'
                   value={searchQuery}
                   onChange={onChangeSearch}
@@ -478,39 +481,42 @@ export default function Header() {
   
                   <Link href='/mypage/lecture/ongoing/1'>
                     <a className='flex h-[2.625rem] w-[6.25rem] items-center justify-center rounded-sm border border-[#00e7ff] leading-3 text-[#00e7ff]'>
-                      내강의실
+                      {t('myLectures')}
                     </a>
                   </Link>
-  
+
                   <Link href='/mypage/notification/1'>
                     <a className='flex h-[2.625rem] w-[6.25rem] items-center justify-center rounded-sm bg-[#00e7ff] leading-3 text-[#14161a]'>
-                      마이페이지
+                      {t('mypage')}
                     </a>
                   </Link>
-  
+
                   <div
                     onClick={handleLogout}
                     className='flex h-[2.625rem] w-[6.25rem] cursor-pointer items-center justify-center rounded-sm bg-[#ffffff2b]'
                   >
-                    로그아웃
+                    {t('logout')}
                   </div>
                 </>
               ) : (
                 <>
                   <Link href='/login'>
                     <a className='flex h-[2.625rem] w-[6.25rem] items-center justify-center rounded-sm bg-[#ffffff2b]'>
-                      로그인
+                      {t('login')}
                     </a>
                   </Link>
-  
+
                   <Link href='/signup'>
                     <a className='flex h-[2.625rem] w-[6.25rem] items-center justify-center rounded-sm bg-[#00e7ff] leading-3 text-[#14161a]'>
-                      회원가입
+                      {t('signup')}
                     </a>
                   </Link>
                 </>
               )}
             </nav>
+            <div className='ml-4'>
+              <LanguageSwitcher />
+            </div>
           </div>
         </div>}
       </div>
@@ -636,7 +642,7 @@ export default function Header() {
                       <Link href='/lecture/coin/1'>
                         <a>
                           <div className='border-b border-[#373c46] pb-4 pl-10 pr-6 pt-5'>
-                            무료라이브
+                            {t('freeLive')}
                           </div>
                         </a>
                       </Link>
@@ -644,7 +650,7 @@ export default function Header() {
                       <Link href='/lecture/premium/1'>
                         <a>
                           <div className='border-b border-[#373c46] pb-4 pl-10 pr-6 pt-5'>
-                            프리미엄클래스
+                            {t('premiumClass')}
                           </div>
                         </a>
                       </Link>
@@ -652,7 +658,7 @@ export default function Header() {
                       <Link href='/event/1'>
                         <a>
                           <div className='border-b border-[#373c46] pb-4 pl-10 pr-6 pt-5'>
-                            이벤트
+                            {t('event')}
                           </div>
                         </a>
                       </Link>
@@ -663,7 +669,7 @@ export default function Header() {
                       <Link href='/lecture/coin/1'>
                         <a>
                           <div className='border-b border-[#373c46] pb-4 pl-10 pr-6 pt-5'>
-                            무료라이브
+                            {t('freeLive')}
                           </div>
                         </a>
                       </Link>
@@ -671,7 +677,7 @@ export default function Header() {
                       <Link href='/lecture/premium/1'>
                         <a>
                           <div className='border-b border-[#373c46] pb-4 pl-10 pr-6 pt-5'>
-                            프리미엄클래스
+                            {t('premiumClass')}
                           </div>
                         </a>
                       </Link>
@@ -679,7 +685,7 @@ export default function Header() {
                       <Link href='/event/1'>
                         <a>
                           <div className='border-b border-[#373c46] pb-4 pl-10 pr-6 pt-5'>
-                            이벤트
+                            {t('event')}
                           </div>
                         </a>
                       </Link>
@@ -687,7 +693,7 @@ export default function Header() {
                       <Link href='/mypage/lecture/ongoing/1'>
                         <a>
                           <div className='border-b border-[#373c46] pb-4 pl-10 pr-6 pt-5'>
-                            내강의실
+                            {t('myLectures')}
                           </div>
                         </a>
                       </Link>
@@ -695,7 +701,7 @@ export default function Header() {
                       <Link href='/mypage/notification/1'>
                         <a>
                           <div className='border-b border-[#373c46] pb-4 pl-10 pr-6 pt-5'>
-                            마이페이지
+                            {t('mypage')}
                           </div>
                         </a>
                       </Link>
@@ -706,7 +712,7 @@ export default function Header() {
                       <Link href='/lecture/coin/1'>
                         <a>
                           <div className='border-b border-[#373c46] pb-4 pl-10 pr-6 pt-5'>
-                            무료라이브
+                            {t('freeLive')}
                           </div>
                         </a>
                       </Link>
@@ -714,15 +720,15 @@ export default function Header() {
                       <Link href='/lecture/premium/1'>
                         <a>
                           <div className='border-b border-[#373c46] pb-4 pl-10 pr-6 pt-5'>
-                            프리미엄클래스
+                            {t('premiumClass')}
                           </div>
                         </a>
-                      </Link> 
+                      </Link>
 
                       <Link href='/event/1'>
                         <a>
                           <div className='border-b border-[#373c46] pb-4 pl-10 pr-6 pt-5'>
-                            이벤트
+                            {t('event')}
                           </div>
                         </a>
                       </Link>
@@ -730,7 +736,7 @@ export default function Header() {
                       <Link href='/login'>
                         <a>
                           <div className='border-b border-[#373c46] pb-4 pl-10 pr-6 pt-5'>
-                            로그인
+                            {t('login')}
                           </div>
                         </a>
                       </Link>
@@ -738,7 +744,7 @@ export default function Header() {
                       <Link href='/signup'>
                         <a>
                           <div className='border-b border-[#373c46] pb-4 pl-10 pr-6 pt-5'>
-                            회원가입
+                            {t('signup')}
                           </div>
                         </a>
                       </Link>
@@ -752,7 +758,7 @@ export default function Header() {
                   <div>
                     <Link href='/about-us'>
                       <a>
-                        <div>회사소개</div>
+                        <div>{t('aboutUs')}</div>
                       </a>
                     </Link>
                   </div>
@@ -760,7 +766,7 @@ export default function Header() {
                   <div>
                     <Link href='/terms-of-service'>
                       <a>
-                        <div>이용약관</div>
+                        <div>{t('termsOfService')}</div>
                       </a>
                     </Link>
                   </div>
@@ -768,7 +774,7 @@ export default function Header() {
                   <div>
                     <Link href='/refund-policy'>
                       <a>
-                        <div>환불규정</div>
+                        <div>{t('refundPolicy')}</div>
                       </a>
                     </Link>
                   </div>
@@ -776,7 +782,7 @@ export default function Header() {
                   <div>
                     <Link href='/privacy-policy'>
                       <a>
-                        <div className='underline'>개인정보처리방침</div>
+                        <div className='underline'>{t('privacyPolicy')}</div>
                       </a>
                     </Link>
                   </div>
@@ -803,7 +809,7 @@ export default function Header() {
                     />
                   </svg>
 
-                  <div className='text-sm opacity-60 '>로그아웃</div>
+                  <div className='text-sm opacity-60 '>{t('logout')}</div>
                 </div>
               )}
             </motion.div>
