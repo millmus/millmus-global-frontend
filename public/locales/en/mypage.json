@@ -1,0 +1,71 @@
+{
+  "notificationBoxTitle": "Notifications",
+  "editProfileTitle": "Edit Profile",
+  "myClassroomTitle": "My Classroom",
+  "lectureListTitle": "Lecture List",
+  "communityActivityTitle": "Community Activity",
+  "purchaseHistoryTitle": "Purchase History",
+  "couponPointTitle": "Coupon/Point",
+  "couponTitle": "Coupon",
+  "pointTitle": "Point",
+  "logoutTitle": "Logout",
+
+  "personalInfoTitle": "Personal Information",
+  "passwordChangeTitle": "Change Password",
+
+  "nameLabel": "Name",
+  "namePlaceholder": "Please enter your name",
+  "nameRequired": "Please enter your name",
+  "nameMinLength": "Name must be at least 2 characters",
+  "nameMaxLength": "Name must be 5 characters or less",
+
+  "nicknameLabel": "Nickname",
+  "nicknamePlaceholder": "Please enter your nickname",
+  "nicknameRequired": "Please enter your nickname",
+  "nicknameMinLength": "Nickname must be at least 2 characters",
+  "nicknameMaxLength": "Nickname must be 8 characters or less",
+
+  "phoneLabel": "Phone Number",
+  "phonePlaceholder": "Please enter your phone number",
+  "phoneRequired": "Please enter your phone number",
+  "phoneInvalid": "Please enter a valid phone number",
+
+  "passwordLabel": "Password",
+  "changePasswordButton": "Change Password",
+
+  "eventInfoLabel": "Event Information",
+  "eventConsentLabel": "Agree to receive event information",
+
+  "deleteAccountLabel": "Delete Account",
+
+  "currentPasswordLabel": "Current Password",
+  "currentPasswordPlaceholder": "Please enter your current password",
+
+  "newPasswordLabel": "New Password",
+  "newPasswordPlaceholder": "Please enter a new password",
+  "newPasswordRequired": "Please enter a new password",
+  "newPasswordPattern": "Password must be at least 8 characters and include letters, numbers, and special characters",
+
+  "confirmPasswordLabel": "Confirm New Password",
+  "confirmPasswordPlaceholder": "Please re-enter your password",
+  "confirmPasswordRequired": "Please re-enter your password",
+  "confirmPasswordMismatch": "Passwords do not match",
+
+  "saveButton": "Save",
+
+  "deleteAccountTitle": "Delete Account",
+  "deleteAccountWarning": "All your course information will be deleted and cannot be recovered. Do you still want to delete your account?",
+  "deleteAccountReasonLabel": "Reason for deletion (optional)",
+  "deleteAccountReasonPlaceholder": "Please enter your reason for deletion",
+  "yesButton": "Yes",
+  "noButton": "No",
+
+  "deleteAccountRequestTitle": "Account deletion request submitted",
+  "deleteAccountRequestMessage": "Your account will be deleted within 23 hours.",
+  "confirmButton": "Confirm",
+
+  "profileUpdateSuccess": "Profile updated successfully",
+  "signupError": "Signup failed",
+  "deleteAccountError": "An error occurred while deleting your account. Please try again.",
+  "errorTitle": "Error"
+}

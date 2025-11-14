@@ -2,11 +2,13 @@ import { scaleValue } from '../utils/responsive';
 import useResponsiveScale from '../hooks/useResponsiveScale';
 import { ICard } from '../types';
 import MultipleRowsCardSlider from './MultipleRowsCardSlider';
+import { useTranslation } from 'next-i18next';
 
 interface Props {
     itemList: ICard[];
 }
 const SalesVerificationRelayList = ({itemList}: Props) => {
+    const { t } = useTranslation('home');
     const scale = useResponsiveScale();
 
     return (
@@ -27,7 +29,7 @@ const SalesVerificationRelayList = ({itemList}: Props) => {
                                     letterSpacing: `-0.05em`,
                                     fontWeight: 700,
                                 }}
-                            >프리미엄 클래스 매출인증 릴레이</h2>
+                            >{t('salesVerificationSectionTitle')}</h2>
                         </div>
                     </div>
                     <div>
@@ -36,7 +38,7 @@ const SalesVerificationRelayList = ({itemList}: Props) => {
                             style={{
                                 letterSpacing: `-0.05em`,
                             }}
-                        >놀라운 매출의 주인공을 모십니다</span>
+                        >{t('salesVerificationSectionSubtitle')}</span>
                     </div>
                 </div>
                 <div className='mt-[-10px]'>

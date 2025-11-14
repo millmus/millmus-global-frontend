@@ -8,12 +8,15 @@ import useSWR from 'swr';
 import cookies from 'next-cookies';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 interface IProps {
   params: { category: string; slug: string[] };
 }
 
 const CommunityCategory: NextPage<IProps> = ({ params }) => {
+  const { t } = useTranslation('seo');
   const { data: myData } = useSWR('/api/user');
   const router = useRouter();
   const { category, slug } = params;
@@ -56,7 +59,7 @@ const CommunityCategory: NextPage<IProps> = ({ params }) => {
   }, [myData]);
   return (
     <>
-      <SEO title='커뮤니티 | 밀레니얼머니스쿨 - 밀머스' description={`멘토에게 질문하고 직접 소통할 수 있는 공간을 제공합니다.`} />
+      <SEO title={t('communityTitle')} description={t('communityDescription')} />
       {
         category === '4' && <Banner title='경제독서모임 커뮤니티 게시판' />
       }
@@ -93,6 +96,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   if (category === '4' || category === '6') {
     return {
       props: {
+        ...(await serverSideTranslations(ctx.locale || 'en', ['common', 'seo'])),
         params: ctx.params,
       },
     };
@@ -109,6 +113,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     } else {
       return {
         props: {
+          ...(await serverSideTranslations(ctx.locale || 'en', ['common', 'seo'])),
           params: ctx.params,
         },
       };

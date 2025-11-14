@@ -9,6 +9,8 @@ import useMutation from '@libs/client/useMutation';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { FieldErrors, useForm } from 'react-hook-form';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface IForm {
   name: string;
@@ -20,6 +22,7 @@ interface IForm {
 }
 
 const EditProfile: NextPage = () => {
+  const { t } = useTranslation(['mypage', 'seo']);
   const { token, profile } = useUser({
     isPrivate: true,
   });
@@ -54,13 +57,13 @@ const EditProfile: NextPage = () => {
         token,
       };
       editMyInfos({ req });
-      alert('회원 정보 수정이 완료되었습니다.');
+      alert(t('mypage:profileUpdateSuccess'));
       const user_obj = {
         // profile: {
         //   mobileNumber: data.phoneNum,
         //   name: name,
         // },
-        tags: ["정보수정"],
+        tags: ["Profile Update"],
         unsubscribeEmail: !(!!data.adAgree),
         unsubscribeTexting: !(!!data.adAgree),
       };
@@ -71,7 +74,7 @@ const EditProfile: NextPage = () => {
         }
       });
     } catch {
-      alert('Error');
+      alert(t('mypage:errorTitle'));
     }
   };
   const onInvalid = (errors: FieldErrors) => {
@@ -88,8 +91,8 @@ const EditProfile: NextPage = () => {
       setShowWithdrawModal(false);
       setShowWithdrawCompleteModal(true);
     } catch (error) {
-      console.error('회원탈퇴 중 오류가 발생했습니다:', error);
-      alert('회원탈퇴 중 오류가 발생했습니다. 다시 시도해주세요.');
+      console.error(t('mypage:deleteAccountError'), error);
+      alert(t('mypage:deleteAccountError'));
     }
   };
 
@@ -109,7 +112,7 @@ const EditProfile: NextPage = () => {
   }, [profile]);
   return (
     <>
-      <SEO title='마이페이지' />
+      <SEO title={t('seo:mypagePageTitle')} />
       <Layout padding='pt-20 pb-44 md:pt-4'>
         <Header />
 
@@ -118,7 +121,7 @@ const EditProfile: NextPage = () => {
 
           <div className='grow space-y-6 md:mt-8'>
             <div className='text-lg font-medium'>
-              {!pwTabOpen ? '개인정보' : '비밀번호 변경'}
+              {!pwTabOpen ? t('mypage:personalInfoTitle') : t('mypage:passwordChangeTitle')}
             </div>
 
             <div className='divide-y divide-[#575b64] rounded-sm bg-[rgba(229,229,229,0.08)] p-10 md:p-4'>
@@ -126,16 +129,16 @@ const EditProfile: NextPage = () => {
                 <>
                   <Input
                     type='text'
-                    label='이름'
+                    label={t('mypage:nameLabel')}
                     register={register('name', {
                       value: profile?.name,
-                      required: '이름을 입력해주세요',
+                      required: t('mypage:nameRequired') as string,
                       minLength: {
-                        message: '이름은 2글자 이상이어야 합니다',
+                        message: t('mypage:nameMinLength') as string,
                         value: 2,
                       },
                       maxLength: {
-                        message: '이름은 5글자 이하여야 합니다',
+                        message: t('mypage:nameMaxLength') as string,
                         value: 5,
                       },
                     })}
@@ -144,16 +147,16 @@ const EditProfile: NextPage = () => {
 
                   <Input
                     type='text'
-                    label='닉네임'
+                    label={t('mypage:nicknameLabel')}
                     register={register('nickname', {
                       value: profile?.nickname,
-                      required: '닉네임을 입력해주세요',
+                      required: t('mypage:nicknameRequired') as string,
                       minLength: {
-                        message: '닉네임은 2글자 이상이어야 합니다',
+                        message: t('mypage:nicknameMinLength') as string,
                         value: 2,
                       },
                       maxLength: {
-                        message: '닉네임은 8글자 이하여야 합니다',
+                        message: t('mypage:nicknameMaxLength') as string,
                         value: 8,
                       },
                     })}
@@ -162,10 +165,10 @@ const EditProfile: NextPage = () => {
 
                   <Input
                     type='tel'
-                    label='전화번호'
+                    label={t('mypage:phoneLabel')}
                     register={register('phoneNum', {
                       value: profile?.phone_number,
-                      required: '전화번호를 입력해주세요',
+                      required: t('mypage:phoneRequired') as string,
                       validate: {
                         notPhoneNum: (value) => {
                           const regPhoneNum =
@@ -173,7 +176,7 @@ const EditProfile: NextPage = () => {
                           if (regPhoneNum.test(value)) {
                             return true;
                           } else {
-                            return '올바른 전화번호를 입력해주세요';
+                            return t('mypage:phoneInvalid') as string;
                           }
                         },
                       },
@@ -183,18 +186,18 @@ const EditProfile: NextPage = () => {
                   />
 
                   <div className='flex h-20 items-center md:text-sm'>
-                    <div className='w-44 font-medium opacity-60'>비밀번호</div>
+                    <div className='w-44 font-medium opacity-60'>{t('mypage:passwordLabel')}</div>
                     <div
                       onClick={() => setPwTabOpen(true)}
                       className='cursor-pointer rounded bg-[#686e7a] px-4 py-2 transition-all hover:opacity-90 md:text-xs'
                     >
-                      비밀번호 변경
+                      {t('mypage:changePasswordButton')}
                     </div>
                   </div>
 
                   <div className='flex h-20 items-center md:text-sm'>
                     <div className='w-44 font-medium opacity-60'>
-                      이벤트 정보
+                      {t('mypage:eventInfoLabel')}
                     </div>
                     <input
                       type='checkbox'
@@ -203,18 +206,18 @@ const EditProfile: NextPage = () => {
                       })}
                       className='mr-2.5 h-4 w-4 cursor-pointer appearance-none rounded-sm border bg-cover bg-center transition-all checked:border-none checked:bg-[url("/icons/check.png")]'
                     />
-                    <div className='md:text-xs'>이벤트 수신 동의</div>
+                    <div className='md:text-xs'>{t('mypage:eventConsentLabel')}</div>
                   </div>
 
                   <div className='flex h-20 items-center md:text-sm'>
                     <div className='w-44 font-medium opacity-60'>
-                      회원탈퇴
+                      {t('mypage:deleteAccountLabel')}
                     </div>
                     <div
                       onClick={() => setShowWithdrawModal(true)}
                       className='cursor-pointer rounded bg-gray-500 px-4 py-2 text-white transition-all hover:bg-gray-600 md:text-xs'
                     >
-                      회원탈퇴
+                      {t('mypage:deleteAccountLabel')}
                     </div>
                   </div>
                 </>
@@ -222,17 +225,17 @@ const EditProfile: NextPage = () => {
                 <>
                   <div className='flex h-20 items-center md:text-sm'>
                     <div className='w-44 font-medium opacity-60'>
-                      현재 비밀번호
+                      {t('mypage:currentPasswordLabel')}
                     </div>
                     <div>**********</div>
                   </div>
 
                   <Input
                     type='password'
-                    label='새 비밀번호'
+                    label={t('mypage:newPasswordLabel')}
                     register={register('password', {
                       value: '',
-                      required: '비밀번호를 입력해주세요',
+                      required: t('mypage:newPasswordRequired') as string,
                       validate: {
                         notPw: (value) => {
                           const regPw =
@@ -240,7 +243,7 @@ const EditProfile: NextPage = () => {
                           if (regPw.test(value)) {
                             return true;
                           } else {
-                            return '비밀번호는 8자리 이상 / 1개 이상의 문자, 숫자, 특수문자가 포함되어야 합니다';
+                            return t('mypage:newPasswordPattern') as string;
                           }
                         },
                       },
@@ -250,14 +253,14 @@ const EditProfile: NextPage = () => {
 
                   <Input
                     type='password'
-                    label='새 비밀번호 확인'
+                    label={t('mypage:confirmPasswordLabel')}
                     register={register('passwordCheck', {
                       value: '',
-                      required: '비밀번호를 입력해주세요',
+                      required: t('mypage:confirmPasswordRequired') as string,
                       validate: {
                         notPwCheck: (value) =>
                           value === watch('password') ||
-                          '비밀번호가 일치하지 않습니다',
+                          (t('mypage:confirmPasswordMismatch') as string),
                       },
                     })}
                     error={errors?.passwordCheck?.message}
@@ -293,7 +296,7 @@ const EditProfile: NextPage = () => {
                     />
                   </svg>
                 ) : (
-                  '저장'
+                  t('mypage:saveButton')
                 )}
               </div>
             </div>
@@ -306,23 +309,20 @@ const EditProfile: NextPage = () => {
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
           <div className='flex flex-col w-[30rem] gap-y-6 rounded bg-[#282e38] py-8 px-8 md:w-[25rem]'>
             <h3 className='text-lg font-medium text-[#cfcfcf] text-center'>
-              회원탈퇴
+              {t('mypage:deleteAccountTitle')}
             </h3>
             <div className='text-center'>
-              <p className='text-[#cfcfcf] leading-relaxed'>
-                탈퇴시 기존에 수강하신 모든 정보가<br />삭제되며 복구 불가합니다.<br />
-                그래도 탈퇴하시겠습니까?
-              </p>
+              <p className='text-[#cfcfcf] leading-relaxed' dangerouslySetInnerHTML={{ __html: t('mypage:deleteAccountWarning').replace(/\n/g, '<br />') }} />
             </div>
             <div className='flex flex-col gap-y-4'>
               <div className='text-left'>
                 <label className='block text-sm font-medium text-[#cfcfcf] mb-2'>
-                  탈퇴 사유 (선택사항)
+                  {t('mypage:deleteAccountReasonLabel')}
                 </label>
                 <textarea
                   value={withdrawalReason}
                   onChange={(e) => setWithdrawalReason(e.target.value)}
-                  placeholder='탈퇴 사유를 입력해주세요'
+                  placeholder={t('mypage:deleteAccountReasonPlaceholder') as string}
                   className='w-full h-24 px-3 py-2 bg-[#3a3f4a] border border-[#575b64] rounded text-[#cfcfcf] placeholder-gray-400 focus:outline-none focus:border-[#00e7ff] resize-none'
                 />
               </div>
@@ -351,7 +351,7 @@ const EditProfile: NextPage = () => {
                     />
                   </svg>
                 ) : (
-                  '예'
+                  t('mypage:yesButton')
                 )}
               </button>
               <button
@@ -362,7 +362,7 @@ const EditProfile: NextPage = () => {
                 disabled={withdrawLoading}
                 className='flex h-12 w-24 cursor-pointer items-center justify-center rounded bg-[#686e7a] text-white transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed'
               >
-                아니오
+                {t('mypage:noButton')}
               </button>
             </div>
           </div>
@@ -374,17 +374,15 @@ const EditProfile: NextPage = () => {
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
           <div className='flex flex-col w-[30rem] gap-y-6 rounded bg-[#282e38] py-8 px-8 md:w-[25rem] text-center'>
             <h3 className='text-lg font-medium text-[#cfcfcf]'>
-              탈퇴 요청이 접수되었습니다
+              {t('mypage:deleteAccountRequestTitle')}
             </h3>
-            <p className='text-[#cfcfcf] leading-relaxed'>
-              23시간 이내 탈퇴승인 및<br />회원정보 삭제가 완료됩니다.
-            </p>
+            <p className='text-[#cfcfcf] leading-relaxed' dangerouslySetInnerHTML={{ __html: t('mypage:deleteAccountRequestMessage').replace(/\n/g, '<br />') }} />
             <div className='flex justify-center font-bold'>
               <button
                 onClick={handleWithdrawComplete}
                 className='flex h-12 w-32 cursor-pointer items-center justify-center rounded bg-[#00e7ff] text-black transition-all hover:opacity-90'
               >
-                확인
+                {t('mypage:confirmButton')}
               </button>
             </div>
           </div>
@@ -393,5 +391,13 @@ const EditProfile: NextPage = () => {
     </>
   );
 };
+
+export async function getServerSideProps({ locale }: { locale: string }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['mypage', 'seo'])),
+    },
+  };
+}
 
 export default EditProfile;

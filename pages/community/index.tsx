@@ -9,16 +9,19 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import { communityApi } from '@libs/api';
 import { cls } from '@libs/client/utils';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 const Community: NextPage = () => {
+  const { t } = useTranslation('seo');
   const { data: myData } = useSWR('/api/user');
   const { data } = useSWR('/community', () => communityApi.communityList());
   const imgList = [Ecomony, Nft, Stock, Coin];
   return (
     <>
       <SEO
-        title='커뮤니티 게시판 | 밀레니얼머니스쿨 - 밀머스'
-        description='멘토에게 질문하고 직접 소통할 수 있는 공간을 제공합니다.'
+        title={t('communityTitle')}
+        description={t('communityDescription')}
       />
       <div>
         <div className='grid grid-cols-4 md:grid-cols-1'  style={{maxWidth: '1180px', margin: "auto"}}>
@@ -82,5 +85,13 @@ const Community: NextPage = () => {
     </>
   );
 };
+
+export async function getServerSideProps({ locale }: { locale: string }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'seo'])),
+    },
+  };
+}
 
 export default Community;

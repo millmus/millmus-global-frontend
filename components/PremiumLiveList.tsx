@@ -3,11 +3,13 @@ import useResponsiveScale from '../hooks/useResponsiveScale';
 import { ICard } from '../types';
 import CardSlider from './CardSlider';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 
 interface Props {
     itemList: ICard[];
 }
 const PremiumLiveList = ({itemList}: Props) => {
+    const { t } = useTranslation('home');
     const scale = useResponsiveScale();
 
     return (
@@ -29,10 +31,10 @@ const PremiumLiveList = ({itemList}: Props) => {
                                     letterSpacing: `-0.05em`,
                                     fontWeight: 700,
                                 }}
-                            >초보를 위한 맞춤 프리미엄 클래스</h2>
+                            >{t('premiumLiveSectionTitle')}</h2>
                         </div>
                         <div className={`sm:hidden bg-[#737373] rounded-[5px] pt-[3px] pb-[0px] px-[16px]`}>
-                            <span className='text-[#000000] font-bold'>더보기 {`>`}</span>
+                            <span className='text-[#000000] font-bold'>{t('viewMoreButton')}</span>
                         </div>
                     </div>
                         </a></Link>
@@ -42,7 +44,7 @@ const PremiumLiveList = ({itemList}: Props) => {
                             style={{
                                 letterSpacing: `-0.05em`,
                             }}
-                        >각분야 최고의 멘토!</span>
+                        >{t('premiumLiveSectionSubtitle')}</span>
                     </div>
                 </div>
                 <div>

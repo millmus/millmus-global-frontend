@@ -20,12 +20,14 @@ import { scaleValue } from '../utils/responsive';
 import { set } from 'react-hook-form';
 import { ICard } from '../types';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 // interface IFallback {
 //   data: any[];
 // }
 
 const Home: NextPage = () => {
+  const { t } = useTranslation('seo');
   const scale = useResponsiveScale();
   const { data: mainBanner } = useSWR('/cms/main_banner', () => lecturesApi.mainBannerList());
   const { data: coinClass } = useSWR('/cms/coin_class', () => lecturesApi.coinClassList());
@@ -161,18 +163,18 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>밀레니얼머니스쿨 - 끝까지 듣고 성과나는 프리미엄 클래스</title>
+        <title>{t('homePageTitle')}</title>
         <meta
           name='description'
-          content='이커머스, 투자, 자기계발까지 각 분야 최고 멘토들의 무료라이브와 프리미엄 클래스로 차원이 다른 성장을 경험하세요!'
+          content={t('homePageDescription') as string}
         />
         <meta
           property='og:title'
-          content='밀레니얼머니스쿨 - 끝까지 듣고 성과나는 프리미엄 클래스'
+          content={t('homeOgTitle') as string}
         />
         <meta
           property='og:description'
-          content='이커머스, 투자, 자기계발까지 각 분야 최고 멘토들의 무료라이브와 프리미엄 클래스로 차원이 다른 성장을 경험하세요!'
+          content={t('homeOgDescription') as string}
         />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-kopubworld@1.0.3/css/all.min.css"></link>
       </Head>
@@ -224,7 +226,7 @@ const Home: NextPage = () => {
 export async function getServerSideProps({ locale }: { locale: string }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common'])),
+      ...(await serverSideTranslations(locale, ['common', 'seo', 'home'])),
     },
   };
 }

@@ -3,11 +3,13 @@ import useResponsiveScale from '../hooks/useResponsiveScale';
 import { ICard } from '../types';
 import CardSlider from './CardSlider';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 
 interface Props {
     itemList: ICard[];
 }
 const FreeLiveList = ({itemList}: Props) => {
+    const { t } = useTranslation('home');
     const scale = useResponsiveScale();
 
     return (
@@ -29,10 +31,10 @@ const FreeLiveList = ({itemList}: Props) => {
                                     letterSpacing: `-0.05em`,
                                     fontWeight: 700,
                                 }}
-                            >유료를 능가하는 초고퀄 무료라이브</h2>
+                            >{t('freeLiveSectionTitle')}</h2>
                         </div>
                         <div className={`sm:hidden bg-[#737373] rounded-[5px] pt-[3px] pb-[0px] px-[16px]`}>
-                            <span className='text-[#000000] font-bold'>더보기 {`>`}</span>
+                            <span className='text-[#000000] font-bold'>{t('viewMoreButton')}</span>
                         </div>
                     </div>
                         </a></Link>
@@ -42,7 +44,7 @@ const FreeLiveList = ({itemList}: Props) => {
                             style={{
                                 letterSpacing: `-0.05em`,
                             }}
-                        >오직 밀머스에서만!</span>
+                        >{t('freeLiveSectionSubtitle')}</span>
                     </div>
                 </div>
                 <div>

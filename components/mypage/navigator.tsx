@@ -3,22 +3,24 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
+import { useTranslation } from 'next-i18next';
 
 export default function Navigator() {
+  const { t } = useTranslation('mypage');
   const router = useRouter();
   const navList = [
     {
       id: 0,
       url: '/mypage/notification/1',
       active: router.pathname === '/mypage/notification/[page]',
-      label: '알림함',
+      label: t('notificationBoxTitle'),
       subMenus: [],
     },
     {
       id: 1,
       url: '/mypage/edit',
       active: router.pathname === '/mypage/edit',
-      label: '회원 정보 수정',
+      label: t('editProfileTitle'),
       subMenus: [],
     },
     {
@@ -27,17 +29,17 @@ export default function Navigator() {
       active:
         router.pathname === '/mypage/lecture/[...slug]' ||
         router.pathname === '/mypage/community/[page]',
-      label: '내 강의실',
+      label: t('myClassroomTitle'),
       subMenus: [
-        { label: '강의 목록', url: '/mypage/lecture/ongoing/1' },
-        { label: '커뮤니티 활동', url: '/mypage/community/1' },
+        { label: t('lectureListTitle'), url: '/mypage/lecture/ongoing/1' },
+        { label: t('communityActivityTitle'), url: '/mypage/community/1' },
       ],
     },
     {
       id: 3,
       url: '/mypage/purchase/1',
       active: router.pathname === '/mypage/purchase/[page]',
-      label: '결제 내역',
+      label: t('purchaseHistoryTitle'),
       subMenus: [],
     },
     {
@@ -46,17 +48,17 @@ export default function Navigator() {
       active:
         router.pathname === '/mypage/coupon/[page]' ||
         router.pathname === '/mypage/point/[page]',
-      label: '쿠폰/포인트 관리',
+      label: t('couponPointTitle'),
       subMenus: [
-        { label: '쿠폰', url: '/mypage/coupon/1' },
-        { label: '포인트', url: '/mypage/point/1' },
+        { label: t('couponTitle'), url: '/mypage/coupon/1' },
+        { label: t('pointTitle'), url: '/mypage/point/1' },
       ],
     },
     {
       id: 5,
       url: '/mypage',
       active: router.pathname === '/mypage',
-      label: '로그아웃',
+      label: t('logoutTitle'),
       subMenus: [],
     },
   ];
@@ -111,7 +113,7 @@ export default function Navigator() {
               onClick={handleLogout}
               className='flex h-12 w-[13.625rem] cursor-pointer items-center justify-center rounded-sm bg-[rgba(229,229,229,0.08)] font-medium transition-all hover:opacity-70 md:h-[3.75rem] md:w-full md:justify-start md:border-b-2 md:border-b-[rgba(229,229,229,0.08)] md:bg-[#282e38] md:pl-8'
             >
-              로그아웃
+              {t('logoutTitle')}
             </div>
           )}
         </div>

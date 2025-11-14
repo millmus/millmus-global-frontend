@@ -1,0 +1,71 @@
+{
+  "notificationBoxTitle": "通知箱",
+  "editProfileTitle": "编辑会员信息",
+  "myClassroomTitle": "我的课程",
+  "lectureListTitle": "课程列表",
+  "communityActivityTitle": "社区活动",
+  "purchaseHistoryTitle": "购买记录",
+  "couponPointTitle": "优惠券/积分",
+  "couponTitle": "优惠券",
+  "pointTitle": "积分",
+  "logoutTitle": "退出登录",
+
+  "personalInfoTitle": "个人信息",
+  "passwordChangeTitle": "修改密码",
+
+  "nameLabel": "姓名",
+  "namePlaceholder": "请输入姓名",
+  "nameRequired": "请输入姓名",
+  "nameMinLength": "姓名必须至少2个字符",
+  "nameMaxLength": "姓名必须在5个字符以下",
+
+  "nicknameLabel": "昵称",
+  "nicknamePlaceholder": "请输入昵称",
+  "nicknameRequired": "请输入昵称",
+  "nicknameMinLength": "昵称必须至少2个字符",
+  "nicknameMaxLength": "昵称必须在8个字符以下",
+
+  "phoneLabel": "电话号码",
+  "phonePlaceholder": "请输入电话号码",
+  "phoneRequired": "请输入电话号码",
+  "phoneInvalid": "请输入正确的电话号码",
+
+  "passwordLabel": "密码",
+  "changePasswordButton": "修改密码",
+
+  "eventInfoLabel": "活动信息",
+  "eventConsentLabel": "同意接收活动信息",
+
+  "deleteAccountLabel": "注销账户",
+
+  "currentPasswordLabel": "当前密码",
+  "currentPasswordPlaceholder": "请输入当前密码",
+
+  "newPasswordLabel": "新密码",
+  "newPasswordPlaceholder": "请输入新密码",
+  "newPasswordRequired": "请输入新密码",
+  "newPasswordPattern": "密码必须至少8个字符，并包含字母、数字和特殊字符",
+
+  "confirmPasswordLabel": "确认新密码",
+  "confirmPasswordPlaceholder": "请再次输入密码",
+  "confirmPasswordRequired": "请再次输入密码",
+  "confirmPasswordMismatch": "密码不匹配",
+
+  "saveButton": "保存",
+
+  "deleteAccountTitle": "注销账户",
+  "deleteAccountWarning": "注销后，您的所有课程信息将被删除且无法恢复。您确定要注销吗？",
+  "deleteAccountReasonLabel": "注销原因（可选）",
+  "deleteAccountReasonPlaceholder": "请输入注销原因",
+  "yesButton": "是",
+  "noButton": "否",
+
+  "deleteAccountRequestTitle": "已提交注销申请",
+  "deleteAccountRequestMessage": "将在23小时内完成注销审批和会员信息删除。",
+  "confirmButton": "确认",
+
+  "profileUpdateSuccess": "会员信息已修改",
+  "signupError": "注册失败",
+  "deleteAccountError": "注销过程中发生错误。请重试。",
+  "errorTitle": "错误"
+}

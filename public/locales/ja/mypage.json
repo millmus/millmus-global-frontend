@@ -1,0 +1,71 @@
+{
+  "notificationBoxTitle": "通知",
+  "editProfileTitle": "会員情報編集",
+  "myClassroomTitle": "マイ講義室",
+  "lectureListTitle": "講義リスト",
+  "communityActivityTitle": "コミュニティ活動",
+  "purchaseHistoryTitle": "購入履歴",
+  "couponPointTitle": "クーポン/ポイント",
+  "couponTitle": "クーポン",
+  "pointTitle": "ポイント",
+  "logoutTitle": "ログアウト",
+
+  "personalInfoTitle": "個人情報",
+  "passwordChangeTitle": "パスワード変更",
+
+  "nameLabel": "名前",
+  "namePlaceholder": "名前を入力してください",
+  "nameRequired": "名前を入力してください",
+  "nameMinLength": "名前は2文字以上である必要があります",
+  "nameMaxLength": "名前は5文字以下である必要があります",
+
+  "nicknameLabel": "ニックネーム",
+  "nicknamePlaceholder": "ニックネームを入力してください",
+  "nicknameRequired": "ニックネームを入力してください",
+  "nicknameMinLength": "ニックネームは2文字以上である必要があります",
+  "nicknameMaxLength": "ニックネームは8文字以下である必要があります",
+
+  "phoneLabel": "電話番号",
+  "phonePlaceholder": "電話番号を入力してください",
+  "phoneRequired": "電話番号を入力してください",
+  "phoneInvalid": "正しい電話番号を入力してください",
+
+  "passwordLabel": "パスワード",
+  "changePasswordButton": "パスワード変更",
+
+  "eventInfoLabel": "イベント情報",
+  "eventConsentLabel": "イベント情報受信同意",
+
+  "deleteAccountLabel": "退会",
+
+  "currentPasswordLabel": "現在のパスワード",
+  "currentPasswordPlaceholder": "現在のパスワードを入力してください",
+
+  "newPasswordLabel": "新しいパスワード",
+  "newPasswordPlaceholder": "新しいパスワードを入力してください",
+  "newPasswordRequired": "新しいパスワードを入力してください",
+  "newPasswordPattern": "パスワードは8文字以上で、文字、数字、特殊文字を含める必要があります",
+
+  "confirmPasswordLabel": "新しいパスワード確認",
+  "confirmPasswordPlaceholder": "パスワードを再入力してください",
+  "confirmPasswordRequired": "パスワードを再入力してください",
+  "confirmPasswordMismatch": "パスワードが一致しません",
+
+  "saveButton": "保存",
+
+  "deleteAccountTitle": "退会",
+  "deleteAccountWarning": "退会すると、受講されたすべての情報が削除され、復元できません。それでも退会しますか？",
+  "deleteAccountReasonLabel": "退会理由（任意）",
+  "deleteAccountReasonPlaceholder": "退会理由を入力してください",
+  "yesButton": "はい",
+  "noButton": "いいえ",
+
+  "deleteAccountRequestTitle": "退会申請が受付されました",
+  "deleteAccountRequestMessage": "23時間以内に退会承認および会員情報削除が完了します。",
+  "confirmButton": "確認",
+
+  "profileUpdateSuccess": "会員情報が修正されました",
+  "signupError": "会員登録失敗",
+  "deleteAccountError": "退会中にエラーが発生しました。もう一度お試しください。",
+  "errorTitle": "エラー"
+}

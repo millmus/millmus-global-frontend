@@ -6,8 +6,11 @@ import useSWR from 'swr';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 const Event: NextPage = () => {
+  const { t } = useTranslation('seo');
   const router = useRouter();
   async function init() {
     const { data: myData } = await axios.get('/api/user');
@@ -29,8 +32,8 @@ const Event: NextPage = () => {
   return (
     <>
       <SEO
-        title='이벤트 | 밀레니얼머니스쿨 - 밀머스'
-        description='따끈한 온오프 행사 소식을 바로 만나보세요!'
+        title={t('eventTitle')}
+        description={t('eventDescription')}
       />
       <Layout padding='pt-24 pb-44 md:py-10'>
         <div className='mb-14 text-2xl font-bold md:mb-6 md:text-xl'>
@@ -44,6 +47,7 @@ const Event: NextPage = () => {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   return {
     props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common', 'seo'])),
     },
   };
 };

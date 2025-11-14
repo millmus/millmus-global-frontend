@@ -7,8 +7,10 @@ import Best from '@components/lecture/best';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 const Lecture: NextPage = () => {
+  const { t } = useTranslation('seo');
   const { data, error } = useSWR('/cms/class', () =>
     lecturesApi.topLectureList()
   );
@@ -20,8 +22,8 @@ const Lecture: NextPage = () => {
   return (
     <>
       <SEO
-        title='BEST 클래스 | 밀레니얼머니스쿨 - 밀머스'
-        description='경제적 자유를 앞당기는 가장 인기 있는 클래스만 모았습니다.'
+        title={t('bestClassTitle')}
+        description={t('bestClassDescription')}
       />
       <Banner />
       <div style={{overflow: "hidden"}}>
@@ -35,7 +37,7 @@ const Lecture: NextPage = () => {
 export async function getServerSideProps({ locale }: { locale: string }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common'])),
+      ...(await serverSideTranslations(locale, ['common', 'seo'])),
     },
   };
 }

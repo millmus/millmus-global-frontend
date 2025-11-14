@@ -11,6 +11,8 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FieldErrors, useForm } from 'react-hook-form';
 import useSWR from 'swr';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 interface IProps {
   category: string;
@@ -22,6 +24,7 @@ interface IForm {
 }
 
 const CommunityDetail: NextPage<IProps> = ({ category, id }) => {
+  const { t } = useTranslation('seo');
   const { token, profile } = useUser({ isPrivate: true });
   const { data, mutate } = useSWR(
     token ? `/community/${category}/${id}/` : null,
@@ -132,8 +135,8 @@ const CommunityDetail: NextPage<IProps> = ({ category, id }) => {
   return (
     <>
       <SEO
-        title='커뮤니티 게시판 | 밀레니얼머니스쿨 - 밀머스'
-        description='멘토에게 질문하고 직접 소통할 수 있는 공간을 제공합니다.'
+        title={t('communityTitle')}
+        description={t('communityDescription')}
       />
       <Detail {...data} />
       <Layout padding='pt-20 pb-36'>
@@ -310,6 +313,7 @@ const CommunityDetail: NextPage<IProps> = ({ category, id }) => {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   return {
     props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common', 'seo'])),
       category: ctx.params?.category,
       id: ctx.params?.id,
     },

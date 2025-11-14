@@ -10,6 +10,8 @@ import Banner from '@components/lecture/banner';
 import { useEffect, useState } from 'react';
 import { ICard } from 'types';
 import MainBanner from '@components/MainBanner';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface IProps {
   category: string;
@@ -18,35 +20,33 @@ interface IProps {
 
 const Lectures: NextPage<IProps> = ({ category, page }) => {
   const router = useRouter();
+  const { t } = useTranslation('seo');
   const { data: mainBanner } = useSWR('/cms/main_banner', () => lecturesApi.mainBannerList());
   const [mainBannerList, setMainBannerList] = useState<ICard[]>([]);
 
-  const categoryReq =
-    category === 'real-estate'
-      ? '부동산'
-      : category === 'stock'
-        ? '주식'
-        : category === 'coin'
-          ? '무료특강'
-          : category === 'online-business'
-            ? '온라인창업'
-            : category === 'master'
-              ? '마스터 시리즈'
-              : category === 'premium'
-                ? '프리미엄 스터디'
-                : '';
-  const categoryDescription =
-    category === 'real-estate'
-      ? '지금 바로 적용할 수 있는 실전 부동산 투자 클래스입니다.'
-      : category === 'stock'
-        ? '주식투자의 기본기를 탄탄하게 쌓을 수 있는 클래스입니다.'
-        : category === 'coin'
-          ? '무료특강 클래스입니다.'
-          : category === 'online-business'
-            ? '직장인도 도전할 수 있는 온라인창업 클래스의 모든 것.'
-            : '';
+  const getSeoKeys = (cat: string) => {
+    switch (cat) {
+      case 'real-estate':
+        return { titleKey: 'realEstateTitle', descKey: 'realEstateDescription', apiCategory: 'Real Estate' };
+      case 'stock':
+        return { titleKey: 'stockTitle', descKey: 'stockDescription', apiCategory: 'Stock' };
+      case 'coin':
+        return { titleKey: 'freeLiveTitle', descKey: 'freeLiveDescription', apiCategory: 'Free Live' };
+      case 'online-business':
+        return { titleKey: 'onlineBusinessTitle', descKey: 'onlineBusinessDescription', apiCategory: 'Online Business' };
+      case 'master':
+        return { titleKey: 'masterSeriesTitle', descKey: 'masterSeriesDescription', apiCategory: 'Master Series' };
+      case 'premium':
+        return { titleKey: 'premiumClassTitle', descKey: 'premiumClassDescription', apiCategory: 'Premium Class' };
+      default:
+        return { titleKey: '', descKey: '', apiCategory: '' };
+    }
+  };
+
+  const { titleKey, descKey, apiCategory } = getSeoKeys(category);
+
   const { data, error } = useSWR(`/lectures/${category}/${page}`, () =>
-    lecturesApi.lectureList(categoryReq === "무료특강" ? "코인" : categoryReq, page)
+    lecturesApi.lectureList(apiCategory, page)
   );
 
   if (error) {
@@ -79,8 +79,8 @@ const Lectures: NextPage<IProps> = ({ category, page }) => {
   return (
     <>
       <SEO
-        title={`${categoryReq} 클래스 | 밀레니얼머니스쿨 - 밀머스`}
-        description={categoryDescription}
+        title={t(titleKey)}
+        description={t(descKey)}
       />
       {/* <CategoryBanner /> */}
       <div className='bg-[#000] flex flex-col items-center justify-center'>
@@ -91,7 +91,7 @@ const Lectures: NextPage<IProps> = ({ category, page }) => {
       <div style={{ overflow: "hidden" }}>
         {/* <Navigator /> */}
         <LectureList
-          title={categoryReq == '프리미엄 스터디' ? '프리미엄클래스' : categoryReq}
+          title={apiCategory}
           data={category === 'premium' ? data?.results?.map((d: any) => { if (d.series) { d.id = d.series.ticket_id; } return d; }) : data?.results}
           totalItems={data?.count}
         />
@@ -103,6 +103,7 @@ const Lectures: NextPage<IProps> = ({ category, page }) => {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   return {
     props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common', 'seo'])),
       category: ctx.params?.category,
       page: ctx.params?.page,
     },
