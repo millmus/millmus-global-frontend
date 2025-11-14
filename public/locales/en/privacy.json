@@ -1,0 +1,90 @@
+{
+  "pageTitle": "Privacy Policy",
+  "pageDescription": "This is the Privacy Policy page of Millennial Money School.",
+
+  "intro": "Millennial Money School Inc. (hereinafter referred to as 'the Company') establishes and discloses this privacy policy in accordance with Article 30 of the Personal Information Protection Act to protect users' personal information and to promptly and smoothly handle related grievances.",
+
+  "section1Title": "Article 1 (Purpose of Processing Personal Information)",
+  "section1Intro": "The Company processes personal information for the following purposes. The personal information being processed will not be used for purposes other than the following, and if the purpose of use changes, necessary measures will be implemented, such as obtaining separate consent in accordance with Article 18 of the Personal Information Protection Act.",
+  "section1Item1": "1. Website membership registration and management<br />Personal information is processed for the purpose of confirming membership registration intention, identifying and authenticating members for membership services, maintaining and managing membership qualifications, confirming identity in accordance with the limited identity verification system, preventing fraudulent use of services, confirming consent of legal representatives when processing personal information of children under 14 years of age, various notices and notifications, and handling grievances.",
+  "section1Item2": "2. Provision of goods or services<br />Personal information is processed for the purpose of product delivery, service provision, sending contracts and invoices, content provision, providing customized services, identity verification, age verification, payment and settlement, debt collection, etc.",
+  "section1Item3": "3. Grievance handling<br />Personal information is processed for the purpose of verifying the complainant's identity, confirming the complaint, contacting and notifying for fact-finding, and notifying the processing results.",
+
+  "section2Title": "Article 2 (Period of Processing and Retention of Personal Information)",
+  "section2Item1": "① The Company processes and retains personal information within the period of retention and use of personal information according to laws or the period of retention and use of personal information consented to when collecting personal information from users.",
+  "section2Item2": "② The processing and retention period of each personal information is as follows.",
+  "section2Item3": "1. Website membership registration and management: Until withdrawal from the business/organization website<br />However, in the following cases, until the end of the relevant reason<br />1) In case of ongoing investigation or inquiry due to violation of relevant laws, until the end of the investigation or inquiry<br />2) In case of remaining debt or credit relationship due to website use, until settlement of the debt or credit relationship",
+  "section2Item4": "2. Provision of goods or services: Until completion of supply of goods and services and payment and settlement<br />However, in the following cases, until the end of the relevant period<br />1) Records related to transactions such as labeling and advertising, contract contents and implementation according to the Act on Consumer Protection in Electronic Commerce, etc.<br />- Records on labeling and advertising: 6 months<br />- Records on contracts or withdrawal of subscription, payment, supply of goods, etc.: 5 years<br />- Records on consumer complaints or dispute resolution: 3 years<br />2) Retention of communication fact confirmation data according to Article 41 of the Protection of Communications Secrets Act<br />- Subscriber telecommunication date and time, start and end time, counterparty subscriber number, frequency of use, cell tower location tracking data: 1 year<br />- Computer communication, Internet log record data, connection location tracking data: 3 months",
+
+  "section3Title": "Article 3 (Provision of Personal Information to Third Parties)",
+  "section3Item1": "① The Company processes users' personal information only within the scope specified in Article 1 (Purpose of Processing Personal Information), and provides personal information to third parties only in cases corresponding to Article 17 of the Personal Information Protection Act, such as user consent or special provisions of law.",
+  "section3Item2": "② The Company provides personal information to third parties as follows.",
+  "section3Item3": "- Recipient of personal information: OOO Co., Ltd.<br />- Purpose of use of personal information by the recipient: Joint hosting of events and partnership discounts<br />- Personal information items provided: Name, address, phone number, email address<br />- Retention and use period of the recipient: Until the end of the event",
+
+  "section4Title": "Article 4 (Consignment of Personal Information Processing)",
+  "section4Item1": "① The Company consigns personal information processing tasks as follows for smooth processing of personal information.",
+  "section4Item2": "- Consignee (trustee): OOO<br />- Contents of consigned work: Identity verification according to membership service use, delivery of notices, complaint handling and other civil complaints, delivery of notices",
+  "section4Item3": "② When concluding a consignment contract, the Company specifies in documents such as contracts matters related to prohibition of processing personal information other than the purpose of performing consigned work, technical and managerial protection measures, restriction on re-consignment, management and supervision of consignees, and liability such as compensation for damages in accordance with Article 25 of the Personal Information Protection Act, and supervises whether consignees safely process personal information.",
+  "section4Item4": "③ If the contents of consigned work or the consignee change, the Company will disclose it through this privacy policy without delay.",
+
+  "section5Title": "Article 5 (Rights and Obligations of Users and Exercise Methods)",
+  "section5Item1": "① Users may exercise the following personal information protection-related rights against the Company at any time.",
+  "section5Item2": "1. Request to view personal information<br />2. Request for correction if there are errors<br />3. Request for deletion<br />4. Request to stop processing",
+  "section5Item3": "② The exercise of rights under paragraph 1 may be done to the Company through writing, telephone, email, facsimile (FAX), etc., and the Company will take action without delay.",
+  "section5Item4": "③ If a user requests correction or deletion of errors in personal information, the Company will not use or provide the personal information until the correction or deletion is completed.",
+  "section5Item5": "④ The exercise of rights under paragraph 1 may be done through an agent such as the user's legal representative or an authorized person. In this case, a power of attorney according to Annex No. 11 of the Enforcement Rules of the Personal Information Protection Act must be submitted.",
+  "section5Item6": "⑤ Users shall not infringe on the personal information and privacy of themselves or others processed by the Company in violation of the Personal Information Protection Act and other related laws.",
+
+  "section6Title": "Article 6 (Items of Personal Information Processed)",
+  "section6Intro": "The Company processes the following personal information items.",
+  "section6Item1": "1. Website membership registration and management",
+  "section6Item1Required": "- Required items: Name, date of birth, ID, password, address, phone number, gender, email address",
+  "section6Item1Optional": "- Optional items: Marital status, areas of interest",
+  "section6Item2": "2. Provision of goods or services",
+  "section6Item2Required": "- Required items: Name, date of birth, ID, password, address, phone number, email address, payment information such as credit card number and bank account information",
+  "section6Item2Optional": "- Optional items: Areas of interest, past purchase history",
+  "section6Item3": "3. The following personal information items may be automatically generated and collected during the use of Internet services.",
+  "section6Item3Auto": "- IP address, cookies, MAC address, service use records, visit records, bad use records, etc.",
+
+  "section7Title": "Article 7 (Destruction of Personal Information)",
+  "section7Item1": "① The Company destroys the personal information without delay when it becomes unnecessary, such as when the retention period of personal information has elapsed or the purpose of processing has been achieved.",
+  "section7Item2": "② If personal information must continue to be preserved according to other laws even though the retention period of personal information consented to by the user has elapsed or the purpose of processing has been achieved, the personal information is transferred to a separate database (DB) or stored in a different storage location.",
+  "section7Item3": "③ The procedure and method of destroying personal information are as follows.",
+  "section7Item4": "1. Destruction procedure<br />The Company selects personal information for which a reason for destruction has occurred and destroys the personal information with the approval of the Company's personal information protection officer.",
+  "section7Item5": "2. Destruction method<br />The Company destroys personal information recorded and stored in electronic file format using methods such as Low Level Format so that the record cannot be reproduced, and destroys personal information recorded and stored in paper documents by shredding or incinerating them.",
+
+  "section8Title": "Article 8 (Measures to Ensure Safety of Personal Information)",
+  "section8Intro": "The Company takes the following measures to ensure the safety of personal information.",
+  "section8Item1": "1. Administrative measures: Establishment and implementation of internal management plan, regular employee training, etc.",
+  "section8Item2": "2. Technical measures: Management of access rights to personal information processing systems, installation of access control systems, encryption of unique identification information, installation of security programs",
+  "section8Item3": "3. Physical measures: Access control to computer rooms, data storage rooms, etc.",
+
+  "section9Title": "Article 9 (Installation, Operation, and Rejection of Automatic Personal Information Collection Devices)",
+  "section9Item1": "① The Company uses 'cookies' that store usage information and retrieve it from time to time to provide individualized customized services to users.",
+  "section9Item2": "② A cookie is a small amount of information sent by the server (http) used to operate a website to the user's computer browser and may be stored on the hard disk inside the user's computer.",
+  "section9Item3": "a. Purpose of using cookies: Used to provide optimized information to users by identifying visits and usage patterns for each service and website visited by users, popular search terms, secure access, etc.",
+  "section9Item4": "b. Installation, operation, and rejection of cookies: You can refuse to store cookies by setting options in Tools > Internet Options > Privacy menu at the top of the web browser.",
+  "section9Item5": "c. If you refuse to store cookies, you may experience difficulties in using customized services.",
+
+  "section10Title": "Article 10 (Personal Information Protection Officer)",
+  "section10Item1": "① The Company designates a personal information protection officer as follows to take overall responsibility for the work related to personal information processing and to handle user complaints and provide relief for damage related to personal information processing.",
+  "section10Item2": "▶ Personal Information Protection Officer<br />Name: Shin Hee-eun<br />Position: CEO<br />Contact: foryourfreedom2023@naver.com<br />※ Connected to the Personal Information Protection Department.",
+  "section10Item3": "▶ Personal Information Protection Department<br />Department: Operations Team<br />Person in charge: Shin Hee-eun<br />Contact: foryourfreedom2023@naver.com",
+  "section10Item4": "② Users can inquire to the Personal Information Protection Officer and the relevant department about all personal information protection-related inquiries, complaint handling, damage relief, etc. that occur while using the Company's service (or business). The Company will respond to and handle user inquiries without delay.",
+
+  "section11Title": "Article 11 (Request for Viewing Personal Information)",
+  "section11Item1": "Users can make a request to view personal information in accordance with Article 35 of the Personal Information Protection Act to the department below. The Company will strive to ensure that user requests to view personal information are processed promptly.",
+  "section11Item2": "▶ Department for receiving and processing personal information viewing requests<br />Department: Operations Team<br />Person in charge: Shin Hee-eun<br />Contact: foryourfreedom2023@naver.com",
+
+  "section12Title": "Article 12 (Methods of Remedy for Rights Infringement)",
+  "section12Intro": "Users can inquire to the institutions below for damage relief and consultation regarding personal information infringement.",
+  "section12Desc": "The institutions below are separate from the Company, and if you are not satisfied with the Company's own personal information complaint handling and damage relief results or need more detailed assistance, please inquire.",
+  "section12Item1": "▶ Personal Information Infringement Report Center (operated by Korea Internet & Security Agency)<br />- Jurisdiction: Reporting personal information infringement facts, requesting consultation<br />- Homepage: privacy.kisa.or.kr<br />- Phone: (without area code) 118<br />- Address: Personal Information Infringement Report Center, 3rd Floor, 9 Jinheung-gil, Naju-si, Jeollanam-do (58324) (301-2 Bitgaram-dong)",
+  "section12Item2": "▶ Personal Information Dispute Mediation Committee<br />- Jurisdiction: Application for personal information dispute mediation, collective dispute mediation (civil resolution)<br />- Homepage: www.kopico.go.kr<br />- Phone: (without area code) 1833-6972<br />- Address: 4th Floor, Government Complex Seoul, 209 Sejong-daero, Jongno-gu, Seoul (03171)",
+  "section12Item3": "▶ Supreme Prosecutors' Office Cyber Crime Investigation Division: 02-3480-3573 (www.spo.go.kr)<br />▶ National Police Agency Cyber Safety Bureau: 182 (http://cyberbureau.police.go.kr)",
+
+  "section13Title": "Article 13 (Changes to Privacy Policy)",
+  "section13Item1": "① This privacy policy applies from April 30, 2022.",
+  "section13Item2": "② Previous privacy policies can be found below.",
+  "section13Item3": "- Applied from 20XX. X. X to 20XX. X. X (Click)"
+}
