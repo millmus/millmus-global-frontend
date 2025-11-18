@@ -22,8 +22,8 @@ const Lecture: NextPage = () => {
   return (
     <>
       <SEO
-        title={t('bestClassTitle')}
-        description={t('bestClassDescription')}
+        title={t('bestClassTitle') as string}
+        description={t('bestClassDescription') as string}
       />
       <Banner />
       <div style={{overflow: "hidden"}}>

@@ -135,8 +135,8 @@ const CommunityDetail: NextPage<IProps> = ({ category, id }) => {
   return (
     <>
       <SEO
-        title={t('communityTitle')}
-        description={t('communityDescription')}
+        title={t('communityTitle') as string}
+        description={t('communityDescription') as string}
       />
       <Detail {...data} />
       <Layout padding='pt-20 pb-36'>

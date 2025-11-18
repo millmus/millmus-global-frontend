@@ -15,8 +15,8 @@ const Event: NextPage<{ page: string }> = ({ page }) => {
   return (
     <>
       <SEO
-        title={t('eventTitle')}
-        description={t('eventDescription')}
+        title={t('eventTitle') as string}
+        description={t('eventDescription') as string}
       />
       <Layout padding='pt-24 pb-44 md:py-10'>
         <div className='mb-14 text-2xl font-bold md:mb-6 md:text-xl'>

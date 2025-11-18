@@ -22,8 +22,8 @@ const Tutor: NextPage<{ page: string }> = ({ page }) => {
   return (
     <>
       <SEO
-        title={t('clubMillmusTitle')}
-        description={t('clubMillmusDescription')}
+        title={t('clubMillmusTitle') as string}
+        description={t('clubMillmusDescription') as string}
       />
       <Banner />
       <div style={{maxWidth: '1024px', margin: "auto"}}>

@@ -20,8 +20,8 @@ const Community: NextPage = () => {
   return (
     <>
       <SEO
-        title={t('communityTitle')}
-        description={t('communityDescription')}
+        title={t('communityTitle') as string}
+        description={t('communityDescription') as string}
       />
       <div>
         <div className='grid grid-cols-4 md:grid-cols-1'  style={{maxWidth: '1180px', margin: "auto"}}>

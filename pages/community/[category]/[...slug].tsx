@@ -59,7 +59,7 @@ const CommunityCategory: NextPage<IProps> = ({ params }) => {
   }, [myData]);
   return (
     <>
-      <SEO title={t('communityTitle')} description={t('communityDescription')} />
+      <SEO title={t('communityTitle') as string} description={t('communityDescription') as string} />
       {
         category === '4' && <Banner title='경제독서모임 커뮤니티 게시판' />
       }

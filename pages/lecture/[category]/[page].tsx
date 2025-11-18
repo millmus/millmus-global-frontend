@@ -79,8 +79,8 @@ const Lectures: NextPage<IProps> = ({ category, page }) => {
   return (
     <>
       <SEO
-        title={t(titleKey)}
-        description={t(descKey)}
+        title={t(titleKey) as string}
+        description={t(descKey) as string}
       />
       {/* <CategoryBanner /> */}
       <div className='bg-[#000] flex flex-col items-center justify-center'>
