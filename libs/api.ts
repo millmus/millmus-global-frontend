@@ -1,9 +1,12 @@
 import axios from 'axios';
 
-export const API_URL = 'http://127.0.0.1:8000';
-// export const API_URL = 'https://api-global.xn--o22bp6a0zk.com';
-// export const API_URL = 'https://test.xn--o22bp6a0zk.com';
-// export const API_URL = 'http://192.168.0.145:8000';
+// 환경 변수를 통해 API URL 설정 (Vercel 환경 변수 사용)
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
+// 개발/프로덕션 URL 예시:
+// 개발: http://127.0.0.1:8000
+// 테스트: https://test.xn--o22bp6a0zk.com
+// 프로덕션: https://api-global.xn--o22bp6a0zk.com
 
 const api = axios.create({
   baseURL: API_URL,
