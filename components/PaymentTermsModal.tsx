@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaAngleDown, FaAngleUp, FaCheck } from 'react-icons/fa';
 
 interface PaymentTermsModalProps {
@@ -7,6 +7,12 @@ interface PaymentTermsModalProps {
   proceedWithPayment: () => void;
   refund_policy?: any;
 }
+
+// TypeScript 타입 호환성을 위한 헬퍼 컴포넌트
+const CheckIcon: React.FC<{ className?: string }> = ({ className }) => {
+  const Icon = FaCheck as any;
+  return React.createElement(Icon, { className });
+};
 
 const PaymentTermsModal: React.FC<PaymentTermsModalProps> = ({
   isOpen,
@@ -107,7 +113,7 @@ const PaymentTermsModal: React.FC<PaymentTermsModalProps> = ({
                   <div
                     className={`h-6 w-6 border-[1px] border-[#00e7ff] rounded flex items-center justify-center`}
                   >
-                    {individualTerms.terms1 ? (<FaCheck className="text-[#00e7ff] w-[12px] h-[12px]" /> as any) : null}
+                    {individualTerms.terms1 && <CheckIcon className="text-[#00e7ff] w-[12px] h-[12px]" />}
                   </div>
                 </div>
                 <span className="ml-2 text-white">프리미엄 클래스 이용 동의</span>
@@ -137,7 +143,7 @@ const PaymentTermsModal: React.FC<PaymentTermsModalProps> = ({
                   <div
                     className={`h-6 w-6 border-[1px] border-[#00e7ff] rounded flex items-center justify-center`}
                   >
-                    {individualTerms.terms2 ? (<FaCheck className="text-[#00e7ff] w-[12px] h-[12px]" /> as any) : null}
+                    {individualTerms.terms2 && <CheckIcon className="text-[#00e7ff] w-[12px] h-[12px]" />}
                   </div>
                 </div>
                 <span className="ml-2 text-white">클래스 환불규정 확인 및 동의</span>
