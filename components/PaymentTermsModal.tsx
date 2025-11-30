@@ -107,7 +107,7 @@ const PaymentTermsModal: React.FC<PaymentTermsModalProps> = ({
                   <div
                     className={`h-6 w-6 border-[1px] border-[#00e7ff] rounded flex items-center justify-center`}
                   >
-                    {individualTerms.terms1 && (<FaCheck className="text-[#00e7ff] w-[12px] h-[12px]" /> as any)}
+                    {individualTerms.terms1 ? (<FaCheck className="text-[#00e7ff] w-[12px] h-[12px]" /> as any) : null}
                   </div>
                 </div>
                 <span className="ml-2 text-white">프리미엄 클래스 이용 동의</span>
@@ -137,7 +137,7 @@ const PaymentTermsModal: React.FC<PaymentTermsModalProps> = ({
                   <div
                     className={`h-6 w-6 border-[1px] border-[#00e7ff] rounded flex items-center justify-center`}
                   >
-                    {individualTerms.terms2 && (<FaCheck className="text-[#00e7ff] w-[12px] h-[12px]" /> as any)}
+                    {individualTerms.terms2 ? (<FaCheck className="text-[#00e7ff] w-[12px] h-[12px]" /> as any) : null}
                   </div>
                 </div>
                 <span className="ml-2 text-white">클래스 환불규정 확인 및 동의</span>
