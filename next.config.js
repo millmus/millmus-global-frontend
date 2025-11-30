@@ -7,6 +7,14 @@ const nextConfig = {
     domains: ['millmus-global-backend-storage.s3.ap-northeast-2.amazonaws.com', '127.0.0.1', 'localhost', 'single-fire.s3.ap-northeast-2.amazonaws.com', '192.168.0.145'],
   },
   i18n,
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // jsonwebtoken 호환성 문제 해결
+      config.externals = config.externals || [];
+      config.externals.push('jsonwebtoken');
+    }
+    return config;
+  },
 };
 
 module.exports = nextConfig;

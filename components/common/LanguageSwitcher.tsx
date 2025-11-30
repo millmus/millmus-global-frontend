@@ -4,13 +4,12 @@ import { useState, useEffect, useRef } from 'react'
 interface Language {
   code: string
   name: string
-  flag: string
 }
 
 const languages: Language[] = [
-  { code: 'en', name: 'English', flag: '🇺🇸' },
-  { code: 'ja', name: '日本語', flag: '🇯🇵' },
-  { code: 'zh', name: '中文', flag: '🇨🇳' },
+  { code: 'en', name: 'English' },
+  { code: 'ja', name: '日本語' },
+  { code: 'zh', name: '中文' },
 ]
 
 export default function LanguageSwitcher() {
@@ -53,7 +52,7 @@ export default function LanguageSwitcher() {
         className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 hover:bg-[#3e4247] transition-colors"
         aria-label="언어 선택"
       >
-        <span className="text-lg">{currentLanguage.flag}</span>
+        <span className="text-xs font-semibold text-gray-400">{currentLanguage.code.toUpperCase()}</span>
         <span className="text-sm font-medium">{currentLanguage.name}</span>
         <svg
           className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
@@ -75,7 +74,7 @@ export default function LanguageSwitcher() {
                 lang.code === router.locale ? 'bg-[#171718] text-blue-600' : ''
               }`}
             >
-              <span className="text-lg">{lang.flag}</span>
+              <span className="text-xs font-semibold text-gray-400 min-w-[24px]">{lang.code.toUpperCase()}</span>
               <span className="text-sm font-medium">{lang.name}</span>
               {lang.code === router.locale && (
                 <svg className="w-4 h-4 ml-auto" fill="currentColor" viewBox="0 0 20 20">

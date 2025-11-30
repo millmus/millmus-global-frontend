@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// export const API_URL = 'http://127.0.0.1:8000';
-export const API_URL = 'https://api-global.xn--o22bp6a0zk.com';
+export const API_URL = 'http://127.0.0.1:8000';
+// export const API_URL = 'https://api-global.xn--o22bp6a0zk.com';
 // export const API_URL = 'https://test.xn--o22bp6a0zk.com';
 // export const API_URL = 'http://192.168.0.145:8000';
 
@@ -18,7 +18,7 @@ api.interceptors.request.use(
       const locale = document.cookie
         .split('; ')
         .find(row => row.startsWith('NEXT_LOCALE='))
-        ?.split('=')[1] || 'ko'; // 기본값: 한국어
+        ?.split('=')[1] || 'en'; // 기본값: 영어
 
       // Accept-Language 헤더 추가
       if (config.headers) {
