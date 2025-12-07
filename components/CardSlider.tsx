@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { ICard } from '../types';
 import Card from './Card';
 import Slider from 'react-slick';
+import Link from 'next/link';
 
 interface ArrowProps {
   onClick?: React.MouseEventHandler<HTMLDivElement>;
@@ -148,15 +149,17 @@ const CardSlider = ({ itemList, showArrowInside=true }: Props) => {
               return (
                 <div key={item.id}>
                   <div className={dynamicSlidesToShow === 2 ? 'px-[5px]': 'px-[10px]'}>
-                    <a href={`/lecture/detail/${item.id}`}>
-                    {item.imageLink && <Card
-                      ref={imageContainerRef}
-                      id={item.id}
-                      title={item.title}
-                      imageLink={item.imageLink}
-                      link={item.link}
-                    />}
-                    </a>
+                    <Link href={`/lecture/detail/${item.id}`}>
+                      <a>
+                        {item.imageLink && <Card
+                          ref={imageContainerRef}
+                          id={item.id}
+                          title={item.title}
+                          imageLink={item.imageLink}
+                          link={item.link}
+                        />}
+                      </a>
+                    </Link>
                   </div>
                 </div>
               );
@@ -164,14 +167,16 @@ const CardSlider = ({ itemList, showArrowInside=true }: Props) => {
             return (
               <div key={item.id}>
                 <div className={dynamicSlidesToShow === 2 ? 'px-[5px]': 'px-[10px]'}>
-                  <a href={`/lecture/detail/${item.id}`}>
-                  {item.imageLink && <Card
-                    id={item.id}
-                    title={item.title}
-                    imageLink={item.imageLink}
-                    link={item.link}
-                  />}
-                  </a>
+                  <Link href={`/lecture/detail/${item.id}`}>
+                    <a>
+                      {item.imageLink && <Card
+                        id={item.id}
+                        title={item.title}
+                        imageLink={item.imageLink}
+                        link={item.link}
+                      />}
+                    </a>
+                  </Link>
                 </div>
               </div>
             );

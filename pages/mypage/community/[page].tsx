@@ -9,12 +9,15 @@ import type { GetServerSidePropsContext, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 interface IProps {
   page: string;
 }
 
 const MyCommunityList: NextPage<IProps> = ({ page }) => {
+  const { t } = useTranslation('mypage');
   const { token } = useUser({
     isPrivate: true,
   });
@@ -38,7 +41,7 @@ const MyCommunityList: NextPage<IProps> = ({ page }) => {
 
           <div className='grow space-y-10 md:mt-8'>
             <div className='space-y-6'>
-              <div className='text-lg font-medium'>커뮤니티</div>
+              <div className='text-lg font-medium'>{t('communityActivityTitle')}</div>
               {data?.community.map((i: { [key: string]: any }) => (
                 <div
                   key={i.community.id}
@@ -58,7 +61,7 @@ const MyCommunityList: NextPage<IProps> = ({ page }) => {
             </div>
 
             <div className='space-y-6'>
-              <div className='text-lg font-medium'>게시글</div>
+              <div className='text-lg font-medium'>{t('tabs.posts')}</div>
               <CommunityList
                 data={data?.posts.results}
                 totalItems={data?.posts.count}
@@ -72,8 +75,10 @@ const MyCommunityList: NextPage<IProps> = ({ page }) => {
 };
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const locale = ctx.locale || 'en';
   return {
     props: {
+      ...(await serverSideTranslations(locale, ['common', 'mypage'])),
       page: ctx.params?.page,
     },
   };

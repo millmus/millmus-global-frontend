@@ -1,0 +1,30 @@
+{
+  "pageTitle": "Grade Guide",
+  "title": "Grade Guide",
+  "table": {
+    "memberGrade": "Member Grade",
+    "gradeConditions": "Grade Conditions",
+    "benefits": "Benefits"
+  },
+  "stages": {
+    "stage1": "Stage 1",
+    "stage2": "Stage 2",
+    "stage3": "Stage 3"
+  },
+  "grades": {
+    "spark": "Spark",
+    "flame": "Flame",
+    "fire": "Fire"
+  },
+  "conditions": {
+    "signupAchievement": "Achieved upon sign-up",
+    "oneLectureOrMore": "Automatically achieved when taking 1 or more lectures",
+    "twoCommunityOrMore": "Automatically achieved when purchasing 2 or more paid communities",
+    "threeLecturesOrMore": "Achieved when taking 3 or more lectures"
+  },
+  "benefits": {
+    "tenThousandPoints": "10,000 points reward",
+    "freeCommunityPriority": "Priority participation in free community events",
+    "paidCommunityPriority": "Priority participation in paid community events"
+  }
+}

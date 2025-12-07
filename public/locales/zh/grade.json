@@ -1,0 +1,30 @@
+{
+  "pageTitle": "等级指南",
+  "title": "等级指南",
+  "table": {
+    "memberGrade": "会员等级",
+    "gradeConditions": "等级条件",
+    "benefits": "优惠"
+  },
+  "stages": {
+    "stage1": "第1阶段",
+    "stage2": "第2阶段",
+    "stage3": "第3阶段"
+  },
+  "grades": {
+    "spark": "火花",
+    "flame": "火焰",
+    "fire": "烈火"
+  },
+  "conditions": {
+    "signupAchievement": "注册时达成",
+    "oneLectureOrMore": "购买1门以上课程时自动达成",
+    "twoCommunityOrMore": "购买2个以上付费社区时自动达成",
+    "threeLecturesOrMore": "购买3门以上课程时达成"
+  },
+  "benefits": {
+    "tenThousandPoints": "1万积分奖励",
+    "freeCommunityPriority": "免费社区活动优先参与权",
+    "paidCommunityPriority": "付费社区活动优先参与权"
+  }
+}

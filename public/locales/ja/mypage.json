@@ -1,4 +1,26 @@
 {
+  "header": {
+    "title": "マイページ",
+    "gradeGuide": "グレードガイド",
+    "userSuffix": "様",
+    "grade": "グレード",
+    "lecture": "講義",
+    "coupon": "クーポン",
+    "point": "ポイント",
+    "pointUnit": "P"
+  },
+  "tabs": {
+    "studying": "受講中",
+    "completed": "受講完了",
+    "purchase": "決済履歴",
+    "posts": "投稿",
+    "usageHistory": "使用履歴",
+    "availablePoints": "保有ポイント",
+    "pointsUsed": "使用済みポイント"
+  },
+  "button": {
+    "cancel": "キャンセル"
+  },
   "notificationBoxTitle": "通知",
   "editProfileTitle": "会員情報編集",
   "myClassroomTitle": "マイ講義室",
@@ -67,5 +89,29 @@
   "profileUpdateSuccess": "会員情報が修正されました",
   "signupError": "会員登録失敗",
   "deleteAccountError": "退会中にエラーが発生しました。もう一度お試しください。",
-  "errorTitle": "エラー"
+  "errorTitle": "エラー",
+
+  "notifications": {
+    "title": "通知BOX",
+    "titleShort": "通知",
+    "markAllRead": "全て既読",
+    "noNotifications": {
+      "title": "新しいお知らせはありません。",
+      "description": "ミルマスサービスと講義のお知らせをここで確認できます。"
+    }
+  },
+  "table": {
+    "number": "番号",
+    "couponName": "クーポン名",
+    "discountAmount": "割引金額",
+    "applicableProducts": "適用商品",
+    "usage": "使用先",
+    "pointsUsed": "使用ポイント",
+    "dateUsed": "使用日",
+    "lecture": "講義",
+    "community": "コミュニティ",
+    "allLectures": "すべての講義",
+    "offlineAttendance": "オフライン参加",
+    "masterSeries": "マスターシリーズ"
+  }
 }

@@ -13,6 +13,8 @@ import Link from 'next/link';
 import PaymentTermsModal from '@components/PaymentTermsModal';
 import { useForm, FieldErrors } from 'react-hook-form';
 import axios from 'axios';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface IPayerForm {
   // 강의 ID
@@ -42,6 +44,7 @@ interface IProps {
 }
 
 const Purchase: NextPage<IProps> = ({ slug, option }) => {
+  const { t } = useTranslation('purchase');
   const { token, profile } = useUser({
     isPrivate: true,
   });
@@ -588,7 +591,7 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
                   <div className='flex'>
                     <input
                       type='tel'
-                      placeholder='사용 포인트 입력'
+                      placeholder={t('form.enterPoints')}
                       value={point}
                       onChange={(e) => handlePoint(e)}
                       className='h-10 w-36 rounded-l bg-[rgba(0,0,0,0.25)] pl-4 text-sm outline-none md:w-48'
@@ -950,8 +953,10 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
 };
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const locale = ctx.locale || 'en';
   return {
     props: {
+      ...(await serverSideTranslations(locale, ['common', 'purchase'])),
       slug: ctx.params?.slug,
       option: ctx.query?.option ?? '',
     },

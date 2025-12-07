@@ -1,0 +1,30 @@
+{
+  "pageTitle": "グレードガイド",
+  "title": "グレードガイド",
+  "table": {
+    "memberGrade": "会員グレード",
+    "gradeConditions": "グレード条件",
+    "benefits": "特典"
+  },
+  "stages": {
+    "stage1": "ステージ1",
+    "stage2": "ステージ2",
+    "stage3": "ステージ3"
+  },
+  "grades": {
+    "spark": "火花",
+    "flame": "炎",
+    "fire": "ファイア"
+  },
+  "conditions": {
+    "signupAchievement": "会員登録時に達成",
+    "oneLectureOrMore": "講義1件以上受講時に自動達成",
+    "twoCommunityOrMore": "有料コミュニティ2件以上決済時に自動達成",
+    "threeLecturesOrMore": "講義3件以上受講時に達成"
+  },
+  "benefits": {
+    "tenThousandPoints": "1万円ポイント付与",
+    "freeCommunityPriority": "コミュニティ無料イベント優先参加権",
+    "paidCommunityPriority": "コミュニティ有料イベント優先参加権"
+  }
+}

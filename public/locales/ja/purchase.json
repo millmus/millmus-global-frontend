@@ -1,0 +1,22 @@
+{
+  "finish": {
+    "title": "決済完了",
+    "complete": "決済が完了しました。",
+    "receiptInfo": "決済領収書はマイページ ▷ 受講申請履歴 ▷ ",
+    "paymentDocuments": "決済発行書",
+    "receiptSuffix": "で確認できます。",
+    "productInfo": "決済商品情報",
+    "productName": "商品名",
+    "paymentMethod": "決済方法",
+    "productPrice": "商品金額",
+    "discount": "割引金額",
+    "pointsUsed": "ポイント使用",
+    "totalAmount": "総決済金額",
+    "bundle": "(統合券)",
+    "termsTitle": "[ご利用案内及び返金規定]",
+    "goToLecture": "講義を見る"
+  },
+  "form": {
+    "enterPoints": "使用ポイント入力"
+  }
+}

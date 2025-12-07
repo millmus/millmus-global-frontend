@@ -1,33 +1,37 @@
 import { gradeImg } from '@components/grade';
 import SEO from '@components/seo';
 import Layout from '@layouts/sectionLayout';
-import type { NextPage } from 'next';
+import type { GetServerSidePropsContext, NextPage } from 'next';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const EditProfile: NextPage = () => {
+  const { t } = useTranslation('grade');
+
   return (
     <>
-      <SEO title='등급안내' />
+      <SEO title={t('pageTitle')} />
       <Layout padding='pt-20 pb-36 md:pt-4 md:pb-8'>
         <div className='text-2xl font-bold md:text-center md:text-lg md:font-medium'>
-          등급 안내
+          {t('title')}
         </div>
 
         <div className='mt-10 flex divide-x divide-black md:mt-4 md:hidden'>
           <div className='w-[12.5rem] divide-y divide-black bg-[#4a4e57]'>
             <div className='h-[3.75rem] ' />
             <div className='flex h-40 items-center justify-center'>
-              회원 등급
+              {t('table.memberGrade')}
             </div>
             <div className='flex h-40 items-center justify-center'>
-              등급 조건
+              {t('table.gradeConditions')}
             </div>
-            <div className='flex h-40 items-center justify-center'>혜택</div>
+            <div className='flex h-40 items-center justify-center'>{t('table.benefits')}</div>
           </div>
 
           <div className='flex grow divide-x divide-black'>
             <div className='w-1/3 divide-y divide-black'>
               <div className='flex h-[3.75rem] items-center justify-center bg-[#4a4e57]'>
-                1단계
+                {t('stages.stage1')}
               </div>
               <div className='flex h-40 flex-col items-center justify-center space-y-4 bg-[#373c46]'>
                 <div className='flex aspect-square w-[3.75rem] items-center justify-center rounded-full bg-[rgba(0,0,0,0.22)]'>
@@ -35,19 +39,19 @@ const EditProfile: NextPage = () => {
                     {gradeImg('1')}
                   </div>
                 </div>
-                <div>불씨</div>
+                <div>{t('grades.spark')}</div>
               </div>
               <div className='flex h-40 items-center justify-center bg-[#373c46]'>
-                회원가입시 달성
+                {t('conditions.signupAchievement')}
               </div>
               <div className='flex h-40 items-center justify-center bg-[#373c46]'>
-                1만원 포인트 적립
+                {t('benefits.tenThousandPoints')}
               </div>
             </div>
 
             <div className='w-1/3 divide-y divide-black'>
               <div className='flex h-[3.75rem] items-center justify-center bg-[#4a4e57]'>
-                2단계
+                {t('stages.stage2')}
               </div>
               <div className='flex h-40 flex-col items-center justify-center space-y-4 bg-[#373c46]'>
                 <div className='flex aspect-square w-[3.75rem] items-center justify-center rounded-full bg-[rgba(0,0,0,0.22)]'>
@@ -55,21 +59,21 @@ const EditProfile: NextPage = () => {
                     {gradeImg('2')}
                   </div>
                 </div>
-                <div>불꽃</div>
+                <div>{t('grades.flame')}</div>
               </div>
               <div className='flex h-40 items-center justify-center bg-[#373c46] text-center'>
-                강의 1건이상 수강시 자동달성
+                {t('conditions.oneLectureOrMore')}
                 <br />
-                유료 커뮤니티 2건 이상 결제시 자동달성
+                {t('conditions.twoCommunityOrMore')}
               </div>
               <div className='flex h-40 items-center justify-center bg-[#373c46] text-center'>
-                커뮤니티 무료행사 우선참여권
+                {t('benefits.freeCommunityPriority')}
               </div>
             </div>
 
             <div className='w-1/3 divide-y divide-black'>
               <div className='flex h-[3.75rem] items-center justify-center bg-[#4a4e57]'>
-                3단계
+                {t('stages.stage3')}
               </div>
               <div className='flex h-40 flex-col items-center justify-center space-y-4 bg-[#373c46]'>
                 <div className='flex aspect-square w-[3.75rem] items-center justify-center rounded-full bg-[rgba(0,0,0,0.22)]'>
@@ -77,14 +81,14 @@ const EditProfile: NextPage = () => {
                     {gradeImg('3')}
                   </div>
                 </div>
-                <div>파이어</div>
+                <div>{t('grades.fire')}</div>
               </div>
               <div className='flex h-40 items-center justify-center bg-[#373c46] text-center'>
-                강의 3건이상 수강시 달성
+                {t('conditions.threeLecturesOrMore')}
                 <br />
               </div>
               <div className='flex h-40 items-center justify-center bg-[#373c46] text-center'>
-                커뮤니티 유료행사 우선참여권
+                {t('benefits.paidCommunityPriority')}
               </div>
             </div>
           </div>
@@ -93,11 +97,11 @@ const EditProfile: NextPage = () => {
         <div className='mt-4 hidden md:block'>
           <div className='flex h-[10.688rem] justify-between bg-[#373d46] p-6'>
             <div className=''>
-              <div className='text-xl font-medium'>불씨</div>
+              <div className='text-xl font-medium'>{t('grades.spark')}</div>
               <div className='mt-[0.375rem] font-[#b1b1b1] text-xs'>
-                회원가입시 달성
+                {t('conditions.signupAchievement')}
               </div>
-              <div className='mt-4 text-sm font-medium'>1만원 포인트 적립</div>
+              <div className='mt-4 text-sm font-medium'>{t('benefits.tenThousandPoints')}</div>
             </div>
             <div className='h-[3.75rem] rounded-full bg-[#2b3037] p-[1.125rem]'>
               <div className='relative aspect-square w-6'>{gradeImg('1')}</div>
@@ -108,14 +112,14 @@ const EditProfile: NextPage = () => {
         <div className='mt-2 hidden md:block'>
           <div className='flex h-[10.688rem] justify-between bg-[#373d46] p-6'>
             <div className=''>
-              <div className='text-xl font-medium'>불꽃</div>
+              <div className='text-xl font-medium'>{t('grades.flame')}</div>
               <div className='mt-[0.375rem] font-[#b1b1b1] text-xs'>
-                강의 1건이상 수강시 자동달성
+                {t('conditions.oneLectureOrMore')}
                 <br />
-                유료 커뮤니티 2건 이상 결제시 자동달성
+                {t('conditions.twoCommunityOrMore')}
               </div>
               <div className='mt-4 text-sm font-medium'>
-                커뮤니티 무료행사 우선참여권
+                {t('benefits.freeCommunityPriority')}
               </div>
             </div>
             <div className='h-[3.75rem] rounded-full bg-[#2b3037] p-[1.125rem]'>
@@ -127,12 +131,12 @@ const EditProfile: NextPage = () => {
         <div className='mt-2 hidden md:block'>
           <div className='flex h-[10.688rem] justify-between bg-[#373d46] p-6'>
             <div className=''>
-              <div className='text-xl font-medium'>파이어</div>
+              <div className='text-xl font-medium'>{t('grades.fire')}</div>
               <div className='mt-[0.375rem] font-[#b1b1b1] text-xs'>
-                강의 3건이상 수강시 달성
+                {t('conditions.threeLecturesOrMore')}
               </div>
               <div className='mt-4 text-sm font-medium'>
-                커뮤니티 유료행사 우선참여권
+                {t('benefits.paidCommunityPriority')}
               </div>
             </div>
             <div className='h-[3.75rem] rounded-full bg-[#2b3037] p-[1.125rem]'>
@@ -143,6 +147,15 @@ const EditProfile: NextPage = () => {
       </Layout>
     </>
   );
+};
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const locale = ctx.locale || 'en';
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'grade'])),
+    },
+  };
 };
 
 export default EditProfile;

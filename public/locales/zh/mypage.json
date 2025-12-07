@@ -1,4 +1,26 @@
 {
+  "header": {
+    "title": "我的主页",
+    "gradeGuide": "等级指南",
+    "userSuffix": "",
+    "grade": "等级",
+    "lecture": "课程",
+    "coupon": "优惠券",
+    "point": "积分",
+    "pointUnit": "P"
+  },
+  "tabs": {
+    "studying": "学习中",
+    "completed": "已完成",
+    "purchase": "支付记录",
+    "posts": "帖子",
+    "usageHistory": "使用记录",
+    "availablePoints": "可用积分",
+    "pointsUsed": "已使用积分"
+  },
+  "button": {
+    "cancel": "取消"
+  },
   "notificationBoxTitle": "通知箱",
   "editProfileTitle": "编辑会员信息",
   "myClassroomTitle": "我的课程",
@@ -67,5 +89,29 @@
   "profileUpdateSuccess": "会员信息已修改",
   "signupError": "注册失败",
   "deleteAccountError": "注销过程中发生错误。请重试。",
-  "errorTitle": "错误"
+  "errorTitle": "错误",
+
+  "notifications": {
+    "title": "通知箱",
+    "titleShort": "通知",
+    "markAllRead": "全部已读",
+    "noNotifications": {
+      "title": "暂无新通知。",
+      "description": "您可以在此处查看Millmus服务和课程通知。"
+    }
+  },
+  "table": {
+    "number": "编号",
+    "couponName": "优惠券名称",
+    "discountAmount": "折扣金额",
+    "applicableProducts": "适用商品",
+    "usage": "使用处",
+    "pointsUsed": "使用积分",
+    "dateUsed": "使用日期",
+    "lecture": "课程",
+    "community": "社区",
+    "allLectures": "所有课程",
+    "offlineAttendance": "线下参加",
+    "masterSeries": "大师系列"
+  }
 }

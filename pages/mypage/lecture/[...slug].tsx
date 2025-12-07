@@ -10,12 +10,15 @@ import { useUser } from '@libs/client/useUser';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 interface IProps {
   slug: string[];
 }
 
 const MyLectureList: NextPage<IProps> = ({ slug }) => {
+  const { t } = useTranslation('mypage');
   const { token } = useUser({
     isPrivate: true,
   });
@@ -52,7 +55,7 @@ const MyLectureList: NextPage<IProps> = ({ slug }) => {
                       'transition-all'
                     )}
                   >
-                    수강중
+                    {t('tabs.studying')}
                   </div>
                 </a>
               </Link>
@@ -67,7 +70,7 @@ const MyLectureList: NextPage<IProps> = ({ slug }) => {
                       'transition-all'
                     )}
                   >
-                    수강완료
+                    {t('tabs.completed')}
                   </div>
                 </a>
               </Link>
@@ -93,8 +96,10 @@ const MyLectureList: NextPage<IProps> = ({ slug }) => {
 };
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const locale = ctx.locale || 'en';
   return {
     props: {
+      ...(await serverSideTranslations(locale, ['common', 'mypage'])),
       slug: ctx.params?.slug,
     },
   };

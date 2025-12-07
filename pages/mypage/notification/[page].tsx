@@ -9,6 +9,7 @@ import SEO from '@components/seo';
 import Header from '@components/mypage/header';
 import Navigator from '@components/mypage/navigator';
 import NotificationList from '@components/mypage/notificationList';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface IProps {
   page: string;
@@ -44,9 +45,11 @@ const MyPurchaseList: NextPage<IProps> = ({ page }) => {
 };
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const locale = ctx.locale || 'en';
   const { token } = cookies(ctx);
   return {
     props: {
+      ...(await serverSideTranslations(locale, ['common', 'mypage'])),
       page: ctx.params?.page,
     },
   };

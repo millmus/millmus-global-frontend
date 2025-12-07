@@ -1,0 +1,22 @@
+{
+  "finish": {
+    "title": "支付完成",
+    "complete": "支付已完成。",
+    "receiptInfo": "支付收据可在我的主页 ▷ 报名记录 ▷ ",
+    "paymentDocuments": "支付凭证",
+    "receiptSuffix": "中查看。",
+    "productInfo": "支付商品信息",
+    "productName": "商品名称",
+    "paymentMethod": "支付方式",
+    "productPrice": "商品金额",
+    "discount": "优惠金额",
+    "pointsUsed": "积分使用",
+    "totalAmount": "总支付金额",
+    "bundle": "(套餐)",
+    "termsTitle": "[使用说明及退款政策]",
+    "goToLecture": "前往课程"
+  },
+  "form": {
+    "enterPoints": "请输入使用积分"
+  }
+}

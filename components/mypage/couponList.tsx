@@ -1,6 +1,7 @@
 import Pagebar from '@components/pagebar';
 import { useRouter } from 'next/router';
 import Coupon from './coupon';
+import { useTranslation } from 'next-i18next';
 
 interface IProps {
   data: any[];
@@ -8,6 +9,7 @@ interface IProps {
 }
 
 export default function CouponList({ data, totalItems }: IProps) {
+  const { t } = useTranslation('mypage');
   const router = useRouter();
   const currentPage = router.query.page as string;
 
@@ -15,10 +17,10 @@ export default function CouponList({ data, totalItems }: IProps) {
     <div>
       <div className='space-y-0.5'>
         <div className='flex h-[3.75rem] items-center rounded-sm bg-[#4a4e57] md:hidden'>
-          <div className='flex w-[10%] justify-center'>번호</div>
-          <div className='flex w-[50%] justify-center'>쿠폰명</div>
-          <div className='flex w-[20%] justify-center'>할인금액</div>
-          <div className='flex grow justify-center'>적용상품</div>
+          <div className='flex w-[10%] justify-center'>{t('table.number')}</div>
+          <div className='flex w-[50%] justify-center'>{t('table.couponName')}</div>
+          <div className='flex w-[20%] justify-center'>{t('table.discountAmount')}</div>
+          <div className='flex grow justify-center'>{t('table.applicableProducts')}</div>
         </div>
 
         {data?.map((i, index) => (
@@ -26,7 +28,7 @@ export default function CouponList({ data, totalItems }: IProps) {
             key={index}
             num={(+currentPage - 1) * 12 + index + 1}
             name={i.name}
-            noticeText={i.reusable ? "오프라인 참석" : i.limit_to_tutor ? "마스터시리즈" : "모든강의"}
+            noticeText={i.reusable ? t('table.offlineAttendance') : i.limit_to_tutor ? t('table.masterSeries') : t('table.allLectures')}
             discount={i.price}
           />
         ))}

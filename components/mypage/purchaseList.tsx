@@ -1,6 +1,7 @@
 import Pagebar from '@components/pagebar';
 import { useRouter } from 'next/router';
 import Purchase from './purchase';
+import { useTranslation } from 'next-i18next';
 
 interface IProps {
   data: any[];
@@ -8,6 +9,7 @@ interface IProps {
 }
 
 export default function PurchaseList({ data, totalItems }: IProps) {
+  const { t } = useTranslation('mypage');
   const router = useRouter();
   const currentPage = router.query.page as string;
   return (
@@ -17,7 +19,7 @@ export default function PurchaseList({ data, totalItems }: IProps) {
           <Purchase
             key={i.id}
             state={i.refund}
-            type={i.lecture.category ? '강의' : '커뮤니티'}
+            type={i.lecture.category ? t('table.lecture') : t('table.community')}
             category={i.lecture.category || ''}
             tutor={i.lecture?.tutor?.name || ''}
             title={i.lecture.raw_name || i.community.name}

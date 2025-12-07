@@ -1,0 +1,22 @@
+{
+  "finish": {
+    "title": "Payment Complete",
+    "complete": "Payment has been completed.",
+    "receiptInfo": "Payment receipts can be found in My Page ▷ Enrollment History ▷ ",
+    "paymentDocuments": "Payment Documents",
+    "receiptSuffix": ".",
+    "productInfo": "Payment Information",
+    "productName": "Product",
+    "paymentMethod": "Payment Method",
+    "productPrice": "Product Price",
+    "discount": "Discount",
+    "pointsUsed": "Points Used",
+    "totalAmount": "Total Amount",
+    "bundle": "(Bundle)",
+    "termsTitle": "[Terms of Use and Refund Policy]",
+    "goToLecture": "Go to Lecture"
+  },
+  "form": {
+    "enterPoints": "Enter points to use"
+  }
+}

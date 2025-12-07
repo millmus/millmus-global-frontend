@@ -14,12 +14,15 @@ import useSWR from 'swr';
 import Image from "next/image";
 import DownloadIcon from "@public/icons/file_download.png";
 import Player from "@vimeo/player";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface IProps {
   slug: string[];
 }
 
 const MyLectureDetail: NextPage<IProps> = ({ slug }) => {
+  const { t } = useTranslation('lecture');
   const { token } = useUser({
     isPrivate: true,
   });
@@ -445,7 +448,7 @@ const MyLectureDetail: NextPage<IProps> = ({ slug }) => {
                       <Link href={data?.live_external_link.startsWith('http') ? data?.live_external_link : `https://${data?.live_external_link}`}>
                         <a target='_blank'>
                           <div className='flex px-4 py-2 items-center justify-center rounded bg-[#ffeb00] font-medium text-[#282e38] transition-all hover:opacity-90'>
-                            <span>단톡방 바로 입장</span>
+                            <span>{t('detail.joinChatRoom')}</span>
                           </div>
                         </a>
                       </Link>
@@ -463,20 +466,20 @@ const MyLectureDetail: NextPage<IProps> = ({ slug }) => {
           
           <div className='flex flex-col relative grow font-medium sm:h-1/2'>
           {
-            data?.live_ended == true ? 
+            data?.live_ended == true ?
             <div className="relative flex h-full w-full bg-[#0f0f0f]/[.5] md:bg-[#0f0f0f]">
-              <span className="m-auto">라이브 채팅창이 종료되었습니다.</span>
+              <span className="m-auto">{t('live.chatEnded')}</span>
             </div>
             :
-            data?.live_ended == '라이브 대기중' ? 
+            data?.live_ended == '라이브 대기중' ?
             <div className="relative flex h-full w-full bg-[#0f0f0f]/[.5] md:bg-[#0f0f0f]">
-              <span className="m-auto">라이브 채팅창이 준비 중입니다.</span>
+              <span className="m-auto">{t('live.chatPreparing')}</span>
             </div>
             :
             detailData && (
               detailData?.chat_room_number ?
               <Chat lectureId={[{lecture: detailData?.chat_room_number}]} />
-              : 
+              :
               <Chat lectureId={data?.index} />
             )
           }
@@ -499,8 +502,10 @@ const MyLectureDetail: NextPage<IProps> = ({ slug }) => {
 };
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const locale = ctx.locale || 'en';
   return {
     props: {
+      ...(await serverSideTranslations(locale, ['common', 'lecture'])),
       slug: ctx.params?.slug,
     },
   };

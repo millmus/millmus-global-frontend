@@ -1,1 +1,33 @@
-{}
+{
+  "tabs": {
+    "info": "Lecture Info",
+    "reviews": "Reviews",
+    "curriculum": "Curriculum",
+    "preview": "Preview",
+    "community": "Community"
+  },
+  "detail": {
+    "freeLecture": "Free Lecture",
+    "interestFreeInstallment": "12-month interest-free installment support",
+    "currency": "",
+    "month": "Monthly",
+    "earlyBird": "*Early Bird",
+    "apply": "Apply",
+    "closed": "Closed",
+    "selectOption": "Click to select online/offline class (required)",
+    "optionRequired": "Option selection is required",
+    "purchaseOverseasOnly": "Apply for overseas purchase agency only",
+    "coupangUpgrade": "Apply for Coupang upgrade",
+    "alreadyPurchased": "You have already purchased this lecture.",
+    "enterCode": "Enter Code",
+    "joinChatRoom": "Join Chat Room",
+    "joinLive": "Join Live",
+    "watchRecording": "Watch Recording"
+  },
+  "live": {
+    "chatEnded": "Live chat has ended.",
+    "chatPreparing": "Live chat is being prepared.",
+    "waiting": "Live Waiting",
+    "inProgress": "Live In Progress"
+  }
+}

@@ -1,4 +1,26 @@
 {
+  "header": {
+    "title": "My Page",
+    "gradeGuide": "Grade Guide",
+    "userSuffix": "",
+    "grade": "Grade",
+    "lecture": "Lecture",
+    "coupon": "Coupon",
+    "point": "Point",
+    "pointUnit": "P"
+  },
+  "tabs": {
+    "studying": "In Progress",
+    "completed": "Completed",
+    "purchase": "Payment History",
+    "posts": "Posts",
+    "usageHistory": "Usage History",
+    "availablePoints": "Available Points",
+    "pointsUsed": "Points Used"
+  },
+  "button": {
+    "cancel": "Cancel"
+  },
   "notificationBoxTitle": "Notifications",
   "editProfileTitle": "Edit Profile",
   "myClassroomTitle": "My Classroom",
@@ -67,5 +89,29 @@
   "profileUpdateSuccess": "Profile updated successfully",
   "signupError": "Signup failed",
   "deleteAccountError": "An error occurred while deleting your account. Please try again.",
-  "errorTitle": "Error"
+  "errorTitle": "Error",
+
+  "notifications": {
+    "title": "Notifications",
+    "titleShort": "Notifications",
+    "markAllRead": "Mark all as read",
+    "noNotifications": {
+      "title": "No new notifications.",
+      "description": "You can check Millmus service and lecture notifications here."
+    }
+  },
+  "table": {
+    "number": "No.",
+    "couponName": "Coupon Name",
+    "discountAmount": "Discount",
+    "applicableProducts": "Applicable Products",
+    "usage": "Usage",
+    "pointsUsed": "Points Used",
+    "dateUsed": "Date Used",
+    "lecture": "Lecture",
+    "community": "Community",
+    "allLectures": "All Lectures",
+    "offlineAttendance": "Offline Attendance",
+    "masterSeries": "Master Series"
+  }
 }

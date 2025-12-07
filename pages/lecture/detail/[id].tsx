@@ -13,8 +13,11 @@ import useSWR from 'swr';
 import Preview from "@components/lecture/detail/preview";
 import ReviewModal from "@components/lecture/detail/reviewModal";
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const LectureDetail: NextPage<{ id: string, title: string, description: string, image: string }> = ({ id, title, description, image }) => {
+  const { t } = useTranslation('lecture');
   const { data, mutate } = useSWR(
     `/lecture/${id}`,
     () => lecturesApi.detail(id), {
@@ -23,7 +26,7 @@ const LectureDetail: NextPage<{ id: string, title: string, description: string, 
   );
 
   const router = useRouter();
-  const [section, setSection] = useState('강의정보');
+  const [section, setSection] = useState('info');
   const [isOpen, setIsOpen] = useState(false);
   const [isDefaultOrder, setIsDefaultOrder] = useState(true);
   const [currentIndex, setIndex] = useState([{ id: 0, index: 0 }]);
@@ -31,23 +34,28 @@ const LectureDetail: NextPage<{ id: string, title: string, description: string, 
   const sectionList = [
     {
       id: 0,
-      label: '강의정보',
+      key: 'info',
+      label: t('tabs.info'),
     },
     {
       id: 3,
-      label: '수강후기',
+      key: 'reviews',
+      label: t('tabs.reviews'),
     },
     {
       id: 2,
-      label: '커리큘럼',
+      key: 'curriculum',
+      label: t('tabs.curriculum'),
     },
     {
       id: 1,
-      label: '미리보기',
+      key: 'preview',
+      label: t('tabs.preview'),
     },
     {
       id: 4,
-      label: '커뮤니티',
+      key: 'community',
+      label: t('tabs.community'),
     },
   ];
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -103,9 +111,9 @@ const LectureDetail: NextPage<{ id: string, title: string, description: string, 
           {sectionList.map((i) => (
             <div
               key={i.id}
-              onClick={() => setSection(i.label)}
+              onClick={() => setSection(i.key)}
               className={cls(
-                section === i.label
+                section === i.key
                   ? 'border-[#00e7ff] text-white'
                   : 'border-[rgba(255,255,255,0.16)] text-[rgba(255,255,255,0.6)]',
                 'flex w-[6.25rem] cursor-pointer justify-center border-b-2 pb-3 transition-all'
@@ -118,11 +126,11 @@ const LectureDetail: NextPage<{ id: string, title: string, description: string, 
         </div>
       </Layout>
       <div style={{ maxWidth: '968px', margin: "auto", }} ref={scrollRef}>
-        {section === '강의정보' && <Info is_offline={(data?.series || data?.category == "프리미엄 스터디") ? true : false} is_masterseries={data?.series ? true : false} is_free={data?.category == "코인"} data={data?.lecture_detail} sold_out={data?.sold_out} refund_policy={data?.refund_policy} />}
-        {section === '미리보기' && <Preview data={data?.curriculum} />}
-        {section === '커리큘럼' && <Curriculum data={data?.curriculum} />}
-        {section === '수강후기' && <Review id={data?.id} review={localReviews} updateReviews={updateReviews} setIsDefaultOrder={setIsDefaultOrder} setIsOpen={setIsOpen} setIndex={setIndex} />}
-        {section === '커뮤니티' && <Community {...data} />}
+        {section === 'info' && <Info is_offline={(data?.series || data?.category == "프리미엄 스터디") ? true : false} is_masterseries={data?.series ? true : false} is_free={data?.category == "코인"} data={data?.lecture_detail} sold_out={data?.sold_out} refund_policy={data?.refund_policy} />}
+        {section === 'preview' && <Preview data={data?.curriculum} />}
+        {section === 'curriculum' && <Curriculum data={data?.curriculum} />}
+        {section === 'reviews' && <Review id={data?.id} review={localReviews} updateReviews={updateReviews} setIsDefaultOrder={setIsDefaultOrder} setIsOpen={setIsOpen} setIndex={setIndex} />}
+        {section === 'community' && <Community {...data} />}
       </div>
     </>
   );
@@ -143,10 +151,12 @@ const LectureDetail: NextPage<{ id: string, title: string, description: string, 
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const id = ctx.params?.id as string;
+  const locale = ctx.locale || 'en';
 
   const data = await lecturesApi.detail(id);
   return {
     props: {
+      ...(await serverSideTranslations(locale, ['common', 'lecture'])),
       id,
       title: data?.tutor.name,
       description: data?.name,

@@ -9,12 +9,15 @@ import type { GetServerSidePropsContext, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 interface IProps {
   page: string;
 }
 
 const Point: NextPage<IProps> = ({ page }) => {
+  const { t } = useTranslation('mypage');
   const { token } = useUser({
     isPrivate: true,
   });
@@ -44,24 +47,24 @@ const Point: NextPage<IProps> = ({ page }) => {
                 <Link href='/mypage/coupon/1'>
                   <a>
                     <div className='text-lg font-medium text-[#afafaf]'>
-                      쿠폰
+                      {t('couponTitle')}
                     </div>
                   </a>
                 </Link>
 
-                <div className='text-lg font-medium'>포인트</div>
+                <div className='text-lg font-medium'>{t('pointTitle')}</div>
               </div>
 
               <div className='flex justify-between space-x-4'>
                 <div className='flex h-[4.278rem] w-1/2 items-center justify-between rounded-sm bg-[rgba(229,229,229,0.08)] pl-12 pr-10 text-lg md:pl-6 md:pr-6 md:text-sm'>
-                  <div className='font-medium'>보유 포인트</div>
+                  <div className='font-medium'>{t('tabs.availablePoints')}</div>
                   <div className='font-bold'>
                     {data?.point.toLocaleString()} P
                   </div>
                 </div>
 
                 <div className='flex h-[4.278rem] w-1/2 items-center justify-between rounded-sm bg-[rgba(229,229,229,0.08)] pl-12 pr-10 text-lg md:pl-6 md:pr-6 md:text-sm'>
-                  <div className='font-medium'>사용한 포인트</div>
+                  <div className='font-medium'>{t('tabs.pointsUsed')}</div>
                   <div className='font-bold'>
                     {data?.used_point.toLocaleString()} P
                   </div>
@@ -70,7 +73,7 @@ const Point: NextPage<IProps> = ({ page }) => {
             </div>
 
             <div className='space-y-6'>
-              <div className='text-lg font-medium'>사용내역</div>
+              <div className='text-lg font-medium'>{t('tabs.usageHistory')}</div>
 
               <PointList data={data?.results} totalItems={data?.count} />
             </div>
@@ -82,8 +85,10 @@ const Point: NextPage<IProps> = ({ page }) => {
 };
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const locale = ctx.locale || 'en';
   return {
     props: {
+      ...(await serverSideTranslations(locale, ['common', 'mypage'])),
       page: ctx.params?.page,
     },
   };

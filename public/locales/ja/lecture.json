@@ -1,1 +1,33 @@
-{}
+{
+  "tabs": {
+    "info": "講義情報",
+    "reviews": "受講レビュー",
+    "curriculum": "カリキュラム",
+    "preview": "プレビュー",
+    "community": "コミュニティ"
+  },
+  "detail": {
+    "freeLecture": "無料特別講義",
+    "interestFreeInstallment": "12ヶ月無利子分割払い対応",
+    "currency": "円",
+    "month": "月",
+    "earlyBird": "*早割",
+    "apply": "申し込む",
+    "closed": "受付終了",
+    "selectOption": "クリックしてオンライン/オフラインクラスを選択（必須）",
+    "optionRequired": "オプション選択は必須です",
+    "purchaseOverseasOnly": "海外購入代行のみ申し込む",
+    "coupangUpgrade": "クーパンアップグレード申し込む",
+    "alreadyPurchased": "すでに購入済みの講義です。",
+    "enterCode": "入場コード",
+    "joinChatRoom": "グループチャットに参加",
+    "joinLive": "ライブに参加",
+    "watchRecording": "録画を見る"
+  },
+  "live": {
+    "chatEnded": "ライブチャットが終了しました。",
+    "chatPreparing": "ライブチャットを準備中です。",
+    "waiting": "ライブ待機中",
+    "inProgress": "ライブ進行中"
+  }
+}

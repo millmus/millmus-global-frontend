@@ -4,6 +4,7 @@ import Notification from './notification';
 import { usersApi } from '@libs/api';
 import { cls } from '@libs/client/utils';
 import { useState } from 'react';
+import { useTranslation } from 'next-i18next';
 
 interface IProps {
   data: any[];
@@ -14,6 +15,7 @@ interface IProps {
 }
 
 export default function CouponList({ data, mutate, token, in_header, totalItems }: IProps) {
+  const { t } = useTranslation('mypage');
   const router = useRouter();
   const currentPage = router.query.page as string;
   const [clickedId, setClickedId] = useState(0);
@@ -30,16 +32,16 @@ export default function CouponList({ data, mutate, token, in_header, totalItems 
   }
   return (
     <div className={cls(!in_header ? 'space-y-6' : 'space-y-4', 'flex flex-col text-lg font-medium md:text-base')}>
-      {!in_header ? 
+      {!in_header ?
         <div className='flex justify-between font-bold'>
           <div className='flex gap-x-2 text-2xl md:text-lg'>
-            알림함
+            {t('notifications.title')}
             {data && <span className="text-base self-end text-[#00E7FF]">{data?.length}</span>}
           </div>
           {
-            data?.length > 0 ? 
+            data?.length > 0 ?
             <button className="font-bold text-[#00E7FF]" onClick={() => readHandler(0)}>
-              전체읽음
+              {t('notifications.markAllRead')}
             </button>
             : null
           }
@@ -47,13 +49,13 @@ export default function CouponList({ data, mutate, token, in_header, totalItems 
         :
         <div className='flex justify-between font-bold'>
           <div className='flex gap-x-2 text-xl'>
-            알림
+            {t('notifications.titleShort')}
           </div>
           {
-            data?.length > 0 ? 
+            data?.length > 0 ?
             <div className='flex gap-x-4'>
               <button className="font-bold text-base text-[#00E7FF]" onClick={() => readHandler(0)}>
-                전체읽음
+                {t('notifications.markAllRead')}
               </button>
             </div>
             : null
@@ -78,9 +80,8 @@ export default function CouponList({ data, mutate, token, in_header, totalItems 
             :
             <>
               <div>
-                <b>새로운 알림이 없습니다.</b><br/>
-                밀머스 서비스와 강의 알림을
-                이곳에서 확인할 수 있어요.
+                <b>{t('notifications.noNotifications.title')}</b><br/>
+                {t('notifications.noNotifications.description')}
               </div>
             </>
         }

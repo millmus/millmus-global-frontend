@@ -1,1 +1,33 @@
-{}
+{
+  "tabs": {
+    "info": "课程信息",
+    "reviews": "学员评价",
+    "curriculum": "课程大纲",
+    "preview": "预览",
+    "community": "社区"
+  },
+  "detail": {
+    "freeLecture": "免费特讲",
+    "interestFreeInstallment": "支持12个月免息分期",
+    "currency": "元",
+    "month": "每月",
+    "earlyBird": "*早鸟优惠",
+    "apply": "申请",
+    "closed": "报名截止",
+    "selectOption": "点击选择线上/线下课程（必选）",
+    "optionRequired": "必须选择选项",
+    "purchaseOverseasOnly": "仅申请海外代购",
+    "coupangUpgrade": "申请Coupang升级",
+    "alreadyPurchased": "您已购买此课程。",
+    "enterCode": "入场码",
+    "joinChatRoom": "进入群聊",
+    "joinLive": "参与直播",
+    "watchRecording": "观看录播"
+  },
+  "live": {
+    "chatEnded": "直播聊天已结束。",
+    "chatPreparing": "直播聊天准备中。",
+    "waiting": "直播待机中",
+    "inProgress": "直播进行中"
+  }
+}

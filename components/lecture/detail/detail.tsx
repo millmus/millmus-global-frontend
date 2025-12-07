@@ -8,6 +8,7 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import Dday from './dday';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'next-i18next';
 
 interface IProps {
   id: number;
@@ -42,6 +43,7 @@ export default function Detail({
   live_external_link_help,
   selectOption,
 }: IProps) {
+  const { t } = useTranslation('lecture');
   const options = [];
   if (series) {
     if (series?.is_plan) {
@@ -177,7 +179,7 @@ export default function Detail({
         {/* 강의 상세정보 */}
         <div className={cls(series ? 'h-[35.625rem]' : 'h-[33.625rem]', 'flex w-[26.75rem] flex-col justify-between md:w-full md:h-fit')}>
           {/* 카테고리 */}
-          <div className='text-sm font-medium md:mt-6'>{category == "코인" ? "무료특강" : category}</div>
+          <div className='text-sm font-medium md:mt-6'>{category == "코인" ? t('detail.freeLecture') : category}</div>
           {/* 카테고리 */}
 
           {/* 강의명 */}
@@ -196,7 +198,7 @@ export default function Detail({
           {!series || (series && selectedOptionIndex >= 0) ? <>
             <div className='mt-4 flex h-20 w-full flex-col justify-center rounded bg-[rgba(0,184,204,0.4)] px-4'>
               <div className='flex justify-end text-sm font-medium text-[#00e7ff] md:text-xs'>
-                12개월 무이자 할부지원
+                {t('detail.interestFreeInstallment')}
               </div>
 
               <div className='flex items-center justify-between whitespace-nowrap'>
@@ -208,13 +210,13 @@ export default function Detail({
                       'mr-[0.375rem]'
                     )}
                   >
-                    {price?.toLocaleString()}원
+                    {price?.toLocaleString()}{t('detail.currency')}
                   </div>
                   {/* 정상가 */}
 
                   {/* 할인가 */}
                   {discount > 0 && (
-                    <div>{(price - discount).toLocaleString()}원</div>
+                    <div>{(price - discount).toLocaleString()}{t('detail.currency')}</div>
                   )}
                   {/* 할인가 */}
                 </div>
@@ -230,11 +232,11 @@ export default function Detail({
 
                   {/* 12개월 할부시 1달 가격 */}
                   <div>
-                    <span className='text-xl md:text-lg'>월</span>{' '}
+                    <span className='text-xl md:text-lg'>{t('detail.month')}</span>{' '}
                     <span className='font-bold md:text-xl'>
                       {Math.round((price - discount) / 12).toLocaleString()}
                     </span>
-                    <span className='text-xl md:text-lg'>원</span>
+                    <span className='text-xl md:text-lg'>{t('detail.currency')}</span>
                   </div>
                   {/* 12개월 할부시 1달 가격 */}
                 </div>
@@ -245,7 +247,7 @@ export default function Detail({
             {/* 할인 기간 */}
             {discount > 0 && (
               <div className='mt-3 text-sm font-medium text-[#cfcfcf] md:text-xs'>
-                <span className='font-bold'>*얼리버드</span>: ~{' '}
+                <span className='font-bold'>{t('detail.earlyBird')}</span>: ~{' '}
                 {discount_period.split('-')[1]}/{discount_period.split('-')[2]}
                 <Dday
                   discount_period={discount_period}
@@ -256,17 +258,17 @@ export default function Detail({
                       onClick={() => setShowPurchasedPopup(true)}
                       className='flex p-1 w-full h-[40px] cursor-pointer items-center justify-center rounded bg-[#00e7ff] font-bold text-black transition-all hover:opacity-90 md:p-1 md:h-[45px]'
                     >
-                      신청하기
+                      {t('detail.apply')}
                     </div>
                   ) : sold_out ? (
                     <div className='flex p-1 w-full h-[40px] pointer-events-none items-center justify-center rounded bg-gray-500 text-black'>
-                      신청마감
+                      {t('detail.closed')}
                     </div>
                   ) : (
                     <div onClick={() => {
                       window.location.href = purchaseLink();
                     }} className='flex p-1 w-full h-[40px] cursor-pointer items-center justify-center rounded bg-[#00e7ff] font-bold text-black transition-all hover:opacity-90 md:p-1 md:h-[45px]'>
-                      신청하기
+                      {t('detail.apply')}
                     </div>
                   )}
                 </Dday>
@@ -295,7 +297,7 @@ export default function Detail({
                 }
 
               }}>
-                <option className="hidden" value={-1} disabled>클릭해 온/오프 클래스 선택 (필수)</option>
+                <option className="hidden" value={-1} disabled>{t('detail.selectOption')}</option>
                 {series.is_plan ? <>
                   {series.ticket_id && series.vod_id && <option value={2}>{options[2]}</option>}
                   {series.ticket_id && <option value={1}>{options[1]}</option>}
@@ -318,7 +320,7 @@ export default function Detail({
                 <div className="w-full flex px-3 py-4 justify-between font-bold border-b">
                   <span>{options[selectedOptionIndex]}</span>
                   <div className="flex gap-x-4">
-                    <span>{selectedOptionIndex == 2 ? (series?.price - series?.discount).toLocaleString() : (price - discount).toLocaleString()}원</span>
+                    <span>{selectedOptionIndex == 2 ? (series?.price - series?.discount).toLocaleString() : (price - discount).toLocaleString()}{t('detail.currency')}</span>
                     <svg
                       onClick={() => setSelectedOptionIndex(-1)}
                       xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"
@@ -356,24 +358,24 @@ export default function Detail({
 
             {(selectedOptionIndex != -1 && sold_out) || (series && series?.all_sold_out) || (!series && sold_out) ? (
               <div className='flex ml-3 grow p-4 pointer-events-none items-center justify-center rounded bg-gray-500 text-xl font-bold text-black'>
-                신청마감
+                {t('detail.closed')}
               </div>
             ) : data === 'already purchased' ? (
               <div
                 onClick={() => setShowPurchasedPopup(true)}
                 className='ml-3 flex grow cursor-pointer items-center justify-center rounded bg-[#00e7ff] text-xl font-bold text-[#282e38] transition-all hover:opacity-90'
               >
-                신청하기
+                {t('detail.apply')}
               </div>
             ) : (
               <div onClick={() => {
                 if (series && selectedOptionIndex < 0) {
-                  alert("옵션선택은 필수입니다");
+                  alert(t('detail.optionRequired'));
                   return;
                 }
                 window.location.href = purchaseLink();
               }} className='ml-3 flex grow cursor-pointer items-center justify-center rounded bg-[#00e7ff] text-xl font-bold text-[#282e38] transition-all hover:opacity-90'>
-                신청하기
+                {t('detail.apply')}
               </div>
             )}
           </div>
@@ -382,7 +384,7 @@ export default function Detail({
             <div className='mt-6 flex'>
               <Link href={'/lecture/detail/190'}>
                 <a className='flex h-[3.625rem] grow cursor-pointer items-center justify-center rounded bg-[#00e7ff] text-xl font-bold text-[#282e38] transition-all hover:opacity-90'>
-                  해외구매대행만 신청하기
+                  {t('detail.purchaseOverseasOnly')}
                 </a>
               </Link>
             </div>
@@ -391,7 +393,7 @@ export default function Detail({
             <div className='mt-6 flex'>
               <Link href={'/lecture/detail/187'}>
                 <a className='flex h-[3.625rem] grow cursor-pointer items-center justify-center rounded bg-[#00e7ff] text-xl font-bold text-[#282e38] transition-all hover:opacity-90'>
-                  쿠팡 업그레이드 신청하기
+                  {t('detail.coupangUpgrade')}
                 </a>
               </Link>
             </div>
@@ -418,19 +420,19 @@ export default function Detail({
           exit='exit'
           className='flex flex-col items-center gap-y-6 w-[20rem] md:w-[25rem] rounded bg-[#282e38] py-8 px-8'
         >
-          <p className='text-center text-[#cfcfcf]'>이미 구매한 강의입니다.</p>
+          <p className='text-center text-[#cfcfcf]'>{t('detail.alreadyPurchased')}</p>
               {live_external_link &&
                 <>
                   <div className='flex flex-col justify-center gap-4'>
                   {live_external_link_help && <>
                     <div className='mb-2 flex justify-center font-light'>
-                      입장코드 <span className="bg-[#ffeb00] font-medium mx-2 px-1 rounded-sm text-[#282e38]">{live_external_link_help}</span>
+                      {t('detail.enterCode')} <span className="bg-[#ffeb00] font-medium mx-2 px-1 rounded-sm text-[#282e38]">{live_external_link_help}</span>
                     </div>
                   </>}
                   <Link href={live_external_link.startsWith('http') ? live_external_link : `https://${live_external_link}`}>
                     <a target='_blank' className='mx-auto'>
                       <div className='flex h-14 w-64 items-center justify-center rounded bg-[#ffeb00] font-medium text-[#282e38] transition-all hover:opacity-90'>
-                        <span>단톡방 바로 입장</span>
+                        <span>{t('detail.joinChatRoom')}</span>
                       </div>
                     </a>
                   </Link>
@@ -445,7 +447,7 @@ export default function Detail({
                         <div className='flex h-14 w-64 items-center justify-center rounded bg-[#00e7ff] font-medium text-[#282e38] transition-all hover:opacity-90'>
                           <>
                             <div className='flex flex-row gap-2 items-center'>
-                              <span>라이브 참여하기</span>
+                              <span>{t('detail.joinLive')}</span>
                             </div>
                           </>
                         </div>
@@ -455,7 +457,7 @@ export default function Detail({
                         <div className='flex h-14 w-64 items-center justify-center rounded bg-[#00e7ff] font-medium text-[#282e38] transition-all hover:opacity-90'>
                           <>
                             <div className='flex flex-row gap-2 items-center'>
-                              <span>녹화본 다시보기</span>
+                              <span>{t('detail.watchRecording')}</span>
                             </div>
                           </>
                         </div>

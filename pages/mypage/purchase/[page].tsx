@@ -9,12 +9,15 @@ import type { GetServerSidePropsContext, NextPage } from 'next';
 import cookies from 'next-cookies';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 interface IProps {
   page: string;
 }
 
 const MyPurchaseList: NextPage<IProps> = ({ page }) => {
+  const { t } = useTranslation('mypage');
   const { token } = useUser({
     isPrivate: true,
   });
@@ -39,7 +42,7 @@ const MyPurchaseList: NextPage<IProps> = ({ page }) => {
 
           <div className='grow space-y-6 md:mt-8'>
             <div className='flex space-x-5 text-lg font-medium'>
-              <div>결제 내역</div>
+              <div>{t('tabs.purchase')}</div>
               {/* <div className='text-[#afafaf]'>환불 내역</div> */}
             </div>
 
@@ -52,10 +55,12 @@ const MyPurchaseList: NextPage<IProps> = ({ page }) => {
 };
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const locale = ctx.locale || 'en';
   const { token } = cookies(ctx);
   const data = token ? await usersApi.myInfos(token) : null;
   return {
     props: {
+      ...(await serverSideTranslations(locale, ['common', 'mypage'])),
       page: ctx.params?.page,
     },
   };
