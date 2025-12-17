@@ -15,62 +15,136 @@ interface IProps {
   merchant_uid: string;
   imp_success: string;
   option: string;
+  payment_method: string;
 }
 
-const Finish: NextPage<IProps> = ({ imp_uid, merchant_uid, imp_success, option }) => {
+type PaymentStatus = 'loading' | 'pending' | 'paid' | 'failed';
+
+const Finish: NextPage<IProps> = ({ imp_uid, merchant_uid, imp_success, option, payment_method }) => {
   const { t } = useTranslation('purchase');
   const { token } = useUser({ isPrivate: true });
   const [data, setData] = useState<{ [key: string]: any } | null>(null);
   const [refund_policy, set_refund_policy] = useState<any | null>();
+  const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>('loading');
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const router = useRouter();
+  const isPaypal = payment_method === 'paypal';
+  const POLLING_INTERVAL = 3000; // 3 seconds
+  const MAX_POLLING_COUNT = 20; // Max 60 seconds
+
+  // Check payment status from PortOne API
+  const checkPaymentStatus = async (): Promise<{ status: string; data: any }> => {
+    const { data } = await axios.post('/api/payment', {
+      imp_uid,
+      merchant_uid,
+      imp_success,
+    });
+    return { status: data.status, data };
+  };
+
+  // Process successful payment
+  const processPayment = async (paymentData: any) => {
+    const customData = JSON.parse(paymentData.custom_data);
+    const {
+      type,
+      id,
+      price,
+      total_price,
+      point,
+      coupon,
+      token: prevToken,
+    } = customData;
+
+    if (token === prevToken) {
+      await purchaseApi.purchase({
+        type,
+        method: paymentData.pay_method,
+        id,
+        price,
+        totalPrice: total_price,
+        point,
+        coupon,
+        orderId: paymentData.merchant_uid,
+        token,
+        option
+      });
+      setData({ ...paymentData, custom_data: customData });
+      setPaymentStatus('paid');
+
+      const updatedData = await lecturesApi.detail(id);
+      set_refund_policy(updatedData.refund_policy);
+    } else {
+      setPaymentStatus('failed');
+      setErrorMessage('Token mismatch error');
+    }
+  };
+
+  // Polling function for PayPal pending payments
+  const pollPaymentStatus = async (pollingCount: number = 0) => {
+    if (pollingCount >= MAX_POLLING_COUNT) {
+      setPaymentStatus('failed');
+      setErrorMessage('Payment verification timeout. Please check your payment status in MyPage.');
+      return;
+    }
+
+    try {
+      const { status, data: paymentData } = await checkPaymentStatus();
+
+      if (status === 'paid') {
+        await processPayment(paymentData);
+      } else if (status === 'failed' || status === 'cancelled') {
+        setPaymentStatus('failed');
+        setErrorMessage(paymentData.fail_reason || 'Payment failed');
+        const customData = JSON.parse(paymentData.custom_data);
+        setTimeout(() => {
+          router.replace(`/purchase/${customData.type}/${customData.id}`);
+        }, 3000);
+      } else {
+        // Still pending, continue polling
+        setPaymentStatus('pending');
+        setTimeout(() => pollPaymentStatus(pollingCount + 1), POLLING_INTERVAL);
+      }
+    } catch (error) {
+      setPaymentStatus('failed');
+      setErrorMessage('Failed to check payment status');
+    }
+  };
 
   const getData = async () => {
     try {
-      const { data } = await axios.post('/api/payment', {
-        imp_uid,
-        merchant_uid,
-        imp_success,
-      });
-      const customData = JSON.parse(data.custom_data);
-      const {
-        type,
-        id,
-        price,
-        total_price,
-        point,
-        coupon,
-        token: prevToken,
-      } = customData;
-      if (imp_success === 'true' && token === prevToken) {
-        await purchaseApi.purchase({
-          type,
-          method: data.pay_method,
-          id,
-          price,
-          totalPrice: total_price,
-          point,
-          coupon,
-          orderId: data.merchant_uid,
-          token,
-          option
-        });
-        setData({ ...data, custom_data: customData });
-        // window.fbq('track', 'Purchase', {value: total_price, currency: 'KRW'});
-        // @ts-ignore
-        // window.gtag('event', 'conversion', {
-        //     'send_to': 'AW-10983062731/CxqxCKrXpKsYEMv5kPUo',
-        //     'value': total_price,
-        //     'currency': 'KRW',
-        //     'transaction_id': data.merchant_uid
-        // });
-        const updatedData = await lecturesApi.detail(id);
-        set_refund_policy(updatedData.refund_policy);
+      const { status, data: paymentData } = await checkPaymentStatus();
+      const customData = JSON.parse(paymentData.custom_data);
+      const { type, id, token: prevToken } = customData;
+
+      // For PayPal, handle pending status with polling
+      if (isPaypal) {
+        if (status === 'paid') {
+          await processPayment(paymentData);
+        } else if (status === 'ready' || status === 'pending') {
+          setPaymentStatus('pending');
+          pollPaymentStatus(1);
+        } else if (status === 'failed' || status === 'cancelled') {
+          setPaymentStatus('failed');
+          setErrorMessage(paymentData.fail_reason || 'Payment failed');
+          setTimeout(() => {
+            router.replace(`/purchase/${type}/${id}`);
+          }, 3000);
+        } else {
+          // Unknown status, try polling
+          setPaymentStatus('pending');
+          pollPaymentStatus(1);
+        }
       } else {
-        // alert('결제가 취소되었습니다.');
-        router.replace(`/purchase/${type}/${id}`);
+        // Non-PayPal: use existing synchronous logic
+        if (imp_success === 'true' && token === prevToken) {
+          await processPayment(paymentData);
+        } else {
+          router.replace(`/purchase/${type}/${id}`);
+        }
       }
     } catch {
-      alert('Error');
+      setPaymentStatus('failed');
+      setErrorMessage('Error processing payment');
       router.replace('/');
     }
   };
@@ -80,29 +154,76 @@ const Finish: NextPage<IProps> = ({ imp_uid, merchant_uid, imp_success, option }
       getData();
     }
   }, [token]);
+  // Spinner component for reuse
+  const LoadingSpinner = () => (
+    <div className='flex items-center justify-center pt-40 pb-16'>
+      <svg
+        role='status'
+        className='h-7 w-7 animate-spin fill-[#373c46] text-[#02cce2] md:h-6 md:w-6'
+        viewBox='0 0 100 101'
+        fill='none'
+        xmlns='http://www.w3.org/2000/svg'
+      >
+        <path
+          d='M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z'
+          fill='currentColor'
+        />
+        <path
+          d='M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z'
+          fill='currentFill'
+        />
+      </svg>
+    </div>
+  );
+
+  // Pending UI for PayPal
+  const PendingUI = () => (
+    <div className='flex flex-col items-center justify-center pt-40 pb-16'>
+      <LoadingSpinner />
+      <div className='mt-8 text-center'>
+        <div className='text-2xl font-bold text-[#00e7ff]'>
+          {t('finish.pendingTitle') || 'Processing Payment...'}
+        </div>
+        <div className='mt-4 text-gray-400'>
+          {t('finish.pendingMessage') || 'Please wait while we verify your PayPal payment.'}
+        </div>
+        <div className='mt-2 text-sm text-gray-500'>
+          {t('finish.pendingNote') || 'This may take a few moments.'}
+        </div>
+      </div>
+    </div>
+  );
+
+  // Failed UI
+  const FailedUI = () => (
+    <div className='flex flex-col items-center justify-center pt-40 pb-16'>
+      <div className='text-6xl text-red-500'>!</div>
+      <div className='mt-8 text-center'>
+        <div className='text-2xl font-bold text-red-500'>
+          {t('finish.failedTitle') || 'Payment Failed'}
+        </div>
+        <div className='mt-4 text-gray-400'>
+          {errorMessage || t('finish.failedMessage') || 'There was an issue processing your payment.'}
+        </div>
+        <div className='mt-2 text-sm text-gray-500'>
+          {t('finish.failedNote') || 'Redirecting to purchase page...'}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <SEO title={t('finish.title')} />
       <Layout padding='pt-24 pb-48'>
-        {!data ? (
-          <div className='flex items-center justify-center pt-40 pb-16'>
-            <svg
-              role='status'
-              className='h-7 w-7 animate-spin fill-[#373c46] text-[#02cce2] md:h-6 md:w-6'
-              viewBox='0 0 100 101'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                d='M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z'
-                fill='currentColor'
-              />
-              <path
-                d='M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z'
-                fill='currentFill'
-              />
-            </svg>
-          </div>
+        {paymentStatus === 'loading' ? (
+          <LoadingSpinner />
+        ) : paymentStatus === 'pending' ? (
+          <PendingUI />
+        ) : paymentStatus === 'failed' ? (
+          <FailedUI />
+        ) : !data ? (
+          <LoadingSpinner />
         ) : (
           <>
             <div className='flex justify-center text-[2.5rem] font-bold md:text-3xl'>
@@ -223,10 +344,11 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   return {
     props: {
       ...(await serverSideTranslations(locale, ['common', 'purchase'])),
-      imp_uid: ctx.query?.imp_uid,
-      merchant_uid: ctx.query?.merchant_uid,
-      imp_success: ctx.query?.imp_success,
-      option: ctx.query?.option??"",
+      imp_uid: ctx.query?.imp_uid ?? '',
+      merchant_uid: ctx.query?.merchant_uid ?? '',
+      imp_success: ctx.query?.imp_success ?? '',
+      option: ctx.query?.option ?? '',
+      payment_method: ctx.query?.payment_method ?? '',
     },
   };
 };

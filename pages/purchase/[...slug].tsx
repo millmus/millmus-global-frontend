@@ -38,6 +38,9 @@ declare global {
   }
 }
 
+// 페이팔 결제 상태 타입
+type PaypalStatus = 'idle' | 'loading' | 'ready' | 'error';
+
 interface IProps {
   slug: string[];
   option: string;
@@ -78,7 +81,9 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
       option == '2' ? { ...tmpData, ...tmpData.series } : tmpData
       : tmpData[+id - 1]);
   const router = useRouter();
-  const [payMethod, setPayMethod] = useState<string | null>('uplus');
+  const [payMethod, setPayMethod] = useState<string | null>('paypal');
+  const [paypalStatus, setPaypalStatus] = useState<PaypalStatus>('idle');
+  const [paypalError, setPaypalError] = useState<string | null>(null);
   const [seriesPopup, setSeriesPopup] = useState(false);
   const [couponPopup, setCouponPopup] = useState(false);
   const [bankAccountPopup, setBankAccountPopup] = useState(false);
@@ -241,6 +246,108 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
     IMP.request_pay(params, callback);
   };
 
+  // 페이팔 SPB 결제 초기화
+  const initPaypalSPB = () => {
+    if (typeof window === 'undefined' || !window.IMP) {
+      setPaypalError('결제 모듈을 로드할 수 없습니다.');
+      setPaypalStatus('error');
+      return;
+    }
+
+    if (purchased === 'already purchased') {
+      alert('이미 구매한 강의입니다.');
+      router.push(`/lecture/detail/${id}`);
+      return;
+    }
+
+    setPaypalStatus('loading');
+    setPaypalError(null);
+
+    const { IMP } = window;
+    IMP.init(process.env.NEXT_PUBLIC_MERCHANT_ID);
+
+    const paypalParams = {
+      channelKey: process.env.NEXT_PUBLIC_PAYPAL_CHANNEL_KEY,
+      merchant_uid: orderId,
+      pay_method: 'paypal',
+      amount: totalPrice,
+      currency: process.env.NEXT_PUBLIC_PAYPAL_CURRENCY || 'USD',
+      buyer_first_name: profile?.name?.split(' ')[0] || profile?.name || '',
+      buyer_last_name: profile?.name?.split(' ')[1] || '',
+      buyer_email: profile?.email,
+      name: data?.name,
+      custom_data: {
+        type,
+        id: data?.id,
+        price,
+        total_price: totalPrice,
+        point,
+        coupon: coupon.id,
+        option,
+        token,
+      },
+      m_redirect_url: `https://millmus.com/purchase/finish?option=${option}`,
+      notice_url: process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/payment/webhook/` : undefined,
+    };
+
+    console.log('PayPal SPB params:', paypalParams);
+
+    try {
+      IMP.loadUI('paypal-spb', paypalParams, handlePaypalCallback);
+      setPaypalStatus('ready');
+    } catch (error) {
+      console.error('PayPal SPB init error:', error);
+      setPaypalError('페이팔 결제 버튼을 로드할 수 없습니다.');
+      setPaypalStatus('error');
+    }
+  };
+
+  // 페이팔 결제 금액 업데이트 (쿠폰/포인트 적용 시)
+  const updatePaypalAmount = () => {
+    if (payMethod !== 'paypal' || paypalStatus !== 'ready') return;
+    if (typeof window === 'undefined' || !window.IMP) return;
+
+    const { IMP } = window;
+
+    try {
+      IMP.updateLoadUIRequest('paypal-spb', {
+        amount: totalPrice,
+        custom_data: {
+          type,
+          id: data?.id,
+          price,
+          total_price: totalPrice,
+          point,
+          coupon: coupon.id,
+          option,
+          token,
+        },
+      });
+    } catch (error) {
+      console.error('PayPal amount update error:', error);
+    }
+  };
+
+  // 페이팔 결제 콜백
+  const handlePaypalCallback = async (res: any) => {
+    const { success, imp_uid, merchant_uid, error_msg, error_code } = res;
+
+    if (success) {
+      fbqProductTrack("Purchase", data, totalPrice);
+      // 페이팔은 pending 상태일 수 있으므로 status 파라미터 추가
+      router.push(
+        `/purchase/finish?imp_uid=${imp_uid}&merchant_uid=${merchant_uid}&imp_success=true&option=${option}&payment_method=paypal`
+      );
+    } else {
+      console.error('PayPal payment error:', error_code, error_msg);
+      setPaypalError(error_msg || '결제에 실패했습니다.');
+      // 페이팔 버튼 재초기화
+      setTimeout(() => {
+        initPaypalSPB();
+      }, 1000);
+    }
+  };
+
   const popupVar = {
     invisible: {
       opacity: 0,
@@ -284,6 +391,24 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
   useEffect(() => {
     if (data) fbqProductTrack("InitiateCheckout", data, data?.price);
   }, [data]);
+
+  // 페이팔 SPB 초기화 - 결제 수단이 페이팔이고 데이터가 준비되면 초기화
+  useEffect(() => {
+    if (payMethod === 'paypal' && data && token && totalPrice > 0) {
+      // 약간의 지연 후 초기화 (DOM 렌더링 대기)
+      const timer = setTimeout(() => {
+        initPaypalSPB();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [payMethod, data, token]);
+
+  // 금액 변경 시 페이팔 업데이트
+  useEffect(() => {
+    if (payMethod === 'paypal' && paypalStatus === 'ready') {
+      updatePaypalAmount();
+    }
+  }, [totalPrice, coupon, point]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -407,6 +532,48 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
           {data?.category != "코인" && <>
             <div className='pt-14 pb-6 text-lg font-medium'>결제 수단 선택</div>
             <div className='flex flex-col space-y-4 py-8 text-lg md:text-base'>
+              {/* PayPal 결제 */}
+              <div className='flex items-center space-x-3' onClick={() => handlePayMethod('paypal')}>
+                <div
+                  className={cls(
+                    payMethod === 'paypal'
+                      ? 'border-[#00e7ff]'
+                      : 'border-[rgba(255,255,255,0.6)]',
+                    'flex aspect-square w-4 items-center justify-center rounded-full border'
+                  )}
+                >
+                  <div
+                    className={cls(
+                      payMethod === 'paypal' ? 'bg-[#00e7ff]' : '',
+                      'flex aspect-square w-2 cursor-pointer items-center justify-center rounded-full transition-all'
+                    )}
+                  />
+                </div>
+                <div>PayPal (해외 결제)</div>
+              </div>
+              {/* PayPal SPB 버튼 컨테이너 */}
+              {payMethod === 'paypal' && (
+                <div className='ml-7 mt-2'>
+                  {paypalStatus === 'loading' && (
+                    <div className='flex items-center space-x-2 text-sm text-gray-400'>
+                      <svg className='animate-spin h-4 w-4' viewBox='0 0 24 24'>
+                        <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4' fill='none' />
+                        <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' />
+                      </svg>
+                      <span>페이팔 버튼 로딩 중...</span>
+                    </div>
+                  )}
+                  {paypalError && (
+                    <div className='text-sm text-red-400 mb-2'>{paypalError}</div>
+                  )}
+                  <div
+                    className='portone-ui-container'
+                    data-portone-ui-type='paypal-spb'
+                    style={{ minHeight: paypalStatus === 'ready' ? '150px' : '0px' }}
+                  />
+                </div>
+              )}
+              {/* 기존 결제 수단 - 체크/신용카드 */}
               <div className='flex items-center space-x-3' onClick={() => handlePayMethod('uplus')}>
                 <div
                   className={cls(
@@ -425,7 +592,7 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
                 </div>
                 <div>{'체크/신용카드 (무이자/할부 선택가능)'}</div>
               </div>
-              {/* <div className='flex items-center space-x-3' onClick={() => handlePayMethod('trans')}> */}
+              {/* 기존 결제 수단 - 실시간 계좌이체 */}
               <div className='flex items-center space-x-3' onClick={() => handlePayMethod('cash')}>
                 <div
                   className={cls(
@@ -645,15 +812,33 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
           </div>
         </div>
 
-        <div className='mt-20 flex justify-center md:mt-4'>
-          <div
-            onClick={data?.series && !data?.series?.is_plan && !(profile?.coupon?.filter((d: any) => d.reusable).length) ? handleProposalPayment : handlePayment}
-            // onClick={data?.series && !data?.series?.is_plan && !(profile?.coupon?.filter((d: any) => d.reusable).length) ? handleProposalPayment : openModal}
-            className='flex h-14 w-64 cursor-pointer items-center justify-center rounded bg-[#00e7ff] font-medium text-[#282e38] transition-all hover:opacity-90'
-          >
-            {data?.category != "코인" ? "결제하기" : "신청하기"}
+        {/* 페이팔 선택 시 안내 메시지, 그 외에는 결제하기 버튼 */}
+        {payMethod === 'paypal' ? (
+          <div className='mt-20 flex flex-col items-center md:mt-4'>
+            <p className='text-sm text-gray-400 mb-4'>위의 PayPal 버튼을 클릭하여 결제를 진행해주세요.</p>
+            {totalPrice === 0 && (
+              <div
+                onClick={() => {
+                  router.push(
+                    `/purchase/free_finish?id=${id}&name=${data?.name}&type=${type}&price=${price}&point=${point}&islive=${data?.live_info}&coupon=${coupon.id ?? ""}&merchant_uid=${orderId}&token=${token}&option=${option}&live_external_link=${data?.live_external_link}&live_external_link_help=${data?.live_external_link_help}`
+                  );
+                }}
+                className='flex h-14 w-64 cursor-pointer items-center justify-center rounded bg-[#00e7ff] font-medium text-[#282e38] transition-all hover:opacity-90'
+              >
+                무료 신청하기
+              </div>
+            )}
           </div>
-        </div>
+        ) : (
+          <div className='mt-20 flex justify-center md:mt-4'>
+            <div
+              onClick={data?.series && !data?.series?.is_plan && !(profile?.coupon?.filter((d: any) => d.reusable).length) ? handleProposalPayment : handlePayment}
+              className='flex h-14 w-64 cursor-pointer items-center justify-center rounded bg-[#00e7ff] font-medium text-[#282e38] transition-all hover:opacity-90'
+            >
+              {data?.category != "코인" ? "결제하기" : "신청하기"}
+            </div>
+          </div>
+        )}
       </Layout >
 
       <input type="hidden" id='phone_number' name="phone_number" value={profile?.phone_number} />
