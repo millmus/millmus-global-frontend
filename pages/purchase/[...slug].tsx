@@ -287,7 +287,6 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
     }
 
     if (!data || totalPrice <= 0) {
-      console.log('[PayPal SPB] Waiting for data or valid price');
       return;
     }
 
@@ -295,10 +294,8 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
     IMP.init(merchantId);
 
     const requestData = getPaypalRequestData();
-    console.log('[PayPal SPB] Initializing with params:', requestData);
 
     IMP.loadUI('paypal-spb', requestData, (response: any) => {
-      console.log('[PayPal SPB] Response:', response);
 
       if (response.imp_uid) {
         // 결제 성공
@@ -325,7 +322,6 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
     }
 
     const requestData = getPaypalRequestData();
-    console.log('[PayPal SPB] Updating amount:', totalPrice);
     window.IMP.updateLoadUIRequest('paypal-spb', requestData);
   };
 
