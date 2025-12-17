@@ -177,7 +177,7 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
   }
   const handlePayment = () => {
     if (purchased === 'already purchased') {
-      alert('이미 구매한 강의입니다.');
+      alert(t('alreadyPurchased'));
       router.push(`/lecture/detail/${id}`);
       return;
     } else if (payMethod === 'cash') {
@@ -452,23 +452,23 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
 
   return (
     <>
-      <SEO title='결제' />
+      <SEO title={t('seoTitle')} />
 
       <Layout padding='py-24 md:py-4'>
         <div className='mb-14 text-2xl font-bold md:mb-4 md:text-center md:text-lg md:font-medium'>
-          주문 결제
+          {t('orderPayment')}
         </div>
 
         <div className='divide-y-2 divide-[#4a4e57] md:divide-[#282e38] md:bg-[#4a4e57] md:p-4'>
           <div>
-            <div className='text-lg font-medium'>주문상품</div>
+            <div className='text-lg font-medium'>{t('orderProduct')}</div>
 
             {/* 상품정보 헤더 */}
             <div className='mt-6 flex h-[3.75rem] items-center rounded-sm bg-[rgba(229,229,229,0.08)] text-lg font-medium text-[rgba(255,255,255,0.6)] md:hidden'>
-              <div className='flex w-1/5 justify-center'>상품정보</div>
-              <div className='flex grow'>상품명</div>
-              <div className='flex w-1/5 justify-center'>옵션</div>
-              <div className='flex w-1/5 justify-center'>상품금액</div>
+              <div className='flex w-1/5 justify-center'>{t('productInfo')}</div>
+              <div className='flex grow'>{t('productName')}</div>
+              <div className='flex w-1/5 justify-center'>{t('option')}</div>
+              <div className='flex w-1/5 justify-center'>{t('productPrice')}</div>
             </div>
             {/* 상품정보 헤더 */}
 
@@ -489,10 +489,10 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
               </div>
               <div className='flex grow'>{lectureName()}</div>
               <div className='flex w-1/5 justify-center'>
-                {priceType ? (priceType === '1' ? '1개월' : '3개월') : '-'}
+                {priceType ? (priceType === '1' ? t('month1') : t('month3')) : '-'}
               </div>
               <div className='flex w-1/5 justify-center'>
-                {price?.toLocaleString()} 원
+                {price?.toLocaleString()} {t('currency')}
               </div>
             </div>
             {/* 상품정보 Data */}
@@ -501,21 +501,21 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
             <div className='hidden py-8 text-lg md:block'>
               <div className='flex grow text-base'>{lectureName()}</div>
               <div className='mt-4 flex justify-between'>
-                <div className='text-sm text-[#cfcfcf]'>옵션</div>
+                <div className='text-sm text-[#cfcfcf]'>{t('option')}</div>
                 <div className=''>
-                  {priceType ? (priceType === '1' ? '1개월' : '3개월') : '-'}
+                  {priceType ? (priceType === '1' ? t('month1') : t('month3')) : '-'}
                 </div>
               </div>
               <div className='mt-1 flex justify-between'>
-                <div className='text-sm text-[#cfcfcf]'>상품금액</div>
-                <div className='text-sm'>{price?.toLocaleString()} 원</div>
+                <div className='text-sm text-[#cfcfcf]'>{t('productPrice')}</div>
+                <div className='text-sm'>{price?.toLocaleString()} {t('currency')}</div>
               </div>
             </div>
             {/* 상품정보 Data 모바일*/}
           </div>
 
           {data?.category != "코인" && <>
-            <div className='pt-14 pb-6 text-lg font-medium'>결제 수단 선택</div>
+            <div className='pt-14 pb-6 text-lg font-medium'>{t('selectPaymentMethod')}</div>
             <div className='flex flex-col space-y-4 py-8 text-lg md:text-base'>
               {/* PayPal 결제 */}
               <div className='flex items-center space-x-3' onClick={() => handlePayMethod('paypal')}>
@@ -534,12 +534,12 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
                     )}
                   />
                 </div>
-                <div>PayPal (해외 결제)</div>
+                <div>{t('paypal')}</div>
               </div>
               {/* PayPal 결제 안내 */}
               {payMethod === 'paypal' && (
                 <div className='ml-7 mt-2 text-sm text-gray-400'>
-                  PayPal 결제를 선택하셨습니다. 아래 결제하기 버튼을 클릭하면 PayPal 결제 페이지로 이동합니다.
+                  {t('paypalGuide')}
                 </div>
               )}
               {/* 기존 결제 수단 - 체크/신용카드 */}
@@ -559,7 +559,7 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
                     )}
                   />
                 </div>
-                <div>{'체크/신용카드 (무이자/할부 선택가능)'}</div>
+                <div>{t('creditCard')}</div>
               </div>
               {/* 기존 결제 수단 - 실시간 계좌이체 */}
               <div className='flex items-center space-x-3' onClick={() => handlePayMethod('cash')}>
@@ -578,7 +578,7 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
                     )}
                   />
                 </div>
-                <div>실시간 계좌이체</div>
+                <div>{t('bankTransfer')}</div>
               </div>
               {/* <div className='flex items-center space-x-3' onClick={() => handlePayMethod('kakaopay')}>
                 <div
@@ -658,29 +658,28 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
 
           {data?.category != "코인" && <>
             {(data?.category == "마스터 시리즈" && couponFilter(profile?.coupon).length == 0) ? (
-              <><div className='pt-14 pb-6 text-lg font-medium'>
-                [오프라인] 관련 상품은 회원가입 쿠폰 사용이 불가합니다.
-                <br />온라인 클래스 수강시 사용할 수 있습니다.
+              <><div className='pt-14 pb-6 text-lg font-medium whitespace-pre-line'>
+                {t('offlineNotice')}
               </div></>
             ) : (
               <>
                 <div className='pt-14 pb-6 text-lg font-medium md:hidden'>
-                  할인 혜택
+                  {t('discountBenefits')}
                 </div>
                 <div className='flex items-start pt-6 pb-8 md:block'>
-                    <div className='mr-12 pt-1.5 text-lg'>적용 가능한 쿠폰</div>
+                    <div className='mr-12 pt-1.5 text-lg'>{t('availableCoupons')}</div>
 
                     <div className='grow'>
                       <div className='flex items-center space-x-4 border-b-2 border-[#4a4e57] pb-6 md:mt-4'>
                         <div className='text-lg'>
-                          <span className='font-bold'>{couponFilter(profile?.coupon).length}</span>장
+                          <span className='font-bold'>{couponFilter(profile?.coupon).length}</span>{t('sheets')}
                         </div>
 
                         <div
                           onClick={() => setCouponPopup(true)}
                           className='cursor-pointer rounded bg-[#4a4e57] py-2 px-4 md:bg-[#676a72]'
                         >
-                          쿠폰적용
+                          {t('applyCoupon')}
                         </div>
                       </div>
 
@@ -691,22 +690,22 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
                           <span className='font-bold'>
                             {coupon.price?.toLocaleString()}
                           </span>
-                          원 할인
+                          {t('currency')} {t('discountWon')}
                         </div>
                       </div>
                       {/* 모바일 */}
                       <div className='hidden pt-8 md:block md:pt-0'>
                         <div className='flex justify-between'>
-                          <div className='text-[#cfcfcf]'>쿠폰번호</div>
+                          <div className='text-[#cfcfcf]'>{t('couponNumber')}</div>
                           <div className='text-lg text-[#00e7ff]'>{coupon.name}</div>
                         </div>
                         <div className='flex justify-between'>
-                          <div className='text-[#cfcfcf]'>할인금액</div>
+                          <div className='text-[#cfcfcf]'>{t('discountAmount')}</div>
                           <div>
                             <span className='font-bold'>
                               {coupon.price?.toLocaleString()}
                             </span>{' '}
-                            원
+                            {t('currency')}
                           </div>
                         </div>
                       </div>
@@ -717,11 +716,11 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
             )}
 
             <div className='flex items-start py-8 md:block'>
-                <div className='mr-12 text-lg'>적용 가능한 포인트</div>
+                <div className='mr-12 text-lg'>{t('availablePoints')}</div>
 
                 <div className='space-y-6 md:mt-4'>
                   <div className='text-lg md:text-base'>
-                    총 <span className='font-bold'>{data?.category == "프리미엄 스터디" || data?.series ? profile?.offline_point : profile?.point}P</span> 보유
+                    {t('totalPoints')} <span className='font-bold'>{data?.category == "프리미엄 스터디" || data?.series ? profile?.offline_point : profile?.point}P</span> {t('pointsHeld')}
                   </div>
 
                   <div className='flex'>
@@ -737,46 +736,46 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
                       onClick={handleAllPoint}
                       className='-ml-0.5 flex h-10 w-24 cursor-pointer items-center justify-center rounded bg-[#4a4e57] md:bg-[#676a72] md:text-sm'
                     >
-                      전액사용
+                      {t('useAll')}
                     </div>
                   </div>
                 </div>
               </div>
           </>}
 
-          <div className='pt-14 pb-6 text-lg font-medium'>결제 금액</div>
+          <div className='pt-14 pb-6 text-lg font-medium'>{t('paymentAmount')}</div>
           <div className='space-y-4 py-8 text-lg'>
             <div className='flex items-center'>
-              <div className='w-40'>상품 금액</div>
+              <div className='w-40'>{t('productPrice')}</div>
               <div>{price?.toLocaleString()}</div>
             </div>
 
             <div className='flex items-center'>
-              <div className='w-40'>할인 금액</div>
+              <div className='w-40'>{t('totalDiscount')}</div>
               <div>-{totalDiscount?.toLocaleString()}</div>
             </div>
 
             <div className='flex items-center opacity-60'>
-              <div className='w-40'>이벤트</div>
+              <div className='w-40'>{t('event')}</div>
               <div>-{data?.discount?.toLocaleString()}</div>
             </div>
 
             <div className='flex items-center opacity-60'>
-              <div className='w-40'>쿠폰</div>
+              <div className='w-40'>{t('coupon')}</div>
               <div>-{coupon.price?.toLocaleString()}</div>
             </div>
 
             <div className='flex items-center opacity-60'>
-              <div className='w-40'>포인트</div>
+              <div className='w-40'>{t('points')}</div>
               <div>-{point === '' ? '0' : point}</div>
             </div>
           </div>
           <div className='flex items-start pt-4'>
-            <div className='w-40 text-lg'>최종 결제 금액</div>
+            <div className='w-40 text-lg'>{t('finalPaymentAmount')}</div>
 
             <div className='flex text-lg'>
               <span className='font-bold'>{totalPrice?.toLocaleString()}</span>
-              원
+              {t('currency')}
             </div>
           </div>
         </div>
@@ -792,7 +791,7 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
               }}
               className='flex h-14 w-64 cursor-pointer items-center justify-center rounded bg-[#00e7ff] font-medium text-[#282e38] transition-all hover:opacity-90'
             >
-              무료 신청하기
+              {t('freeApply')}
             </div>
           ) : payMethod === 'paypal' ? (
             <div className='flex flex-col items-center'>
@@ -805,7 +804,7 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
                 {/* PayPal 버튼이 여기에 자동으로 생성됩니다 */}
                 {!paypalInitialized && (
                   <div className='flex h-14 w-64 items-center justify-center rounded bg-gray-200 text-gray-500'>
-                    PayPal 버튼 로딩 중...
+                    {t('paypalLoading')}
                   </div>
                 )}
               </div>
@@ -815,7 +814,7 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
               onClick={data?.series && !data?.series?.is_plan && !(profile?.coupon?.filter((d: any) => d.reusable).length) ? handleProposalPayment : handlePayment}
               className='flex h-14 w-64 cursor-pointer items-center justify-center rounded bg-[#00e7ff] font-medium text-[#282e38] transition-all hover:opacity-90'
             >
-              {data?.category != "코인" ? "결제하기" : "신청하기"}
+              {data?.category != "코인" ? t('pay') : t('apply')}
             </div>
           )}
         </div>
@@ -840,12 +839,12 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
               className='flex flex-col w-[30rem] gap-y-6 rounded bg-[#282e38] py-8 px-8 md:w-[25rem]'
             >
               <div className="flex flex-col gap-y-2">
-                <div>🔍 <span className="underline">오프특강을 1회 이상 참석하셨나요?</span></div>
-                <div>😞 <span className="underline">지난번 놓친 VOD가 아쉬우셨나요?</span></div>
+                <div><span className="underline">{t('popup.attendedOffline')}</span></div>
+                <div><span className="underline">{t('popup.missedVOD')}</span></div>
               </div>
               <div className='cursor-default items-center rounded-xl bg-[#4a4e57]'>
-                <div className='py-4 px-6 text-lg leading-loose md:text-base md:leading-relaxed'>
-                  [마스터 멤버십] 가입하면 <br /><span className="bg-[#00e7ff] text-black px-1">최대 80% 저렴하게</span> 이용할 수 있어요!
+                <div className='py-4 px-6 text-lg leading-loose md:text-base md:leading-relaxed whitespace-pre-line'>
+                  {t('popup.masterMembership')}
                 </div>
               </div>
               <div className='flex justify-center gap-x-8 md:gap-x-6'>
@@ -853,13 +852,13 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
                   onClick={() => { router.push('/lecture/detail/83') }}
                   className='flex h-14 w-64 cursor-pointer items-center justify-center rounded bg-[#00e7ff] text-black transition-all hover:opacity-90'
                 >
-                  멤버십 살펴보기
+                  {t('popup.viewMembership')}
                 </div>
                 <div
                   onClick={() => { setSeriesPopup(false); handlePayment(); }}
                   className='flex h-14 w-64 cursor-pointer items-center justify-center rounded bg-[#CFCFCF] text-black transition-all hover:opacity-90'
                 >
-                  기존결제 진행
+                  {t('popup.proceedPayment')}
                 </div>
               </div>
             </motion.div>
@@ -885,17 +884,17 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
               className='flex flex-col w-[30rem] gap-y-6 rounded bg-[#282e38] py-8 px-8 md:w-[25rem]'
             >
               <div className="flex flex-col gap-y-2">
-                <div className='flex'><div className='mr-2'>※</div><div>(주)밀레니얼머니스쿨의 안전한 법인계좌로<br className='ml-sm:hidden' /> <span className='bg-[#00e7ff] font-bold px-1 text-black'>{totalPrice.toLocaleString()}원</span>을 입금하신 후 <br className='ml-2 sm:hidden' />아래 접수확인 버튼을 눌러 입금자명을 알려주세요!</div></div>
-                <div className='flex'><div className='mr-2'>※</div><div>접수확인을 통해 현금영수증 또는 사업자 계산서 발행이 가능합니다.</div></div>
+                <div className='flex'><div className='mr-2'>※</div><div>{t('popup.bankTransferGuide', { amount: totalPrice.toLocaleString() })}</div></div>
+                <div className='flex'><div className='mr-2'>※</div><div>{t('popup.receiptGuide')}</div></div>
               </div>
               <div className='cursor-pointer items-center text-center rounded-xl bg-[#4a4e57] font-bold'
                 onClick={() => {
                   navigator.clipboard
-                    .writeText('국민은행 023501-04-274463 (주)밀레니얼머니스쿨')
-                    .then(() => alert('계좌번호가 복사되었습니다.'));
+                    .writeText('Kookmin Bank 023501-04-274463 Millennial Money School Co., Ltd.')
+                    .then(() => alert(t('popup.accountCopied')));
                 }}>
-                <div className='py-4 px-6 text-lg leading-loose md:text-base md:leading-relaxed'>
-                  국민은행 023501-04-274463<br />(주)밀레니얼머니스쿨
+                <div className='py-4 px-6 text-lg leading-loose md:text-base md:leading-relaxed whitespace-pre-line'>
+                  {t('popup.bankAccount')}
                 </div>
               </div>
               <div className='flex justify-center gap-x-8 font-bold md:gap-x-6'>
@@ -903,15 +902,11 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
                   setBankAccountPopup(false)
                   setPayerNamePopup(true)
                 }}>
-                {/* <Link href='https://open.kakao.com/o/ssIO6xbg'>
-                  <a target='_blank'> */}
                     <div
                       className='flex h-14 w-64 cursor-pointer items-center justify-center rounded bg-[#00e7ff] text-black transition-all hover:opacity-90'
                     >
-                      입금 후 접수확인하기
+                      {t('popup.confirmDeposit')}
                     </div>
-                  {/* </a>
-                </Link> */}
                 </button>
               </div>
             </motion.div>
@@ -938,11 +933,11 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
             >
               <form onSubmit={handleSubmit(onValid, onInvalid)} className="space-y-4">
                 <div className='hidden'>
-                  <label className="block text-sm font-medium mb-2">강의 ID</label>
+                  <label className="block text-sm font-medium mb-2">Lecture ID</label>
                   <input
                     type="text"
                     {...register('lecture_id', {
-                      required: '강의 ID를 입력해주세요',
+                      required: 'Lecture ID is required',
                     })}
                     className="w-full text-[#cfcfcf] px-3 py-2 bg-[#2b313a] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
                     value={data?.id}
@@ -951,11 +946,11 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
                   {errors.lecture_id && <span className="text-red-500 text-sm">{errors.lecture_id.message}</span>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">강의명</label>
+                  <label className="block text-sm font-medium mb-2">{t('popup.lectureName')}</label>
                   <input
                     type="text"
                     {...register('lecture_name', {
-                      required: '강의명을 입력해주세요',
+                      required: 'Lecture name is required',
                     })}
                     className="w-full text-[#cfcfcf] px-3 py-2 bg-[#2b313a] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
                     value={lectureName()}
@@ -964,26 +959,26 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
                   {errors.lecture_name && <span className="text-red-500 text-sm">{errors.lecture_name.message}</span>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">성함(필수)</label>
+                  <label className="block text-sm font-medium mb-2">{t('popup.name')}</label>
                   <input
                     type="text"
                     {...register('payer_name', {
-                      required: '입금자명을 입력해주세요',
+                      required: t('popup.enterDepositorName'),
                     })}
                     className="w-full text-[#cfcfcf] px-3 py-2 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
                   />
                   {errors.payer_name && <span className="text-red-500 text-sm">{errors.payer_name.message}</span>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">가입 핸드폰번호(필수)</label>
+                  <label className="block text-sm font-medium mb-2">{t('popup.phone')}</label>
                   <input
                     type="text"
                     maxLength={11}
                     {...register('payer_phone', {
-                      required: '핸드폰 번호를 입력해주세요',
+                      required: t('popup.enterPhone'),
                       pattern: {
-                        value: /^\d{11}$/, // 숫자만 11자리인지 확인하는 정규식
-                        message: '핸드폰 번호는 -없이 숫자 11자리로 입력해주세요',
+                        value: /^\d{11}$/,
+                        message: t('popup.phoneFormat'),
                       },
                     })}
                     className="w-full text-[#cfcfcf] px-3 py-2 bg-[#e5e5e514] border border-[#e5e5e514] rounded-lg shadow-sm focus:outline-none "
@@ -991,7 +986,7 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
                   {errors.payer_phone && <span className="text-red-500 text-sm">{errors.payer_phone.message}</span>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">현금영수증 발급번호(선택)</label>
+                  <label className="block text-sm font-medium mb-2">{t('popup.cashReceiptNumber')}</label>
                   <input
                     type="text"
                     {...register('cash_receipt_number')}
@@ -1000,7 +995,7 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
                   {errors.cash_receipt_number && <span className="text-red-500 text-sm">{errors.cash_receipt_number.message}</span>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">사업자 계산서 발행시 사업자번호(선택)</label>
+                  <label className="block text-sm font-medium mb-2">{t('popup.businessNumber')}</label>
                   <input
                     type="text"
                     {...register('business_number')}
@@ -1013,12 +1008,12 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
                       <div
                         className='flex h-14 w-64 cursor-pointer items-center justify-center rounded bg-[#00e7ff] text-black transition-all hover:opacity-90'
                       >
-                        등록하기
+                        {t('popup.register')}
                       </div>
                     </button>
                   </div>
               </form>
-              
+
             </motion.div>
           </div >
         ) : null}
@@ -1043,23 +1038,22 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
             >
               <div className="space-y-4">
                 <div>
-                  <p className='text-center'>현금 입금내역과 제출정보를 확인 후 정상 접수됩니다.</p>
-                  <p className='text-center mt-[5px]'>신청해주셔서 감사합니다!</p>
+                  <p className='text-center'>{t('popup.depositConfirmation')}</p>
+                  <p className='text-center mt-[5px]'>{t('popup.thankYou')}</p>
                 </div>
                 <div className='flex justify-center gap-x-8 font-bold md:gap-x-6'>
                     <button onClick={() => {
-                      // 홈으로 이동
                       router.push('/');
                     }}>
                       <div
                         className='flex h-14 w-64 cursor-pointer items-center justify-center rounded bg-[#00e7ff] text-black transition-all hover:opacity-90'
                       >
-                        확인
+                        {t('popup.confirm')}
                       </div>
                     </button>
                   </div>
               </div>
-              
+
             </motion.div>
           </div >
         ) : null}
@@ -1082,8 +1076,8 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
               className='w-[30rem] rounded bg-[#282e38] py-8 px-4'
             >
               <div className='flex h-[3.75rem] items-center rounded-sm bg-[#4a4e57]'>
-                <div className='flex w-3/4 pl-4'>쿠폰명</div>
-                <div className='flex grow justify-center'>할인금액</div>
+                <div className='flex w-3/4 pl-4'>{t('popup.couponName')}</div>
+                <div className='flex grow justify-center'>{t('discountAmount')}</div>
               </div>
 
               <div className='max-h-96 overflow-y-scroll'>
