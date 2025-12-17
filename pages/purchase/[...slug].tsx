@@ -248,8 +248,27 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
 
   // 페이팔 SPB 결제 초기화
   const initPaypalSPB = () => {
+    console.log('[PayPal SPB] Initializing...', {
+      windowExists: typeof window !== 'undefined',
+      IMPExists: typeof window !== 'undefined' && !!window.IMP,
+      channelKey: process.env.NEXT_PUBLIC_PAYPAL_CHANNEL_KEY,
+      totalPrice,
+      dataExists: !!data,
+      tokenExists: !!token,
+    });
+
     if (typeof window === 'undefined' || !window.IMP) {
-      setPaypalError('결제 모듈을 로드할 수 없습니다.');
+      console.error('[PayPal SPB] IMP not loaded');
+      setPaypalError('결제 모듈을 로드할 수 없습니다. 페이지를 새로고침 해주세요.');
+      setPaypalStatus('error');
+      return;
+    }
+
+    // Channel key 유효성 검사
+    const channelKey = process.env.NEXT_PUBLIC_PAYPAL_CHANNEL_KEY;
+    if (!channelKey || channelKey.includes('your-paypal-channel-key') || !channelKey.startsWith('channel-key-')) {
+      console.error('[PayPal SPB] Invalid channel key:', channelKey);
+      setPaypalError('PayPal 설정이 완료되지 않았습니다. 관리자에게 문의하세요.');
       setPaypalStatus('error');
       return;
     }
@@ -260,6 +279,11 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
       return;
     }
 
+    if (totalPrice <= 0) {
+      console.log('[PayPal SPB] totalPrice is 0 or less, skipping initialization');
+      return;
+    }
+
     setPaypalStatus('loading');
     setPaypalError(null);
 
@@ -267,7 +291,7 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
     IMP.init(process.env.NEXT_PUBLIC_MERCHANT_ID);
 
     const paypalParams = {
-      channelKey: process.env.NEXT_PUBLIC_PAYPAL_CHANNEL_KEY,
+      channelKey: channelKey,
       merchant_uid: orderId,
       pay_method: 'paypal',
       amount: totalPrice,
@@ -287,17 +311,18 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
         token,
       },
       m_redirect_url: `https://millmus.com/purchase/finish?option=${option}`,
-      notice_url: process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/payment/webhook/` : undefined,
+      notice_url: process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/payment/webhook/paypal/` : undefined,
     };
 
-    console.log('PayPal SPB params:', paypalParams);
+    console.log('[PayPal SPB] Calling IMP.loadUI with params:', paypalParams);
 
     try {
       IMP.loadUI('paypal-spb', paypalParams, handlePaypalCallback);
+      console.log('[PayPal SPB] loadUI called successfully');
       setPaypalStatus('ready');
     } catch (error) {
-      console.error('PayPal SPB init error:', error);
-      setPaypalError('페이팔 결제 버튼을 로드할 수 없습니다.');
+      console.error('[PayPal SPB] loadUI error:', error);
+      setPaypalError('페이팔 결제 버튼을 로드할 수 없습니다. 잠시 후 다시 시도해주세요.');
       setPaypalStatus('error');
     }
   };
@@ -394,14 +419,28 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
 
   // 페이팔 SPB 초기화 - 결제 수단이 페이팔이고 데이터가 준비되면 초기화
   useEffect(() => {
-    if (payMethod === 'paypal' && data && token && totalPrice > 0) {
+    console.log('[PayPal SPB useEffect] Checking conditions:', {
+      payMethod,
+      dataExists: !!data,
+      tokenExists: !!token,
+      totalPrice,
+      paypalStatus,
+    });
+
+    if (payMethod === 'paypal' && data && token) {
+      // 이미 로딩/준비 상태이면 재초기화 하지 않음
+      if (paypalStatus === 'loading' || paypalStatus === 'ready') {
+        console.log('[PayPal SPB useEffect] Already initialized, skipping');
+        return;
+      }
+
       // 약간의 지연 후 초기화 (DOM 렌더링 대기)
       const timer = setTimeout(() => {
         initPaypalSPB();
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [payMethod, data, token]);
+  }, [payMethod, data, token, totalPrice]);
 
   // 금액 변경 시 페이팔 업데이트
   useEffect(() => {
