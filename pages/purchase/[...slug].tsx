@@ -44,9 +44,13 @@ type PaypalStatus = 'idle' | 'loading' | 'ready' | 'error';
 interface IProps {
   slug: string[];
   option: string;
+  // 서버에서 전달받는 환경변수 (Vercel 빌드 캐시 문제 해결)
+  paypalChannelKey: string;
+  paypalCurrency: string;
+  merchantId: string;
 }
 
-const Purchase: NextPage<IProps> = ({ slug, option }) => {
+const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurrency, merchantId }) => {
   const { t } = useTranslation('purchase');
   const { token, profile } = useUser({
     isPrivate: true,
@@ -251,7 +255,7 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
     console.log('[PayPal SPB] Initializing...', {
       windowExists: typeof window !== 'undefined',
       IMPExists: typeof window !== 'undefined' && !!window.IMP,
-      channelKey: process.env.NEXT_PUBLIC_PAYPAL_CHANNEL_KEY,
+      channelKey: paypalChannelKey,  // props에서 전달받은 값 사용
       totalPrice,
       dataExists: !!data,
       tokenExists: !!token,
@@ -264,10 +268,9 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
       return;
     }
 
-    // Channel key 유효성 검사
-    const channelKey = process.env.NEXT_PUBLIC_PAYPAL_CHANNEL_KEY;
-    if (!channelKey || channelKey.includes('your-paypal-channel-key') || !channelKey.startsWith('channel-key-')) {
-      console.error('[PayPal SPB] Invalid channel key:', channelKey);
+    // Channel key 유효성 검사 (props에서 전달받은 값 사용)
+    if (!paypalChannelKey || paypalChannelKey.includes('your-paypal-channel-key') || !paypalChannelKey.startsWith('channel-key-')) {
+      console.error('[PayPal SPB] Invalid channel key:', paypalChannelKey);
       setPaypalError('PayPal 설정이 완료되지 않았습니다. 관리자에게 문의하세요.');
       setPaypalStatus('error');
       return;
@@ -288,14 +291,14 @@ const Purchase: NextPage<IProps> = ({ slug, option }) => {
     setPaypalError(null);
 
     const { IMP } = window;
-    IMP.init(process.env.NEXT_PUBLIC_MERCHANT_ID);
+    IMP.init(merchantId);  // props에서 전달받은 값 사용
 
     const paypalParams = {
-      channelKey: channelKey,
+      channelKey: paypalChannelKey,  // props에서 전달받은 값 사용
       merchant_uid: orderId,
       pay_method: 'paypal',
       amount: totalPrice,
-      currency: process.env.NEXT_PUBLIC_PAYPAL_CURRENCY || 'USD',
+      currency: paypalCurrency || 'USD',  // props에서 전달받은 값 사용
       buyer_first_name: profile?.name?.split(' ')[0] || profile?.name || '',
       buyer_last_name: profile?.name?.split(' ')[1] || '',
       buyer_email: profile?.email,
@@ -1183,6 +1186,10 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       ...(await serverSideTranslations(locale, ['common', 'purchase'])),
       slug: ctx.params?.slug,
       option: ctx.query?.option ?? '',
+      // 환경변수를 런타임에 서버에서 전달 (Vercel 빌드 캐시 문제 해결)
+      paypalChannelKey: process.env.NEXT_PUBLIC_PAYPAL_CHANNEL_KEY || '',
+      paypalCurrency: process.env.NEXT_PUBLIC_PAYPAL_CURRENCY || 'USD',
+      merchantId: process.env.NEXT_PUBLIC_MERCHANT_ID || '',
     },
   };
 };
