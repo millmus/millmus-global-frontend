@@ -85,7 +85,6 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
       : tmpData[+id - 1]);
   const router = useRouter();
   const [payMethod, setPayMethod] = useState<string | null>('paypal');
-  const [paypalLoading, setPaypalLoading] = useState(false);
   const [seriesPopup, setSeriesPopup] = useState(false);
   const [couponPopup, setCouponPopup] = useState(false);
   const [bankAccountPopup, setBankAccountPopup] = useState(false);
@@ -248,76 +247,112 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
     IMP.request_pay(params, callback);
   };
 
-  // 페이팔 일반 결제 (request_pay 방식)
-  const handlePaypalPayment = () => {
-    console.log('[PayPal] Starting payment...', {
-      channelKey: paypalChannelKey,
-      totalPrice,
-      dataExists: !!data,
-    });
+  // PayPal SPB 초기화 상태
+  const [paypalInitialized, setPaypalInitialized] = useState(false);
 
+  // PayPal SPB 요청 데이터 생성
+  const getPaypalRequestData = () => ({
+    channelKey: paypalChannelKey,
+    pay_method: 'paypal',
+    merchant_uid: orderId,
+    amount: totalPrice,
+    currency: paypalCurrency || 'USD',
+    name: data?.name || '',
+    buyer_name: profile?.name || '',
+    buyer_email: profile?.email || '',
+    custom_data: {
+      type,
+      id: data?.id,
+      price,
+      total_price: totalPrice,
+      point,
+      coupon: coupon.id,
+      option,
+      token,
+    },
+    m_redirect_url: `https://millmus.com/purchase/finish?option=${option}&payment_method=paypal`,
+    notice_url: process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/payment/webhook/paypal/` : undefined,
+  });
+
+  // PayPal SPB 초기화 (IMP.loadUI 사용)
+  const initPaypalSPB = () => {
     if (typeof window === 'undefined' || !window.IMP) {
-      alert('결제 모듈을 로드할 수 없습니다. 페이지를 새로고침 해주세요.');
+      console.error('[PayPal SPB] IMP not loaded');
       return;
     }
 
-    if (purchased === 'already purchased') {
-      alert('이미 구매한 강의입니다.');
-      router.push(`/lecture/detail/${id}`);
+    if (!paypalChannelKey) {
+      console.error('[PayPal SPB] Channel key is missing');
       return;
     }
 
-    if (totalPrice <= 0) {
-      alert('결제 금액이 올바르지 않습니다.');
+    if (!data || totalPrice <= 0) {
+      console.log('[PayPal SPB] Waiting for data or valid price');
       return;
     }
-
-    setPaypalLoading(true);
 
     const { IMP } = window;
     IMP.init(merchantId);
 
-    const paypalParams = {
-      channelKey: paypalChannelKey,
-      pg: 'paypal',  // Express Checkout V1
-      merchant_uid: orderId,
-      pay_method: 'paypal',
-      amount: totalPrice,
-      currency: paypalCurrency || 'USD',
-      buyer_name: profile?.name || '',
-      buyer_email: profile?.email,
-      name: data?.name,
-      custom_data: {
-        type,
-        id: data?.id,
-        price,
-        total_price: totalPrice,
-        point,
-        coupon: coupon.id,
-        option,
-        token,
-      },
-      m_redirect_url: `https://millmus.com/purchase/finish?option=${option}&payment_method=paypal`,
-      notice_url: process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/payment/webhook/paypal/` : undefined,
-    };
+    const requestData = getPaypalRequestData();
+    console.log('[PayPal SPB] Initializing with params:', requestData);
 
-    console.log('[PayPal] Calling IMP.request_pay with params:', paypalParams);
+    IMP.loadUI('paypal-spb', requestData, (response: any) => {
+      console.log('[PayPal SPB] Response:', response);
 
-    IMP.request_pay(paypalParams, (res: any) => {
-      setPaypalLoading(false);
-      const { success, imp_uid, merchant_uid, error_msg, error_code } = res;
-
-      if (success) {
+      if (response.imp_uid) {
+        // 결제 성공
         fbqProductTrack("Purchase", data, totalPrice);
         router.push(
-          `/purchase/finish?imp_uid=${imp_uid}&merchant_uid=${merchant_uid}&imp_success=true&option=${option}&payment_method=paypal`
+          `/purchase/finish?imp_uid=${response.imp_uid}&merchant_uid=${response.merchant_uid}&imp_success=true&option=${option}&payment_method=paypal`
         );
       } else {
-        console.error('PayPal payment error:', error_code, error_msg);
-        alert(error_msg || '결제에 실패했습니다. 다시 시도해주세요.');
+        // 결제 실패 또는 취소
+        console.error('[PayPal SPB] Payment failed:', response.error_msg);
+        if (response.error_msg) {
+          alert(response.error_msg);
+        }
       }
     });
+
+    setPaypalInitialized(true);
   };
+
+  // PayPal SPB 금액 업데이트
+  const updatePaypalAmount = () => {
+    if (typeof window === 'undefined' || !window.IMP || !paypalInitialized) {
+      return;
+    }
+
+    const requestData = getPaypalRequestData();
+    console.log('[PayPal SPB] Updating amount:', totalPrice);
+    window.IMP.updateLoadUIRequest('paypal-spb', requestData);
+  };
+
+  // PayPal SPB 초기화 (payMethod가 paypal이고 데이터 준비 완료 시)
+  useEffect(() => {
+    if (payMethod === 'paypal' && data && totalPrice > 0 && paypalChannelKey && !paypalInitialized) {
+      // 약간의 지연 후 초기화 (DOM이 렌더링된 후)
+      const timer = setTimeout(() => {
+        initPaypalSPB();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [payMethod, data, totalPrice, paypalChannelKey, paypalInitialized]);
+
+  // PayPal SPB 금액 업데이트 (포인트, 쿠폰 변경 시)
+  useEffect(() => {
+    if (paypalInitialized && payMethod === 'paypal') {
+      updatePaypalAmount();
+    }
+  }, [totalPrice, paypalInitialized, payMethod]);
+
+  // 결제 수단 변경 시 PayPal 초기화 상태 리셋
+  useEffect(() => {
+    if (payMethod !== 'paypal') {
+      setPaypalInitialized(false);
+    }
+  }, [payMethod]);
 
   const popupVar = {
     invisible: {
@@ -764,23 +799,20 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
               무료 신청하기
             </div>
           ) : payMethod === 'paypal' ? (
-            <div
-              onClick={handlePaypalPayment}
-              className={`flex h-14 w-64 cursor-pointer items-center justify-center rounded font-medium transition-all hover:opacity-90 ${
-                paypalLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#0070ba] text-white'
-              }`}
-            >
-              {paypalLoading ? (
-                <div className='flex items-center space-x-2'>
-                  <svg className='animate-spin h-5 w-5' viewBox='0 0 24 24'>
-                    <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4' fill='none' />
-                    <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' />
-                  </svg>
-                  <span>처리 중...</span>
-                </div>
-              ) : (
-                'PayPal로 결제하기'
-              )}
+            <div className='flex flex-col items-center'>
+              {/* PayPal SPB 버튼 컨테이너 - PortOne이 여기에 PayPal 버튼을 렌더링 */}
+              <div
+                className="portone-ui-container"
+                data-portone-ui-type="paypal-spb"
+                style={{ minWidth: '256px', minHeight: '56px' }}
+              >
+                {/* PayPal 버튼이 여기에 자동으로 생성됩니다 */}
+                {!paypalInitialized && (
+                  <div className='flex h-14 w-64 items-center justify-center rounded bg-gray-200 text-gray-500'>
+                    PayPal 버튼 로딩 중...
+                  </div>
+                )}
+              </div>
             </div>
           ) : (
             <div
