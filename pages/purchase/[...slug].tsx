@@ -1181,6 +1181,18 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const locale = ctx.locale || 'en';
+
+  // 디버깅: 환경변수 출력
+  console.log('=== [getServerSideProps] Environment Variables Debug ===');
+  console.log('NEXT_PUBLIC_PAYPAL_CHANNEL_KEY:', process.env.NEXT_PUBLIC_PAYPAL_CHANNEL_KEY);
+  console.log('NEXT_PUBLIC_PAYPAL_CURRENCY:', process.env.NEXT_PUBLIC_PAYPAL_CURRENCY);
+  console.log('NEXT_PUBLIC_MERCHANT_ID:', process.env.NEXT_PUBLIC_MERCHANT_ID);
+  console.log('NEXT_PUBLIC_PG:', process.env.NEXT_PUBLIC_PG);
+  console.log('NEXT_PUBLIC_CHANNEL_KEY:', process.env.NEXT_PUBLIC_CHANNEL_KEY);
+  console.log('NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+  console.log('NODE_ENV:', process.env.NODE_ENV);
+  console.log('=== End Environment Variables Debug ===');
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ['common', 'purchase'])),
