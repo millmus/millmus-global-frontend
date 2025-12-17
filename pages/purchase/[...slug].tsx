@@ -38,8 +38,7 @@ declare global {
   }
 }
 
-// 페이팔 결제 상태 타입
-type PaypalStatus = 'idle' | 'loading' | 'ready' | 'error';
+// PayPal 결제 로딩 상태
 
 interface IProps {
   slug: string[];
@@ -51,18 +50,6 @@ interface IProps {
 }
 
 const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurrency, merchantId }) => {
-  // 디버깅: 클라이언트에서 환경변수 출력
-  console.log('=== [Client] Environment Variables Debug ===');
-  console.log('props.paypalChannelKey:', paypalChannelKey);
-  console.log('props.paypalCurrency:', paypalCurrency);
-  console.log('props.merchantId:', merchantId);
-  console.log('process.env.NEXT_PUBLIC_PAYPAL_CHANNEL_KEY:', process.env.NEXT_PUBLIC_PAYPAL_CHANNEL_KEY);
-  console.log('process.env.NEXT_PUBLIC_PAYPAL_CURRENCY:', process.env.NEXT_PUBLIC_PAYPAL_CURRENCY);
-  console.log('process.env.NEXT_PUBLIC_MERCHANT_ID:', process.env.NEXT_PUBLIC_MERCHANT_ID);
-  console.log('process.env.NEXT_PUBLIC_PG:', process.env.NEXT_PUBLIC_PG);
-  console.log('process.env.NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
-  console.log('=== End Client Debug ===');
-
   const { t } = useTranslation('purchase');
   const { token, profile } = useUser({
     isPrivate: true,
@@ -98,8 +85,7 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
       : tmpData[+id - 1]);
   const router = useRouter();
   const [payMethod, setPayMethod] = useState<string | null>('paypal');
-  const [paypalStatus, setPaypalStatus] = useState<PaypalStatus>('idle');
-  const [paypalError, setPaypalError] = useState<string | null>(null);
+  const [paypalLoading, setPaypalLoading] = useState(false);
   const [seriesPopup, setSeriesPopup] = useState(false);
   const [couponPopup, setCouponPopup] = useState(false);
   const [bankAccountPopup, setBankAccountPopup] = useState(false);
@@ -262,29 +248,16 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
     IMP.request_pay(params, callback);
   };
 
-  // 페이팔 SPB 결제 초기화
-  const initPaypalSPB = () => {
-    console.log('[PayPal SPB] Initializing...', {
-      windowExists: typeof window !== 'undefined',
-      IMPExists: typeof window !== 'undefined' && !!window.IMP,
-      channelKey: paypalChannelKey,  // props에서 전달받은 값 사용
+  // 페이팔 일반 결제 (request_pay 방식)
+  const handlePaypalPayment = () => {
+    console.log('[PayPal] Starting payment...', {
+      channelKey: paypalChannelKey,
       totalPrice,
       dataExists: !!data,
-      tokenExists: !!token,
     });
 
     if (typeof window === 'undefined' || !window.IMP) {
-      console.error('[PayPal SPB] IMP not loaded');
-      setPaypalError('결제 모듈을 로드할 수 없습니다. 페이지를 새로고침 해주세요.');
-      setPaypalStatus('error');
-      return;
-    }
-
-    // Channel key 유효성 검사 (props에서 전달받은 값 사용)
-    if (!paypalChannelKey || paypalChannelKey.includes('your-paypal-channel-key') || !paypalChannelKey.startsWith('channel-key-')) {
-      console.error('[PayPal SPB] Invalid channel key:', paypalChannelKey);
-      setPaypalError('PayPal 설정이 완료되지 않았습니다. 관리자에게 문의하세요.');
-      setPaypalStatus('error');
+      alert('결제 모듈을 로드할 수 없습니다. 페이지를 새로고침 해주세요.');
       return;
     }
 
@@ -295,24 +268,23 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
     }
 
     if (totalPrice <= 0) {
-      console.log('[PayPal SPB] totalPrice is 0 or less, skipping initialization');
+      alert('결제 금액이 올바르지 않습니다.');
       return;
     }
 
-    setPaypalStatus('loading');
-    setPaypalError(null);
+    setPaypalLoading(true);
 
     const { IMP } = window;
-    IMP.init(merchantId);  // props에서 전달받은 값 사용
+    IMP.init(merchantId);
 
     const paypalParams = {
-      channelKey: paypalChannelKey,  // props에서 전달받은 값 사용
+      channelKey: paypalChannelKey,
+      pg: 'paypal_v2',
       merchant_uid: orderId,
       pay_method: 'paypal',
       amount: totalPrice,
-      currency: paypalCurrency || 'USD',  // props에서 전달받은 값 사용
-      buyer_first_name: profile?.name?.split(' ')[0] || profile?.name || '',
-      buyer_last_name: profile?.name?.split(' ')[1] || '',
+      currency: paypalCurrency || 'USD',
+      buyer_name: profile?.name || '',
       buyer_email: profile?.email,
       name: data?.name,
       custom_data: {
@@ -325,67 +297,26 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
         option,
         token,
       },
-      m_redirect_url: `https://millmus.com/purchase/finish?option=${option}`,
+      m_redirect_url: `https://millmus.com/purchase/finish?option=${option}&payment_method=paypal`,
       notice_url: process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/payment/webhook/paypal/` : undefined,
     };
 
-    console.log('[PayPal SPB] Calling IMP.loadUI with params:', paypalParams);
+    console.log('[PayPal] Calling IMP.request_pay with params:', paypalParams);
 
-    try {
-      IMP.loadUI('paypal-spb', paypalParams, handlePaypalCallback);
-      console.log('[PayPal SPB] loadUI called successfully');
-      setPaypalStatus('ready');
-    } catch (error) {
-      console.error('[PayPal SPB] loadUI error:', error);
-      setPaypalError('페이팔 결제 버튼을 로드할 수 없습니다. 잠시 후 다시 시도해주세요.');
-      setPaypalStatus('error');
-    }
-  };
+    IMP.request_pay(paypalParams, (res: any) => {
+      setPaypalLoading(false);
+      const { success, imp_uid, merchant_uid, error_msg, error_code } = res;
 
-  // 페이팔 결제 금액 업데이트 (쿠폰/포인트 적용 시)
-  const updatePaypalAmount = () => {
-    if (payMethod !== 'paypal' || paypalStatus !== 'ready') return;
-    if (typeof window === 'undefined' || !window.IMP) return;
-
-    const { IMP } = window;
-
-    try {
-      IMP.updateLoadUIRequest('paypal-spb', {
-        amount: totalPrice,
-        custom_data: {
-          type,
-          id: data?.id,
-          price,
-          total_price: totalPrice,
-          point,
-          coupon: coupon.id,
-          option,
-          token,
-        },
-      });
-    } catch (error) {
-      console.error('PayPal amount update error:', error);
-    }
-  };
-
-  // 페이팔 결제 콜백
-  const handlePaypalCallback = async (res: any) => {
-    const { success, imp_uid, merchant_uid, error_msg, error_code } = res;
-
-    if (success) {
-      fbqProductTrack("Purchase", data, totalPrice);
-      // 페이팔은 pending 상태일 수 있으므로 status 파라미터 추가
-      router.push(
-        `/purchase/finish?imp_uid=${imp_uid}&merchant_uid=${merchant_uid}&imp_success=true&option=${option}&payment_method=paypal`
-      );
-    } else {
-      console.error('PayPal payment error:', error_code, error_msg);
-      setPaypalError(error_msg || '결제에 실패했습니다.');
-      // 페이팔 버튼 재초기화
-      setTimeout(() => {
-        initPaypalSPB();
-      }, 1000);
-    }
+      if (success) {
+        fbqProductTrack("Purchase", data, totalPrice);
+        router.push(
+          `/purchase/finish?imp_uid=${imp_uid}&merchant_uid=${merchant_uid}&imp_success=true&option=${option}&payment_method=paypal`
+        );
+      } else {
+        console.error('PayPal payment error:', error_code, error_msg);
+        alert(error_msg || '결제에 실패했습니다. 다시 시도해주세요.');
+      }
+    });
   };
 
   const popupVar = {
@@ -432,37 +363,6 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
     if (data) fbqProductTrack("InitiateCheckout", data, data?.price);
   }, [data]);
 
-  // 페이팔 SPB 초기화 - 결제 수단이 페이팔이고 데이터가 준비되면 초기화
-  useEffect(() => {
-    console.log('[PayPal SPB useEffect] Checking conditions:', {
-      payMethod,
-      dataExists: !!data,
-      tokenExists: !!token,
-      totalPrice,
-      paypalStatus,
-    });
-
-    if (payMethod === 'paypal' && data && token) {
-      // 이미 로딩/준비 상태이면 재초기화 하지 않음
-      if (paypalStatus === 'loading' || paypalStatus === 'ready') {
-        console.log('[PayPal SPB useEffect] Already initialized, skipping');
-        return;
-      }
-
-      // 약간의 지연 후 초기화 (DOM 렌더링 대기)
-      const timer = setTimeout(() => {
-        initPaypalSPB();
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [payMethod, data, token, totalPrice]);
-
-  // 금액 변경 시 페이팔 업데이트
-  useEffect(() => {
-    if (payMethod === 'paypal' && paypalStatus === 'ready') {
-      updatePaypalAmount();
-    }
-  }, [totalPrice, coupon, point]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -605,26 +505,10 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
                 </div>
                 <div>PayPal (해외 결제)</div>
               </div>
-              {/* PayPal SPB 버튼 컨테이너 */}
+              {/* PayPal 결제 안내 */}
               {payMethod === 'paypal' && (
-                <div className='ml-7 mt-2'>
-                  {paypalStatus === 'loading' && (
-                    <div className='flex items-center space-x-2 text-sm text-gray-400'>
-                      <svg className='animate-spin h-4 w-4' viewBox='0 0 24 24'>
-                        <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4' fill='none' />
-                        <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' />
-                      </svg>
-                      <span>페이팔 버튼 로딩 중...</span>
-                    </div>
-                  )}
-                  {paypalError && (
-                    <div className='text-sm text-red-400 mb-2'>{paypalError}</div>
-                  )}
-                  <div
-                    className='portone-ui-container'
-                    data-portone-ui-type='paypal-spb'
-                    style={{ minHeight: paypalStatus === 'ready' ? '150px' : '0px' }}
-                  />
+                <div className='ml-7 mt-2 text-sm text-gray-400'>
+                  PayPal 결제를 선택하셨습니다. 아래 결제하기 버튼을 클릭하면 PayPal 결제 페이지로 이동합니다.
                 </div>
               )}
               {/* 기존 결제 수단 - 체크/신용카드 */}
@@ -866,33 +750,47 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
           </div>
         </div>
 
-        {/* 페이팔 선택 시 안내 메시지, 그 외에는 결제하기 버튼 */}
-        {payMethod === 'paypal' ? (
-          <div className='mt-20 flex flex-col items-center md:mt-4'>
-            <p className='text-sm text-gray-400 mb-4'>위의 PayPal 버튼을 클릭하여 결제를 진행해주세요.</p>
-            {totalPrice === 0 && (
-              <div
-                onClick={() => {
-                  router.push(
-                    `/purchase/free_finish?id=${id}&name=${data?.name}&type=${type}&price=${price}&point=${point}&islive=${data?.live_info}&coupon=${coupon.id ?? ""}&merchant_uid=${orderId}&token=${token}&option=${option}&live_external_link=${data?.live_external_link}&live_external_link_help=${data?.live_external_link_help}`
-                  );
-                }}
-                className='flex h-14 w-64 cursor-pointer items-center justify-center rounded bg-[#00e7ff] font-medium text-[#282e38] transition-all hover:opacity-90'
-              >
-                무료 신청하기
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className='mt-20 flex justify-center md:mt-4'>
+        {/* 결제하기 버튼 */}
+        <div className='mt-20 flex justify-center md:mt-4'>
+          {totalPrice === 0 ? (
+            <div
+              onClick={() => {
+                router.push(
+                  `/purchase/free_finish?id=${id}&name=${data?.name}&type=${type}&price=${price}&point=${point}&islive=${data?.live_info}&coupon=${coupon.id ?? ""}&merchant_uid=${orderId}&token=${token}&option=${option}&live_external_link=${data?.live_external_link}&live_external_link_help=${data?.live_external_link_help}`
+                );
+              }}
+              className='flex h-14 w-64 cursor-pointer items-center justify-center rounded bg-[#00e7ff] font-medium text-[#282e38] transition-all hover:opacity-90'
+            >
+              무료 신청하기
+            </div>
+          ) : payMethod === 'paypal' ? (
+            <div
+              onClick={handlePaypalPayment}
+              className={`flex h-14 w-64 cursor-pointer items-center justify-center rounded font-medium transition-all hover:opacity-90 ${
+                paypalLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#0070ba] text-white'
+              }`}
+            >
+              {paypalLoading ? (
+                <div className='flex items-center space-x-2'>
+                  <svg className='animate-spin h-5 w-5' viewBox='0 0 24 24'>
+                    <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4' fill='none' />
+                    <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' />
+                  </svg>
+                  <span>처리 중...</span>
+                </div>
+              ) : (
+                'PayPal로 결제하기'
+              )}
+            </div>
+          ) : (
             <div
               onClick={data?.series && !data?.series?.is_plan && !(profile?.coupon?.filter((d: any) => d.reusable).length) ? handleProposalPayment : handlePayment}
               className='flex h-14 w-64 cursor-pointer items-center justify-center rounded bg-[#00e7ff] font-medium text-[#282e38] transition-all hover:opacity-90'
             >
               {data?.category != "코인" ? "결제하기" : "신청하기"}
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </Layout >
 
       <input type="hidden" id='phone_number' name="phone_number" value={profile?.phone_number} />
@@ -1193,18 +1091,6 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const locale = ctx.locale || 'en';
-
-  // 디버깅: 환경변수 출력
-  console.log('=== [getServerSideProps] Environment Variables Debug ===');
-  console.log('NEXT_PUBLIC_PAYPAL_CHANNEL_KEY:', process.env.NEXT_PUBLIC_PAYPAL_CHANNEL_KEY);
-  console.log('NEXT_PUBLIC_PAYPAL_CURRENCY:', process.env.NEXT_PUBLIC_PAYPAL_CURRENCY);
-  console.log('NEXT_PUBLIC_MERCHANT_ID:', process.env.NEXT_PUBLIC_MERCHANT_ID);
-  console.log('NEXT_PUBLIC_PG:', process.env.NEXT_PUBLIC_PG);
-  console.log('NEXT_PUBLIC_CHANNEL_KEY:', process.env.NEXT_PUBLIC_CHANNEL_KEY);
-  console.log('NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
-  console.log('NODE_ENV:', process.env.NODE_ENV);
-  console.log('=== End Environment Variables Debug ===');
-
   return {
     props: {
       ...(await serverSideTranslations(locale, ['common', 'purchase'])),
