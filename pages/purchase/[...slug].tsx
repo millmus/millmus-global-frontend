@@ -279,7 +279,7 @@ const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurr
 
     const paypalParams = {
       channelKey: paypalChannelKey,
-      pg: 'paypal_v2',
+      pg: 'paypal',  // Express Checkout V1
       merchant_uid: orderId,
       pay_method: 'paypal',
       amount: totalPrice,
