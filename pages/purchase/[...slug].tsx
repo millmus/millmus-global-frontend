@@ -51,6 +51,18 @@ interface IProps {
 }
 
 const Purchase: NextPage<IProps> = ({ slug, option, paypalChannelKey, paypalCurrency, merchantId }) => {
+  // 디버깅: 클라이언트에서 환경변수 출력
+  console.log('=== [Client] Environment Variables Debug ===');
+  console.log('props.paypalChannelKey:', paypalChannelKey);
+  console.log('props.paypalCurrency:', paypalCurrency);
+  console.log('props.merchantId:', merchantId);
+  console.log('process.env.NEXT_PUBLIC_PAYPAL_CHANNEL_KEY:', process.env.NEXT_PUBLIC_PAYPAL_CHANNEL_KEY);
+  console.log('process.env.NEXT_PUBLIC_PAYPAL_CURRENCY:', process.env.NEXT_PUBLIC_PAYPAL_CURRENCY);
+  console.log('process.env.NEXT_PUBLIC_MERCHANT_ID:', process.env.NEXT_PUBLIC_MERCHANT_ID);
+  console.log('process.env.NEXT_PUBLIC_PG:', process.env.NEXT_PUBLIC_PG);
+  console.log('process.env.NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+  console.log('=== End Client Debug ===');
+
   const { t } = useTranslation('purchase');
   const { token, profile } = useUser({
     isPrivate: true,
